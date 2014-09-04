@@ -3,7 +3,9 @@ class Spec
 {
     protected $definition;
 
-    protected $setupFns = [];
+    protected $setUpFns = [];
+
+    protected $tearDownFns = [];
 
     public function __construct($description, callable $definition)
     {
@@ -12,15 +14,23 @@ class Spec
 
     public function run()
     {
-        foreach ($this->setupFns as $fn) {
+        foreach ($this->setUpFns as $fn) {
             $fn();
         }
         $bound = \Closure::bind($this->definition, $this, $this);
         $bound();
+        foreach ($this->tearDownFns as $fn) {
+            $fn();
+        }
     }
 
-    public function addSetupFunction(callable $setupFn)
+    public function addSetUpFunction(callable $setupFn)
     {
-        $this->setupFns[] = \Closure::bind($setupFn, $this, $this);
+        $this->setUpFns[] = \Closure::bind($setupFn, $this, $this);
+    }
+
+    public function addTearDownFunction(callable $tearDownFn)
+    {
+        $this->tearDownFns[] = \Closure::bind($tearDownFn, $this, $this);
     }
 }

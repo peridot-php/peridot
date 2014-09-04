@@ -12,10 +12,20 @@ $specTest->run();
 
 $setupSpec = new Spec("should run setup functions", function() {
     $spec = new ItWasRun("this should setup", function() {});
-    $spec->addSetupFunction(function() {
-        $this->wasSetup = true;
+    $spec->addSetUpFunction(function() {
+        $this->log .= "setUp ";
     });
     $spec->run();
-    assert($spec->wasSetup, "spec should have been setup");
+    assert($spec->log == "setUp ", "spec should have been setup");
 });
 $setupSpec->run();
+
+$teardownSpec = new Spec("should run teardown functions", function() {
+    $spec = new ItWasRun("this should teardown", function() {});
+    $spec->addTearDownFunction(function() {
+        $this->log .= "tearDown ";
+    });
+    $spec->run();
+    assert($spec->log == "tearDown ", "spec should have been torn down");
+});
+$teardownSpec->run();
