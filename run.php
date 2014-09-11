@@ -39,3 +39,12 @@ $resultSpec = new Spec("should return a result", function () {
 });
 $resultSpec->run();
 
+$failedResultSpec = new Spec("should return a failed result", function () {
+    $spec = new ItWasRun("this should return a failed result", function () {
+        throw new \Exception('blaaargh');
+    });
+    $result = $spec->run();
+    assert("1 run, 1 failed" == $result->getSummary(), "result summary should have shown 1 failed");
+});
+$failedResultSpec->run();
+

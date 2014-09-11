@@ -20,8 +20,14 @@ class Spec
         foreach ($this->setUpFns as $fn) {
             $fn();
         }
+
         $bound = \Closure::bind($this->definition, $this, $this);
-        $bound();
+        try {
+            $bound();
+        } catch (\Exception $e) {
+            $result->failSpec();
+        }
+
         foreach ($this->tearDownFns as $fn) {
             $fn();
         }

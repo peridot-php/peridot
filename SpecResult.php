@@ -2,16 +2,22 @@
 
 class SpecResult
 {
-    protected $count = 0;
+    protected $specCount = 0;
+    protected $failureCount = 0;
 
     public function getSummary()
     {
-        return sprintf('%d run, 0 failed', $this->count);
+        return sprintf('%d run, %d failed', $this->specCount, $this->failureCount);
     }
-    
+
+    public function failSpec()
+    {
+        $this->failureCount++;
+    }
+
     public function startSpec()
     {
-        $this->count++;
+        $this->specCount++;
     }
 }
 
