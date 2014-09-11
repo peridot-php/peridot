@@ -1,5 +1,7 @@
 <?php
-include_once 'ItWasRun.php';
+require_once 'Spec.php';
+require_once 'ItWasRun.php';
+require_once 'SpecResult.php';
 
 $specTest = new Spec("was run should run", function() {
     $spec = new ItWasRun("this should run", function() {
@@ -29,3 +31,11 @@ $teardownSpec = new Spec("should run teardown functions", function() {
     assert($spec->log == "tearDown ", "spec should have been torn down");
 });
 $teardownSpec->run();
+
+$resultSpec = new Spec("should return a result", function () {
+    $spec = new ItWasRun("this should return a result", function () {});
+    $result = $spec->run();
+    assert("1 run, 0 failed" == $result->getSummary(), "result summary should have shown 1 run");
+});
+$resultSpec->run();
+

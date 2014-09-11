@@ -14,6 +14,9 @@ class Spec
 
     public function run()
     {
+        $result = new SpecResult();
+        $result->startSpec();
+
         foreach ($this->setUpFns as $fn) {
             $fn();
         }
@@ -22,6 +25,8 @@ class Spec
         foreach ($this->tearDownFns as $fn) {
             $fn();
         }
+
+        return $result;
     }
 
     public function addSetUpFunction(callable $setupFn)
