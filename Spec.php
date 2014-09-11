@@ -2,9 +2,7 @@
 class Spec
 {
     protected $definition;
-
     protected $setUpFns = [];
-
     protected $tearDownFns = [];
 
     public function __construct($description, callable $definition)
@@ -12,9 +10,8 @@ class Spec
         $this->definition = $definition;
     }
 
-    public function run()
+    public function run(\SpecResult $result)
     {
-        $result = new SpecResult();
         $result->startSpec();
 
         foreach ($this->setUpFns as $fn) {
@@ -31,8 +28,6 @@ class Spec
         foreach ($this->tearDownFns as $fn) {
             $fn();
         }
-
-        return $result;
     }
 
     public function addSetUpFunction(callable $setupFn)
