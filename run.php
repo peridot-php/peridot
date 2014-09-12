@@ -1,9 +1,13 @@
 <?php
-require_once 'Suite.php';
-require_once 'Spec.php';
-require_once 'ItWasRun.php';
-require_once 'SpecResult.php';
-require_once 'Runner.php';
+require_once 'vendor/autoload.php';
+require_once 'bootstrap.php';
+require_once 'specs/ItWasRun.php';
+
+use Peridot\Core\Spec;
+use Peridot\Core\Suite;
+use Peridot\Core\SpecResult;
+use Peridot\Runner\Runner;
+use Peridot\Runner\SuiteFactory;
 
 $specTest = new Spec("was run should run", function() {
     $spec = new ItWasRun("this should run", function() {
@@ -67,7 +71,7 @@ $suiteSpec->run(new SpecResult());
 
 $runnerSpec = new Spec("should run a spec in a file", function() {
     $runner = new Runner();
-    $runner->runSpec(__DIR__ . '/runner.spec.php');
+    $runner->runSpec(__DIR__ . '/specs/runner.spec.php');
     $result = $runner->getResult();
     assert('2 run, 1 failed' == $result->getSummary(), 'result summary should show 2/1');
 });

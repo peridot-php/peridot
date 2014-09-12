@@ -1,4 +1,6 @@
 <?php
+namespace Peridot\Core;
+
 class Spec
 {
     protected $definition;
@@ -10,7 +12,7 @@ class Spec
         $this->definition = $definition;
     }
 
-    public function run(\SpecResult $result)
+    public function run(SpecResult $result)
     {
         $result->startSpec();
 

@@ -1,4 +1,5 @@
 <?php
+namespace Peridot\Core;
 
 class SpecResult
 {
