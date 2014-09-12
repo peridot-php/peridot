@@ -3,6 +3,7 @@ require_once 'Suite.php';
 require_once 'Spec.php';
 require_once 'ItWasRun.php';
 require_once 'SpecResult.php';
+require_once 'Runner.php';
 
 $specTest = new Spec("was run should run", function() {
     $spec = new ItWasRun("this should run", function() {
@@ -64,3 +65,10 @@ $suiteSpec = new Spec("should run a test suite", function () {
 });
 $suiteSpec->run(new SpecResult());
 
+$runnerSpec = new Spec("should run a spec in a file", function() {
+    $runner = new Runner();
+    $runner->runSpec(__DIR__ . '/runner.spec.php');
+    $result = $runner->getResult();
+    assert('2 run, 1 failed' == $result->getSummary(), 'result summary should show 2/1');
+});
+$runnerSpec->run(new SpecResult());
