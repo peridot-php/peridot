@@ -71,7 +71,7 @@ $suiteSpec->run(new SpecResult());
 
 $runnerSpec = new Spec("should run a spec in a file", function() {
     $runner = new Runner();
-    $runner->runSpec(__DIR__ . '/specs/runner.spec.php');
+    $runner->runSpec(__DIR__ . '/specs/sample.spec.php');
     $result = $runner->getResult();
     assert('2 run, 1 failed' == $result->getSummary(), 'result summary should show 2/1');
 });
