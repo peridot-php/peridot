@@ -2,6 +2,7 @@
 use Peridot\Core\Spec;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
+use Peridot\Test\ItWasRun;
 
 describe("Suite", function() {
     it("should run multiple specs", function () {

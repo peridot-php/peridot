@@ -1,6 +1,7 @@
 <?php
 use Peridot\Core\Spec;
 use Peridot\Core\SpecResult;
+use Peridot\Test\ItWasRun;
 
 describe("Spec", function() {
     it("should run", function() {

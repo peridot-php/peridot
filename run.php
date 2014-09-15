@@ -1,7 +1,6 @@
 <?php
 require_once 'vendor/autoload.php';
 require_once 'bootstrap.php';
-require_once 'specs/ItWasRun.php';
 
 use Peridot\Core\SpecResult;
 use Peridot\Runner\Runner;
