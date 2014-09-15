@@ -5,10 +5,16 @@ use Peridot\Core\SpecResult;
 
 class Runner
 {
+    protected $result;
+
+    public function __construct(SpecResult $result)
+    {
+        $this->result = $result;
+    }
+
     public function runSpec($path)
     {
         include $path;
-        $this->result = new SpecResult();
         SuiteFactory::getInstance()->getSuite()->run($this->result);
     }
 
