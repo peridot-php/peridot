@@ -6,7 +6,7 @@ use Peridot\Core\SpecResult;
 use Peridot\Runner\Runner;
 
 $specs = __DIR__ . '/specs/';
-$files = ['spec.spec.php', 'suite.spec.php', 'runner.spec.php'];
+$files = ['spec.spec.php', 'suite.spec.php', 'runner.spec.php', 'suiteloader.spec.php'];
 $result = new SpecResult();
 $runner = new Runner($result);
 foreach ($files as $file) {

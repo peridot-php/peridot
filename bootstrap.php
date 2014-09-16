@@ -29,10 +29,16 @@ function it($description, callable $fn) {
     $suite->addSpec($spec);
 }
 
+/**
+ * Add a setup function for all specs in the
+ * current suite
+ *
+ * @param callable $fn
+ */
 function beforeEach(callable $fn) {
     $singleton = SuiteFactory::getInstance();
     $suite = $singleton->getSuite();
-
+    $suite->addSetUpFunction($fn);
 }
 
 /**
