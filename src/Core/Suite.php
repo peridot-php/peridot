@@ -5,7 +5,7 @@ namespace Peridot\Core;
  * Class Suite maps to describe() style functions as well as context() style functions
  * @package Peridot\Core
  */
-class Suite
+class Suite extends AbstractSpec
 {
     /**
      * Specs belonging to this suite
@@ -25,6 +25,26 @@ class Suite
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @param callable $setupFn
+     */
+    public function addSetUpFunction(callable $setupFn)
+    {
+        $this->setUpFns[] = $setupFn;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param callable $tearDownFn
+     */
+    public function addTearDownFunction(callable $tearDownFn)
+    {
+        $this->tearDownFns[] = $tearDownFn;
+    }
+
+    /**
      * Run all the specs belonging to the suite
      *
      * @param SpecResult $result
@@ -32,7 +52,23 @@ class Suite
     public function run(SpecResult $result)
     {
         foreach ($this->specs as $spec) {
+            $this->bindCallables($spec);
             $spec->run($result);
+        }
+    }
+
+    /**
+     * Bind the suite's callables to the provided spec
+     *
+     * @param $spec
+     */
+    public function bindCallables(SpecInterface $spec)
+    {
+        foreach ($this->setUpFns as $fn) {
+            $spec->addSetUpFunction($fn);
+        }
+        foreach ($this->tearDownFns as $fn) {
+            $spec->addTearDownFunction($fn);
         }
     }
 }
