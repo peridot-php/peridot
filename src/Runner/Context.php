@@ -3,10 +3,10 @@ namespace Peridot\Runner;
 use Peridot\Core\Suite;
 
 /**
- * Class SuiteFactory tracks the state of the runner - i.e the current suite
+ * Class Context tracks the state of the runner - i.e the current suite
  * @package Peridot\Runner
  */
-class SuiteFactory
+class Context
 {
     /**
      * @var \Peridot\Core\Suite
@@ -14,7 +14,7 @@ class SuiteFactory
     protected $suite;
 
     /**
-     * @var SuiteFactory
+     * @var Context
      */
     private static $instance = null;
 
@@ -46,7 +46,7 @@ class SuiteFactory
     /**
      * Singleton access to SuiteFactory
      *
-     * @return SuiteFactory
+     * @return Context
      */
     public static function getInstance()
     {

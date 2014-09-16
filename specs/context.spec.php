@@ -3,7 +3,7 @@
 describe('SuiteFactory', function() {
 
     beforeEach(function() {
-        $reflection = new ReflectionClass('Peridot\Runner\SuiteFactory');
+        $reflection = new ReflectionClass('Peridot\Runner\Context');
         $this->factory = $reflection->newInstanceWithoutConstructor();
     });
 

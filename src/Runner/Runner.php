@@ -32,7 +32,7 @@ class Runner
     public function runSpec($path)
     {
         include $path;
-        SuiteFactory::getInstance()->getCurrentSuite()->run($this->result);
+        Context::getInstance()->getCurrentSuite()->run($this->result);
     }
 
     /**
