@@ -15,5 +15,5 @@ function it($description, $fn) {
     $singleton = SuiteFactory::getInstance();
     $suite = $singleton->getSuite();
     $spec = new Spec($description, $fn);
-    $suite->add($spec);
+    $suite->addSpec($spec);
 }
