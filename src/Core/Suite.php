@@ -25,6 +25,26 @@ class Suite extends AbstractSpec
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @param callable $setupFn
+     */
+    public function addSetUpFunction(callable $setupFn)
+    {
+        $this->setUpFns[] = $setupFn;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param callable $tearDownFn
+     */
+    public function addTearDownFunction(callable $tearDownFn)
+    {
+        $this->tearDownFns[] = $tearDownFn;
+    }
+
+    /**
      * Run all the specs belonging to the suite
      *
      * @param SpecResult $result
