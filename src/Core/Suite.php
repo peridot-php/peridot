@@ -52,10 +52,23 @@ class Suite extends AbstractSpec
     public function run(SpecResult $result)
     {
         foreach ($this->specs as $spec) {
-            foreach ($this->setUpFns as $fn) {
-                $spec->addSetUpFunction($fn);
-            }
+            $this->bindCallables($spec);
             $spec->run($result);
+        }
+    }
+
+    /**
+     * Bind the suite's callables to the provided spec
+     *
+     * @param $spec
+     */
+    public function bindCallables(SpecInterface $spec)
+    {
+        foreach ($this->setUpFns as $fn) {
+            $spec->addSetUpFunction($fn);
+        }
+        foreach ($this->tearDownFns as $fn) {
+            $spec->addTearDownFunction($fn);
         }
     }
 }

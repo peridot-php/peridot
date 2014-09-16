@@ -33,4 +33,23 @@ describe("Suite", function() {
         $suite->run($result);
         assert('2 run, 0 failed' == $result->getSummary(), "result summary should show 2/0");
     });
+
+    it("should pass teardown functions to specs", function() {
+        $suite = new Suite("Suite", function() {});
+        $suite->addTearDownFunction(function() {
+            $this->log = "torn";
+        });
+
+        $fn = function() {};
+
+        $spec1 = new ItWasRun("should have log", $fn);
+        $spec2 = new ItWasRun("should have log too", $fn);
+        $suite->addSpec($spec1);
+        $suite->addSpec($spec2);
+
+        $result = new SpecResult();
+        $suite->run($result);
+
+        assert('torntorn' == $spec1->log . $spec2->log, "tear down should have run for both specs");
+    });
 });
