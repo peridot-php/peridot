@@ -32,6 +32,9 @@ class Suite extends AbstractSpec
     public function run(SpecResult $result)
     {
         foreach ($this->specs as $spec) {
+            foreach ($this->setUpFns as $fn) {
+                $spec->addSetUpFunction($fn);
+            }
             $spec->run($result);
         }
     }
