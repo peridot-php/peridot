@@ -1,5 +1,4 @@
 <?php
-use Peridot\Core\Spec;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 use Peridot\Test\ItWasRun;
@@ -7,8 +6,8 @@ use Peridot\Test\ItWasRun;
 describe("Suite", function() {
     it("should run multiple specs", function () {
         $suite = new Suite("Suite");
-        $suite->add(new ItWasRun("should pass", function () {}));
-        $suite->add(new ItWasRun('should fail', function () {
+        $suite->addSpec(new ItWasRun("should pass", function () {}));
+        $suite->addSpec(new ItWasRun('should fail', function () {
             throw new \Exception('woooooo!');
         }));
 
