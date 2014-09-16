@@ -4,7 +4,9 @@ use Peridot\Core\Suite;
 use Peridot\Core\Spec;
 
 /**
- * @param $description
+ * Creates a suite and sets it on the suite factory
+ *
+ * @param string $description
  * @param callable $fn
  */
 function describe($description, callable $fn) {
@@ -15,6 +17,8 @@ function describe($description, callable $fn) {
 }
 
 /**
+ * Create a spec and add it to the current suite
+ *
  * @param $description
  * @param $fn
  */
