@@ -5,7 +5,7 @@ use Peridot\Test\ItWasRun;
 
 describe("Suite", function() {
     it("should run multiple specs", function () {
-        $suite = new Suite("Suite");
+        $suite = new Suite("Suite", function() {});
         $suite->addSpec(new ItWasRun("should pass", function () {}));
         $suite->addSpec(new ItWasRun('should fail', function () {
             throw new \Exception('woooooo!');

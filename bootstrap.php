@@ -11,9 +11,9 @@ use Peridot\Core\Spec;
  */
 function describe($description, callable $fn) {
     $singleton = SuiteFactory::getInstance();
-    $suite = new Suite();
+    $suite = new Suite($description, $fn);
     $singleton->setSuite($suite);
-    $fn();
+    call_user_func($suite->getDefinition());
 }
 
 /**
@@ -22,11 +22,17 @@ function describe($description, callable $fn) {
  * @param $description
  * @param $fn
  */
-function it($description, $fn) {
+function it($description, callable $fn) {
     $singleton = SuiteFactory::getInstance();
     $suite = $singleton->getSuite();
     $spec = new Spec($description, $fn);
     $suite->addSpec($spec);
+}
+
+function beforeEach(callable $fn) {
+    $singleton = SuiteFactory::getInstance();
+    $suite = $singleton->getSuite();
+
 }
 
 /**
