@@ -12,7 +12,7 @@ use Peridot\Core\Spec;
 function describe($description, callable $fn) {
     $singleton = SuiteFactory::getInstance();
     $suite = new Suite($description, $fn);
-    $singleton->setSuite($suite);
+    $singleton->setCurrentSuite($suite);
     call_user_func($suite->getDefinition());
 }
 
@@ -24,7 +24,7 @@ function describe($description, callable $fn) {
  */
 function it($description, callable $fn) {
     $singleton = SuiteFactory::getInstance();
-    $suite = $singleton->getSuite();
+    $suite = $singleton->getCurrentSuite();
     $spec = new Spec($description, $fn);
     $suite->addSpec($spec);
 }
@@ -37,7 +37,7 @@ function it($description, callable $fn) {
  */
 function beforeEach(callable $fn) {
     $singleton = SuiteFactory::getInstance();
-    $suite = $singleton->getSuite();
+    $suite = $singleton->getCurrentSuite();
     $suite->addSetUpFunction($fn);
 }
 

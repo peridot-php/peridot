@@ -30,7 +30,7 @@ class SuiteFactory
      *
      * @param Suite $suite
      */
-    public function setSuite(Suite $suite)
+    public function setCurrentSuite(Suite $suite)
     {
         $this->suite = $suite;
     }
@@ -38,7 +38,7 @@ class SuiteFactory
     /**
      * @return Suite
      */
-    public function getSuite()
+    public function getCurrentSuite()
     {
         return $this->suite;
     }
