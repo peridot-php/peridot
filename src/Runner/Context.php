@@ -1,5 +1,6 @@
 <?php
 namespace Peridot\Runner;
+use Peridot\Core\Spec;
 use Peridot\Core\Suite;
 
 /**
@@ -23,6 +24,44 @@ class Context
      */
     private function __construct()
     {
+    }
+
+    /**
+     * Creates a suite and sets it on the suite factory
+     *
+     * @param $description
+     * @param callable $fn
+     */
+    public function describe($description, callable $fn)
+    {
+        $suite = new Suite($description, $fn);
+        $this->setCurrentSuite($suite);
+        call_user_func($suite->getDefinition());
+    }
+
+    /**
+     * Create a spec and add it to the current suite
+     *
+     * @param $description
+     * @param $fn
+     */
+    public function it($description, callable $fn)
+    {
+        $suite = $this->getCurrentSuite();
+        $spec = new Spec($description, $fn);
+        $suite->addSpec($spec);
+    }
+
+    /**
+     * Add a setup function for all specs in the
+     * current suite
+     *
+     * @param callable $fn
+     */
+    public function beforeEach(callable $fn)
+    {
+        $suite = $this->getCurrentSuite();
+        $suite->addSetUpFunction($fn);
     }
 
     /**

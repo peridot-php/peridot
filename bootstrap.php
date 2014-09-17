@@ -10,10 +10,7 @@ use Peridot\Core\Spec;
  * @param callable $fn
  */
 function describe($description, callable $fn) {
-    $singleton = Context::getInstance();
-    $suite = new Suite($description, $fn);
-    $singleton->setCurrentSuite($suite);
-    call_user_func($suite->getDefinition());
+    Context::getInstance()->describe($description, $fn);
 }
 
 /**
@@ -23,10 +20,7 @@ function describe($description, callable $fn) {
  * @param $fn
  */
 function it($description, callable $fn) {
-    $singleton = Context::getInstance();
-    $suite = $singleton->getCurrentSuite();
-    $spec = new Spec($description, $fn);
-    $suite->addSpec($spec);
+    Context::getInstance()->it($description, $fn);
 }
 
 /**
@@ -36,9 +30,7 @@ function it($description, callable $fn) {
  * @param callable $fn
  */
 function beforeEach(callable $fn) {
-    $singleton = Context::getInstance();
-    $suite = $singleton->getCurrentSuite();
-    $suite->addSetUpFunction($fn);
+    Context::getInstance()->beforeEach($fn);
 }
 
 /**
