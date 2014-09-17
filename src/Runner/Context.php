@@ -37,17 +37,6 @@ class Context
     }
 
     /**
-     * @param SpecResult $result
-     */
-    public function run(SpecResult $result)
-    {
-        $specs = $this->getCurrentSuite()->getSpecs();
-        foreach ($specs as $spec) {
-            $spec->run($result);
-        }
-    }
-
-    /**
      * Creates a suite and sets it on the suite factory
      *
      * @param $description
