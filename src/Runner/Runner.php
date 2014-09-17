@@ -2,6 +2,7 @@
 namespace Peridot\Runner;
 
 use Peridot\Core\SpecResult;
+use Peridot\Core\Suite;
 
 /**
  * Class Runner
@@ -10,38 +11,25 @@ use Peridot\Core\SpecResult;
 class Runner
 {
     /**
-     * @var \Peridot\Core\SpecResult
+     * @var \Peridot\Core\Suite
      */
-    protected $result;
+    protected $suite;
 
     /**
      * Constructor
      *
      * @param SpecResult $result
      */
-    public function __construct(SpecResult $result)
+    public function __construct(Suite $suite)
     {
-        $this->result = $result;
+        $this->suite = $suite;
     }
 
     /**
-     * Run the spec at the given path
-     *
-     * @param string $path
+     * @param SpecResult $result
      */
-    public function runSpec($path)
+    public function run(SpecResult $result)
     {
-        include $path;
-        Context::getInstance()->getCurrentSuite()->run($this->result);
-    }
-
-    /**
-     * Return the result of the runner
-     *
-     * @return SpecResult
-     */
-    public function getResult()
-    {
-        return $this->result;
+        $this->suite->run($result);
     }
 }

@@ -25,6 +25,16 @@ class Suite extends AbstractSpec
     }
 
     /**
+     * Return collection of specs
+     *
+     * @return array
+     */
+    public function getSpecs()
+    {
+        return $this->specs;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @param callable $setupFn

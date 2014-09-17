@@ -7,11 +7,8 @@ use Peridot\Runner\Runner;
 use Peridot\Runner\SuiteLoader;
 
 $loader = new SuiteLoader();
-$specs = $loader->load(__DIR__ . '/specs/');
+$loader->load(__DIR__ . '/specs/');
 $result = new SpecResult();
-$runner = new Runner($result);
-foreach ($specs as $file) {
-    $runner->runSpec($file);
-}
-$result = $runner->getResult();
+$runner = new Runner(\Peridot\Runner\Context::getInstance()->getCurrentSuite());
+$runner->run($result);
 print $result->getSummary() . "\n";

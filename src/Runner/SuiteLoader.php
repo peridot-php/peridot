@@ -21,6 +21,20 @@ class SuiteLoader
     }
 
     /**
+     * Load specs. Runs 'include' on all specs
+     * returned by getSpecs
+     *
+     * @param $path
+     */
+    public function load($path)
+    {
+        $specs = $this->getSpecs($path);
+        foreach ($specs as $spec) {
+            include $spec;
+        }
+    }
+
+    /**
      * Search a path for a provided file or scan a
      * directory structure for files matching the loader's
      * pattern
@@ -29,7 +43,7 @@ class SuiteLoader
      * @return array
      * @throws \RuntimeException
      */
-    public function load($path)
+    public function getSpecs($path)
     {
         if (is_file($path)) {
             return [$path];

@@ -1,8 +1,6 @@
 <?php
 
-use Peridot\Core\Suite;
-
-describe('SuiteFactory', function() {
+describe('Context', function() {
 
     beforeEach(function() {
         $reflection = new ReflectionClass('Peridot\Runner\Context');
@@ -13,21 +11,23 @@ describe('SuiteFactory', function() {
         $this->context = $context;
     });
 
-    it("should have a root suite", function() {
-        $root = $this->context->getRoot();
-        assert($root instanceof Suite, "context should have a root suite");
+    it("should allow nesting of suites via describe", function() {
+        $context = $this->context;
+        $child = null;
+        $parent = $context->describe('Parent suite', function() use ($context, &$child) {
+            $child = $context->describe('Child suite', function() use ($context) {
+            });
+        });
+        $specs = $parent->getSpecs();
+        assert($specs[0] === $child, "child should have been added to parent");
     });
 
-    it("should return root suite as current by default", function() {
-        $root = $this->context->getRoot();
-        $current = $this->context->getCurrentSuite();
-        assert($root === $current, "root should be current by default");
-    });
-
-    it("should be able to set and get current suite", function() {
-        $suite = new \Peridot\Core\Suite("description", function() {});
-        $this->context->setCurrentSuite($suite);
-        assert($suite === $this->context->getCurrentSuite(), "current suite should be same");
+    it("should allow sibling suites via describe", function() {
+        $sibling1 = $this->context->describe('Sibling1 suite', function() {});
+        $sibling2 = $this->context->describe('Sibling2 suite', function() {});
+        $specs = $this->context->getCurrentSuite()->getSpecs();
+        assert($specs[0] === $sibling1, "sibling1 should have been added to parent");
+        assert($specs[1] === $sibling2, "sibling2 should have been added to parent");
     });
 
 });

@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Runner;
 use Peridot\Core\Spec;
+use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 
 /**
@@ -10,14 +11,9 @@ use Peridot\Core\Suite;
 class Context
 {
     /**
-     * @var \Peridot\Core\Suite
+     * @var array
      */
-    protected $suite;
-
-    /**
-     * @var \Peridot\Core\Suite
-     */
-    protected $root;
+    protected $suites;
 
     /**
      * @var Context
@@ -29,15 +25,26 @@ class Context
      */
     private function __construct()
     {
-        $this->root = $this->suite = new Suite("root suite", function() {});
+        $this->suites = [new Suite("root suite", function() {})];
     }
 
     /**
-     * @return Suite
+     * @return \Peridot\Core\Suite
      */
-    public function getRoot()
+    public function getCurrentSuite()
     {
-        return $this->root;
+        return $this->suites[0];
+    }
+
+    /**
+     * @param SpecResult $result
+     */
+    public function run(SpecResult $result)
+    {
+        $specs = $this->getCurrentSuite()->getSpecs();
+        foreach ($specs as $spec) {
+            $spec->run($result);
+        }
     }
 
     /**
@@ -49,8 +56,11 @@ class Context
     public function describe($description, callable $fn)
     {
         $suite = new Suite($description, $fn);
-        $this->setCurrentSuite($suite);
+        $this->getCurrentSuite()->addSpec($suite);
+        array_unshift($this->suites, $suite);
         call_user_func($suite->getDefinition());
+        array_shift($this->suites);
+        return $suite;
     }
 
     /**
@@ -61,9 +71,8 @@ class Context
      */
     public function it($description, callable $fn)
     {
-        $suite = $this->getCurrentSuite();
         $spec = new Spec($description, $fn);
-        $suite->addSpec($spec);
+        $this->getCurrentSuite()->addSpec($spec);
     }
 
     /**
@@ -74,26 +83,7 @@ class Context
      */
     public function beforeEach(callable $fn)
     {
-        $suite = $this->getCurrentSuite();
-        $suite->addSetUpFunction($fn);
-    }
-
-    /**
-     * Set the current suite context
-     *
-     * @param Suite $suite
-     */
-    public function setCurrentSuite(Suite $suite)
-    {
-        $this->suite = $suite;
-    }
-
-    /**
-     * @return Suite
-     */
-    public function getCurrentSuite()
-    {
-        return $this->suite;
+        $this->getCurrentSuite()->addSetUpFunction($fn);
     }
 
     /**
