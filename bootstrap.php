@@ -13,6 +13,10 @@ function describe($description, callable $fn) {
     Context::getInstance()->describe($description, $fn);
 }
 
+function context($description, callable $fn) {
+    describe($description, $fn);
+}
+
 /**
  * Create a spec and add it to the current suite
  *
