@@ -19,9 +19,19 @@ class Suite extends AbstractSpec
      *
      * @param Spec $spec
      */
-    public function addSpec(Spec $spec)
+    public function addSpec(SpecInterface $spec)
     {
         $this->specs[] = $spec;
+    }
+
+    /**
+     * Return collection of specs
+     *
+     * @return array
+     */
+    public function getSpecs()
+    {
+        return $this->specs;
     }
 
     /**

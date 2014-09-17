@@ -4,6 +4,7 @@
 use Peridot\Core\SpecResult;
 use Peridot\Runner\Runner;
 use Peridot\Runner\SuiteLoader;
+use Peridot\Runner\Context;
 
 $autoload = null;
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
@@ -37,13 +38,10 @@ if (!file_exists(getcwd() . '/' . $specDirectory)) {
 require_once 'bootstrap.php';
 
 $loader = new SuiteLoader();
-$specs = $loader->load($specDirectory);
+$loader->load($specDirectory);
 $result = new SpecResult();
-$runner = new Runner($result);
-foreach ($specs as $file) {
-    $runner->runSpec($file);
-}
-$result = $runner->getResult();
+$runner = new Runner(Context::getInstance()->getCurrentSuite());
+$runner->run($result);
 print $result->getSummary() . PHP_EOL;
 
 if ($result->getFailureCount() > 0) {

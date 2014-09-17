@@ -1,5 +1,5 @@
 <?php
-use Peridot\Runner\SuiteFactory;
+use Peridot\Runner\Context;
 use Peridot\Core\Suite;
 use Peridot\Core\Spec;
 
@@ -10,10 +10,11 @@ use Peridot\Core\Spec;
  * @param callable $fn
  */
 function describe($description, callable $fn) {
-    $singleton = SuiteFactory::getInstance();
-    $suite = new Suite($description, $fn);
-    $singleton->setSuite($suite);
-    call_user_func($suite->getDefinition());
+    Context::getInstance()->describe($description, $fn);
+}
+
+function context($description, callable $fn) {
+    describe($description, $fn);
 }
 
 /**
@@ -23,10 +24,7 @@ function describe($description, callable $fn) {
  * @param $fn
  */
 function it($description, callable $fn) {
-    $singleton = SuiteFactory::getInstance();
-    $suite = $singleton->getSuite();
-    $spec = new Spec($description, $fn);
-    $suite->addSpec($spec);
+    Context::getInstance()->it($description, $fn);
 }
 
 /**
@@ -36,9 +34,7 @@ function it($description, callable $fn) {
  * @param callable $fn
  */
 function beforeEach(callable $fn) {
-    $singleton = SuiteFactory::getInstance();
-    $suite = $singleton->getSuite();
-    $suite->addSetUpFunction($fn);
+    Context::getInstance()->beforeEach($fn);
 }
 
 /**
