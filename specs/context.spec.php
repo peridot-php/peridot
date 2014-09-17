@@ -1,5 +1,7 @@
 <?php
 
+use Peridot\Core\Suite;
+
 describe('SuiteFactory', function() {
 
     beforeEach(function() {
@@ -9,6 +11,17 @@ describe('SuiteFactory', function() {
         $construct->setAccessible(true);
         $construct->invoke($context);
         $this->context = $context;
+    });
+
+    it("should have a root suite", function() {
+        $root = $this->context->getRoot();
+        assert($root instanceof Suite, "context should have a root suite");
+    });
+
+    it("should return root suite as current by default", function() {
+        $root = $this->context->getRoot();
+        $current = $this->context->getCurrentSuite();
+        assert($root === $current, "root should be current by default");
     });
 
     it("should be able to set and get current suite", function() {

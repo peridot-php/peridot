@@ -15,6 +15,11 @@ class Context
     protected $suite;
 
     /**
+     * @var \Peridot\Core\Suite
+     */
+    protected $root;
+
+    /**
      * @var Context
      */
     private static $instance = null;
@@ -24,6 +29,15 @@ class Context
      */
     private function __construct()
     {
+        $this->root = $this->suite = new Suite("root suite", function() {});
+    }
+
+    /**
+     * @return Suite
+     */
+    public function getRoot()
+    {
+        return $this->root;
     }
 
     /**
