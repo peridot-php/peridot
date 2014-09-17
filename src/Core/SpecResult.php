@@ -1,4 +1,5 @@
 <?php
+
 namespace Peridot\Core;
 
 /**
@@ -47,5 +48,20 @@ class SpecResult
     {
         $this->specCount++;
     }
-}
 
+    /**
+     * @return int
+     */
+    public function getFailureCount()
+    {
+        return $this->failureCount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSpecCount()
+    {
+        return $this->specCount;
+    }
+}

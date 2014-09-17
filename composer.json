@@ -17,5 +17,6 @@
         "psr-4": {
             "Peridot\\": "src/"
         }
-    }
+    },
+    "bin": ["bin/peridot"]
 }
