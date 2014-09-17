@@ -26,12 +26,14 @@ if (!$autoload) {
 require_once $autoload;
 
 if (!isset($argv[1])) {
-    die('Please specify a spec directory.' . PHP_EOL);
+    print 'Please specify a spec directory.' . PHP_EOL;
+    exit(1);
 }
 
 $specDirectory = $argv[1];
 if (!file_exists(getcwd() . '/' . $specDirectory)) {
-    die($argv[1] . ' is not a directory.  Please specify a valid spec directory' . PHP_EOL);
+    print $argv[1] . ' is not a directory.  Please specify a valid spec directory' . PHP_EOL;
+    exit(1);
 }
 
 // todo - we are going to need to know how to find the bootstrap when installed as a library in another project
