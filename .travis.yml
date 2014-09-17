@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - 5.6
+  - 5.5
+  - 5.4
+  - hhvm
+  - hhvm-nightly
+
+install:
+    - composer install --prefer-source
+
+script: bin/peridot
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: hhvm
+    - php: hhvm-nightly
