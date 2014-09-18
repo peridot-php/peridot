@@ -10,7 +10,7 @@ php:
 install:
     - composer install --prefer-source
 
-script: bin/peridot
+script: bin/peridot specs/
 
 matrix:
   fast_finish: true
