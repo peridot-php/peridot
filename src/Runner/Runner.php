@@ -3,6 +3,7 @@ namespace Peridot\Runner;
 
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
+use Evenement\EventEmitterTrait;
 
 /**
  * Class Runner
@@ -10,6 +11,8 @@ use Peridot\Core\Suite;
  */
 class Runner
 {
+    use EventEmitterTrait;
+
     /**
      * @var \Peridot\Core\Suite
      */
@@ -30,6 +33,16 @@ class Runner
      */
     public function run(SpecResult $result)
     {
+        $result->on('spec:failed', function($spec) {
+            $this->emit('fail', [$spec]);
+        });
+
+        $result->on('spec:passed', function($spec) {
+            $this->emit('pass', [$spec]);
+        });
+
+        $this->emit('start');
         $this->suite->run($result);
+        $this->emit('end');
     }
 }
