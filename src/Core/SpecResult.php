@@ -2,12 +2,16 @@
 
 namespace Peridot\Core;
 
+use Evenement\EventEmitterTrait;
+
 /**
  * Class SpecResult
  * @package Peridot\Core
  */
 class SpecResult
 {
+    use EventEmitterTrait;
+
     /**
      * Tracks total specs run against this result
      *
@@ -35,10 +39,13 @@ class SpecResult
 
     /**
      * Increment the failure count
+     *
+     * @param SpecInterface $spec
      */
-    public function failSpec()
+    public function failSpec(SpecInterface $spec)
     {
         $this->failureCount++;
+        $this->emit('spec:failed', [$spec]);
     }
 
     /**

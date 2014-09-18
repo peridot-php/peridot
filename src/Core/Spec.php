@@ -8,10 +8,10 @@ namespace Peridot\Core;
 class Spec extends AbstractSpec
 {
     /**
-     * Execute the spec along with any setup and tear down
-     * functions
+     * Execute the spec along with any setup and tear down functions.
      *
      * @param SpecResult $result
+     * @return void
      */
     public function run(SpecResult $result)
     {
@@ -25,7 +25,7 @@ class Spec extends AbstractSpec
         try {
             $bound();
         } catch (\Exception $e) {
-            $result->failSpec();
+            $result->failSpec($this);
         }
 
         foreach ($this->tearDownFns as $fn) {
