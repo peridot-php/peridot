@@ -24,6 +24,7 @@ class Spec extends AbstractSpec
         $bound = \Closure::bind($this->definition, $this, $this);
         try {
             $bound();
+            $result->passSpec($this);
         } catch (\Exception $e) {
             $result->failSpec($this);
         }

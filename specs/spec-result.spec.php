@@ -43,4 +43,21 @@ describe("SpecResult", function() {
             assert($emitted === $spec, 'should have emitted spec:failed event');
        });
     });
+
+    describe("->passSpec()", function() {
+        beforeEach(function() {
+            $this->result = new SpecResult();
+        });
+
+        it('should emit a spec:passed event', function() {
+            $emitted = null;
+            $this->result->on('spec:passed', function ($spec) use (&$emitted){
+                $emitted = $spec;
+            });
+
+            $spec = new Spec('spec', function() {});
+            $this->result->passSpec($spec);
+            assert($emitted === $spec, 'should have emitted spec:passed event');
+        });
+    });
 });

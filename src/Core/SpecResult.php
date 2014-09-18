@@ -38,7 +38,7 @@ class SpecResult
     }
 
     /**
-     * Increment the failure count
+     * Fail the given spec.
      *
      * @param SpecInterface $spec
      */
@@ -46,6 +46,16 @@ class SpecResult
     {
         $this->failureCount++;
         $this->emit('spec:failed', [$spec]);
+    }
+
+    /**
+     * Pass the given spec.
+     *
+     * @param SpecInterface $spec
+     */
+    public function passSpec(SpecInterface $spec)
+    {
+        $this->emit('spec:passed', [$spec]);
     }
 
     /**
