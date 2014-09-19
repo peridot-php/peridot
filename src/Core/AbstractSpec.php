@@ -36,6 +36,11 @@ abstract class AbstractSpec implements SpecInterface
     protected $description;
 
     /**
+     * @var SpecInterface
+     */
+    protected $parent;
+
+    /**
      * Constructor
      *
      * @param string $description
@@ -84,5 +89,21 @@ abstract class AbstractSpec implements SpecInterface
     public function getDefinition()
     {
         return $this->definition;
+    }
+
+    /**
+     * @param SpecInterface $parent
+     */
+    public function setParent(SpecInterface $parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return SpecInterface
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }

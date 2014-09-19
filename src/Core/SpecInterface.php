@@ -38,4 +38,15 @@ interface SpecInterface
      * @return callable
      */
     public function getDefinition();
+
+    /**
+     * @return SpecInterface
+     */
+    public function getParent();
+
+    /**
+     * @param SpecInterface $parent
+     * @return mixed
+     */
+    public function setParent(SpecInterface $parent);
 } 

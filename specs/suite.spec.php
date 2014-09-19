@@ -1,4 +1,5 @@
 <?php
+use Peridot\Core\Spec;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 use Peridot\Test\ItWasRun;
@@ -51,5 +52,16 @@ describe("Suite", function() {
         $suite->run($result);
 
         assert('torntorn' == $spec1->log . $spec2->log, "tear down should have run for both specs");
+    });
+
+    describe("->addSpec()", function() {
+
+        it("should set parent property on child spec", function() {
+            $suite = new Suite("test suite", function() {});
+            $spec = new Spec("test spec", function() {});
+            $suite->addSpec($spec);
+            assert($spec->getParent() === $suite, "added spec should have parent property set");
+        });
+
     });
 });
