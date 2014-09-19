@@ -2,6 +2,7 @@
 
 namespace Peridot\Core;
 
+use Closure;
 use Exception;
 
 /**
@@ -20,18 +21,18 @@ class Spec extends AbstractSpec
     {
         $result->startSpec();
 
-        foreach ($this->setUpFns as $fn) {
+        foreach ($this->setUpFns as $setUp) {
             try {
-                $fn();
+                $setUp();
             } catch (Exception $e) {
                 $result->failSpec($this);
                 $this->runTearDown();
             }
         }
 
-        $bound = \Closure::bind($this->definition, $this, $this);
+        $boundSpec = Closure::bind($this->definition, $this, $this);
         try {
-            $bound();
+            $boundSpec();
             $result->passSpec($this);
         } catch (Exception $e) {
             $result->failSpec($this);
@@ -45,8 +46,12 @@ class Spec extends AbstractSpec
      */
     protected function runTearDown()
     {
-        foreach ($this->tearDownFns as $fn) {
-            $fn();
+        foreach ($this->tearDownFns as $tearDown) {
+            try {
+                $tearDown();
+            } catch (Exception $e) {
+                continue;
+            }
         }
     }
 }

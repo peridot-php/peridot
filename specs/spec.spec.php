@@ -69,4 +69,15 @@ describe("Spec", function() {
         $spec->run(new SpecResult());;
         assert($spec->log == 'tearing down', 'spec should have been torn down after failure');
     });
+
+    it('should continue if tear down fails', function () {
+        $spec = new Spec('spec', function() {}) ;
+        $spec->addTearDownFunction(function() {
+            throw new Exception('tear down failure');
+        });
+
+        $result = new SpecResult();
+        $spec->run($result);;
+        assert("1 run, 0 failed" == $result->getSummary(), "result summary should have shown 1 run");
+    });
 });
