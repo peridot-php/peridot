@@ -1,4 +1,6 @@
 <?php
+
+use Peridot\Core\Spec;
 use Peridot\Core\SpecResult;
 use Peridot\Test\ItWasRun;
 
@@ -45,5 +47,26 @@ describe("Spec", function() {
         assert("1 run, 1 failed" == $result->getSummary(), "result summary should have shown 1 failed");
     });
 
-    
+    it('should run tear down functions even if spec fails', function () {
+        $spec = new Spec('failing spec with tear downs', function() {
+            throw new Exception('fail');
+        }) ;
+        $spec->addTearDownFunction(function() {
+            $this->log = 'tearing down';
+        });
+        $spec->run(new SpecResult());;
+        assert($spec->log == 'tearing down', 'spec should have been torn down after failure');
+    });
+
+    it('should run tear down functions even if setup fails', function () {
+        $spec = new Spec('spec', function() {}) ;
+        $spec->addSetUpFunction(function() {
+            throw new Exception('set up failure');
+        });
+        $spec->addTearDownFunction(function() {
+            $this->log = 'tearing down';
+        });
+        $spec->run(new SpecResult());;
+        assert($spec->log == 'tearing down', 'spec should have been torn down after failure');
+    });
 });
