@@ -27,6 +27,7 @@ class Spec extends AbstractSpec
             } catch (Exception $e) {
                 $result->failSpec($this);
                 $this->runTearDown();
+                return;
             }
         }
 
