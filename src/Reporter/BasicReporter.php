@@ -11,18 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Peridot\Reporter
  */
-class BasicReporter
+class BasicReporter extends AbstractBaseReporter
 {
-    /**
-     * @var \Peridot\Runner\Runner
-     */
-    protected $runner;
-
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    protected $output;
-
     /**
      * @var array
      */
@@ -32,20 +22,17 @@ class BasicReporter
      * @param Runner $runner
      * @param OutputInterface $output
      */
-    public function __construct(Runner $runner, OutputInterface $output)
+    public function init()
     {
-        $this->runner = $runner;
-        $this->output = $output;
-
-        $runner->on('fail', function() {
+        $this->runner->on('fail', function() {
            $this->counts['fail']++;
         });
 
-        $runner->on('pass', function() {
+        $this->runner->on('pass', function() {
            $this->counts['pass']++;
         });
 
-        $runner->on('end', function() {
+        $this->runner->on('end', function() {
            $this->output->writeln(sprintf('%d run, %d failed', $this->counts['pass'], $this->counts['fail']));
         });
     }
