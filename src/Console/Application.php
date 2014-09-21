@@ -19,6 +19,7 @@ class Application extends ConsoleApplication
     public function __construct()
     {
         parent::__construct(Version::NAME, Version::NUMBER);
+        require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Dsl.php';
     }
 
     /**
