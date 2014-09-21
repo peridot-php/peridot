@@ -25,30 +25,10 @@ if (!$autoload) {
 }
 
 require_once $autoload;
-
-if (!isset($argv[1])) {
-    print 'Please specify a spec directory.' . PHP_EOL;
-    exit(1);
-}
-
-$specDirectory = $argv[1];
-if (!file_exists(getcwd() . '/' . $specDirectory)) {
-    print $argv[1] . ' is not a directory.  Please specify a valid spec directory' . PHP_EOL;
-    exit(1);
-}
-
 // todo - we are going to need to know how to find the bootstrap when installed as a library in another project
 require_once 'bootstrap.php';
 
-$loader = new SuiteLoader();
-$loader->load($specDirectory);
-$result = new SpecResult();
-$runner = new Runner(Context::getInstance()->getCurrentSuite());
-$runner->run($result);
-print $result->getSummary() . PHP_EOL;
+use Peridot\Console\Application;
 
-if ($result->getFailureCount() > 0) {
-    exit(1);
-}
-
-exit(0);
+$application = new Application();
+$application->run();

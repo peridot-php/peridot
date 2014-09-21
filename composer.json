@@ -13,7 +13,8 @@
         }
     ],
     "require": {
-        "evenement/evenement": "2.0.*"
+        "evenement/evenement": "2.0.*",
+        "symfony/console": "~2.0"
     },
     "autoload": {
         "psr-4": {
