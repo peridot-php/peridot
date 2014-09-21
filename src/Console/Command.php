@@ -28,7 +28,7 @@ class Command extends ConsoleCommand
     protected function configure()
     {
         $this->
-            addArgument('path', InputArgument::REQUIRED, 'The path to a directory or file containing tests.');
+            addArgument('path', InputArgument::REQUIRED, 'The path to a directory or file containing specs.');
     }
 
     /**
