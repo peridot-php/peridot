@@ -19,8 +19,7 @@ class BasicReporter extends AbstractBaseReporter
     protected $counts = ['pass' => 0, 'fail' => 0];
 
     /**
-     * @param Runner $runner
-     * @param OutputInterface $output
+     * {@inheritdoc}
      */
     public function init()
     {

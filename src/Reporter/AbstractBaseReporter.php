@@ -32,7 +32,7 @@ abstract class AbstractBaseReporter
     }
 
     /**
-     * Report results
+     * Initialize reporter. Setup and listen for runner events
      *
      * @return void
      */
