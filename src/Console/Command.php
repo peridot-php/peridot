@@ -2,12 +2,12 @@
 namespace Peridot\Console;
 
 use Peridot\Core\SpecResult;
+use Peridot\Reporter\BasicReporter;
 use Peridot\Runner\Context;
 use Peridot\Runner\Runner;
 use Peridot\Runner\SuiteLoader;
 use Symfony\Component\Console\Command\Command as ConsoleCommand;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -39,13 +39,13 @@ class Command extends ConsoleCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $path = $input->getArgument('path');
-        $result = new SpecResult();
 
+        $result = new SpecResult();
         $loader = new SuiteLoader();
         $loader->load($path);
         $runner = new Runner(Context::getInstance()->getCurrentSuite());
+        $reporter = new BasicReporter($runner, $output);
         $runner->run($result);
-        $output->writeln($result->getSummary());
 
         if ($result->getFailureCount() > 0) {
             return 1;
