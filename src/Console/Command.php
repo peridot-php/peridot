@@ -3,6 +3,7 @@ namespace Peridot\Console;
 
 use Peridot\Core\SpecResult;
 use Peridot\Reporter\BasicReporter;
+use Peridot\Reporter\SpecReporter;
 use Peridot\Runner\Context;
 use Peridot\Runner\Runner;
 use Peridot\Runner\SuiteLoader;
@@ -44,7 +45,7 @@ class Command extends ConsoleCommand
         $loader = new SuiteLoader();
         $loader->load($path);
         $runner = new Runner(Context::getInstance()->getCurrentSuite());
-        $reporter = new BasicReporter($runner, $output);
+        $reporter = new SpecReporter($runner, $output);
         $runner->run($result);
 
         if ($result->getFailureCount() > 0) {
