@@ -33,8 +33,8 @@ class Runner
      */
     public function run(SpecResult $result)
     {
-        $result->on('spec:failed', function($spec) {
-            $this->emit('fail', [$spec]);
+        $result->on('spec:failed', function($spec, $e) {
+            $this->emit('fail', [$spec, $e]);
         });
 
         $result->on('spec:passed', function($spec) {

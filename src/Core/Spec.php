@@ -26,7 +26,7 @@ class Spec extends AbstractSpec
             $bound();
             $result->passSpec($this);
         } catch (\Exception $e) {
-            $result->failSpec($this);
+            $result->failSpec($this, $e);
         }
 
         foreach ($this->tearDownFns as $fn) {

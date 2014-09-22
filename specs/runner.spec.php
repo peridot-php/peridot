@@ -74,11 +74,13 @@ describe("Runner", function() {
 
         it("should emit a fail event when a spec fails", function() {
             $emitted = null;
-            $this->runner->on('fail', function($spec) use (&$emitted) {
+            $exception = null;
+            $this->runner->on('fail', function($spec, $e) use (&$emitted, &$exception) {
                 $emitted = $spec;
+                $exception = $e;
             });
             $this->runner->run(new SpecResult());
-            assert($emitted === $this->failingSpec, 'fail event should have been emitted');
+            assert($emitted === $this->failingSpec && !is_null($exception), 'fail event should have been emitted with spec and exception');
         });
 
         it("should emit a pass event when a spec passes", function() {

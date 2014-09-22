@@ -42,10 +42,10 @@ class SpecResult
      *
      * @param SpecInterface $spec
      */
-    public function failSpec(SpecInterface $spec)
+    public function failSpec(SpecInterface $spec, \Exception $e)
     {
         $this->failureCount++;
-        $this->emit('spec:failed', [$spec]);
+        $this->emit('spec:failed', [$spec, $e]);
     }
 
     /**
