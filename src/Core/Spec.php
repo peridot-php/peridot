@@ -1,5 +1,9 @@
 <?php
+
 namespace Peridot\Core;
+
+use Closure;
+use Exception;
 
 /**
  * Class Spec - maps to it() style functions
@@ -17,20 +21,38 @@ class Spec extends AbstractSpec
     {
         $result->startSpec();
 
-        foreach ($this->setUpFns as $fn) {
-            $fn();
+        foreach ($this->setUpFns as $setUp) {
+            try {
+                $setUp();
+            } catch (Exception $e) {
+                $result->failSpec($this, $e);
+                $this->runTearDown();
+                return;
+            }
         }
 
-        $bound = \Closure::bind($this->definition, $this, $this);
+        $boundSpec = Closure::bind($this->definition, $this, $this);
         try {
-            $bound();
+            $boundSpec();
             $result->passSpec($this);
         } catch (\Exception $e) {
             $result->failSpec($this, $e);
         }
 
-        foreach ($this->tearDownFns as $fn) {
-            $fn();
+        $this->runTearDown();
+    }
+
+    /**
+     * Execute this spec's tear down functions.
+     */
+    protected function runTearDown()
+    {
+        foreach ($this->tearDownFns as $tearDown) {
+            try {
+                $tearDown();
+            } catch (Exception $e) {
+                continue;
+            }
         }
     }
 }
