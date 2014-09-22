@@ -41,7 +41,7 @@ abstract class AbstractBaseReporter
         $this->output = $output;
 
         $this->runner->on('fail', function(Spec $spec, \Exception $e) {
-            $this->errors[] = $e;
+            $this->errors[] = [$spec, $e];
         });
 
         $this->runner->on('pass', function() {

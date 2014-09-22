@@ -58,6 +58,13 @@ class SpecReporter extends AbstractBaseReporter
                 $this->output->writeln(sprintf("  <fg=red>%d failing</fg=red>", count($this->errors)));
             }
             $this->output->writeln("");
+            for ($i = 0; $i < count($this->errors); $i++) {
+                list($spec, $error) = $this->errors[$i];
+                $this->output->writeln(sprintf("  %d)%s:", $i + 1, $spec->getTitle()));
+                $this->output->writeln(sprintf("     <fg=red>%s</fg=red>", $error->getMessage()));
+                $trace = preg_replace('/^#/m', "      #", $error->getTraceAsString());
+                $this->output->writeln(sprintf("%s\n", $trace));
+            }
         });
     }
 
