@@ -33,7 +33,7 @@ class SpecReporter extends AbstractBaseReporter
         $this->runner->on('suite:start', function(Suite $suite) use ($root) {
             if ($suite != $root) {
                 ++$this->column;
-                $this->output->writeln(sprintf('%s<fg=cyan>%s</fg=cyan>', $this->indent(), $suite->getDescription()));
+                $this->output->writeln(sprintf('%s%s', $this->indent(), $suite->getDescription()));
             }
         });
 
@@ -45,31 +45,53 @@ class SpecReporter extends AbstractBaseReporter
         });
 
         $this->runner->on('pass', function(Spec $spec) {
-            $this->output->writeln(sprintf("  %s<fg=green>%s</fg=green> %s", $this->indent(), '✓', $spec->getDescription()));
+            $this->output->writeln(sprintf(
+                "  %s%s %s",
+                $this->indent(),
+                $this->color('success', '✓'),
+                $this->color('muted', $spec->getDescription())
+            ));
         });
 
         $this->runner->on('fail', function(Spec $spec, \Exception $e) {
-            $this->output->writeln(sprintf("  %s<fg=red>%d) %s</fg=red>", $this->indent(), count($this->errors), $spec->getDescription()));
+            $this->output->writeln(sprintf(
+                "  %s%s",
+                $this->indent(),
+                $this->color('error', sprintf("%d) %s", count($this->errors), $spec->getDescription()))
+            ));
         });
 
         $this->runner->on('end', function() {
-            $this->output->writeln(sprintf("\n  <fg=green>%d passing</fg=green>", $this->passing));
-            if ($this->errors) {
-                $this->output->writeln(sprintf("  <fg=red>%d failing</fg=red>", count($this->errors)));
-            }
-            $this->output->writeln("");
-            for ($i = 0; $i < count($this->errors); $i++) {
-                list($spec, $error) = $this->errors[$i];
-                $this->output->writeln(sprintf("  %d)%s:", $i + 1, $spec->getTitle()));
-                $this->output->writeln(sprintf("     <fg=red>%s</fg=red>", $error->getMessage()));
-                $trace = preg_replace('/^#/m', "      #", $error->getTraceAsString());
-                $this->output->writeln(sprintf("%s\n", $trace));
-            }
+            $this->footer();
         });
     }
 
+    /**
+     * Returns the current indent for the spec reporter
+     *
+     * @return string
+     */
     public function indent()
     {
         return implode('  ', array_fill(0, $this->column + 1, ''));
+    }
+
+    /**
+     * Output result footer
+     */
+    public function footer()
+    {
+        $this->output->writeln($this->color('success', sprintf("\n  %d passing", $this->passing)));
+        if ($this->errors) {
+            $this->output->writeln($this->color('error', sprintf("  %d failing", count($this->errors))));
+        }
+        $this->output->writeln("");
+        for ($i = 0; $i < count($this->errors); $i++) {
+            list($spec, $error) = $this->errors[$i];
+            $this->output->writeln($this->color('white', sprintf("  %d)%s:", $i + 1, $spec->getTitle())));
+            $this->output->writeln($this->color('error', sprintf("     %s", $error->getMessage())));
+            $trace = preg_replace('/^#/m', "      #", $error->getTraceAsString());
+            $this->output->writeln($this->color('muted', $trace));
+        }
     }
 }

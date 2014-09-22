@@ -32,6 +32,16 @@ abstract class AbstractBaseReporter
     protected $passing = 0;
 
     /**
+     * @var array
+     */
+    protected $colors = array(
+        'white' => ['left' => '<fg=white>', 'right' => '</fg=white>'],
+        'success' => ['left' => '<fg=green>', 'right' => '</fg=green>'],
+        'error' => ['left' => '<fg=red>', 'right' => '</fg=red>'],
+        'muted' => ['left' => "\033[90m", 'right' => "\033[0m"]
+    );
+
+    /**
      * @param Runner $runner
      * @param OutputInterface $output
      */
@@ -49,6 +59,19 @@ abstract class AbstractBaseReporter
         });
 
         $this->init();
+    }
+
+    /**
+     * Helper for colors
+     *
+     * @param $key
+     * @param $text
+     * @return string
+     */
+    public function color($key, $text)
+    {
+        $color = $this->colors[$key];
+        return sprintf("%s%s%s", $color['left'], $text, $color['right']);
     }
 
     /**
