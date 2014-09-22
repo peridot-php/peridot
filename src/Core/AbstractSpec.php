@@ -108,4 +108,20 @@ abstract class AbstractSpec implements SpecInterface
     {
         return $this->parent;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        $parts = [];
+        $node = $this;
+        while ($node != null) {
+            array_unshift($parts, $node->getDescription());
+            $node = $node->getParent();
+        }
+        return implode(' ' ,$parts);
+    }
 }

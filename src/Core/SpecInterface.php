@@ -50,4 +50,11 @@ interface SpecInterface extends EventEmitterInterface
      * @return mixed
      */
     public function setParent(SpecInterface $parent);
+
+    /**
+     * Returns the full description including parent descriptions
+     *
+     * @return string
+     */
+    public function getTitle();
 } 

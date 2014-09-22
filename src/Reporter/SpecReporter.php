@@ -13,6 +13,11 @@ class SpecReporter extends AbstractBaseReporter
     protected $column = 0;
 
     /**
+     * @var array
+     */
+    protected $errors = [];
+
+    /**
      * Initialize reporter. Setup and listen for runner events
      *
      * @return void
@@ -41,6 +46,18 @@ class SpecReporter extends AbstractBaseReporter
 
         $this->runner->on('pass', function(Spec $spec) {
             $this->output->writeln(sprintf("  %s<fg=green>%s</fg=green> %s", $this->indent(), '✓', $spec->getDescription()));
+        });
+
+        $this->runner->on('fail', function(Spec $spec, \Exception $e) {
+            $this->output->writeln(sprintf("  %s<fg=red>%d) %s</fg=red>", $this->indent(), count($this->errors), $spec->getDescription()));
+        });
+
+        $this->runner->on('end', function() {
+            $this->output->writeln(sprintf("\n  <fg=green>%d passing</fg=green>", $this->passing));
+            if ($this->errors) {
+                $this->output->writeln(sprintf("  <fg=red>%d failing</fg=red>", count($this->errors)));
+            }
+            $this->output->writeln("");
         });
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Reporter;
 
+use Peridot\Core\Spec;
 use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -21,6 +22,16 @@ abstract class AbstractBaseReporter
     protected $output;
 
     /**
+     * @var array
+     */
+    protected $errors = [];
+
+    /**
+     * @var int
+     */
+    protected $passing = 0;
+
+    /**
      * @param Runner $runner
      * @param OutputInterface $output
      */
@@ -28,6 +39,15 @@ abstract class AbstractBaseReporter
     {
         $this->runner = $runner;
         $this->output = $output;
+
+        $this->runner->on('fail', function(Spec $spec, \Exception $e) {
+            $this->errors[] = $e;
+        });
+
+        $this->runner->on('pass', function() {
+            $this->passing++;
+        });
+
         $this->init();
     }
 

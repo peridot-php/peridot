@@ -1,5 +1,7 @@
 <?php
+use Peridot\Core\Spec;
 use Peridot\Core\SpecResult;
+use Peridot\Core\Suite;
 use Peridot\Test\ItWasRun;
 
 describe("Spec", function() {
@@ -46,6 +48,18 @@ describe("Spec", function() {
             $spec->run($result);
             assert("1 run, 1 failed" == $result->getSummary(), "result summary should have shown 1 failed");
         });
+    });
+
+    describe("->getTitle()", function() {
+       it("should return the full text for a spec including parents", function() {
+           $root = new Suite("parent", function() {});
+           $child = new Suite("nested", function() {});
+           $spec = new Spec("should be rad", function() {});
+           $child->addSpec($spec);
+           $root->addSpec($child);
+
+           assert($spec->getTitle() == "parent nested should be rad", "title should include text from parents");
+       });
     });
 
 });
