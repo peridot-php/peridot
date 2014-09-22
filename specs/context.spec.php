@@ -20,7 +20,7 @@ describe('Context', function() {
                 });
             });
             $specs = $parent->getSpecs();
-            assert($specs[0] === null, "child should have been added to parent");
+            assert($specs[0] === $child, "child should have been added to parent");
         });
 
         it("should allow sibling suites", function() {
