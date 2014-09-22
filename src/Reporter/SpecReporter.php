@@ -48,7 +48,7 @@ class SpecReporter extends AbstractBaseReporter
             $this->output->writeln(sprintf(
                 "  %s%s %s",
                 $this->indent(),
-                $this->color('success', '✓'),
+                $this->color('success', $this->symbol('check')),
                 $this->color('muted', $spec->getDescription())
             ));
         });
@@ -88,7 +88,7 @@ class SpecReporter extends AbstractBaseReporter
         $this->output->writeln("");
         for ($i = 0; $i < count($this->errors); $i++) {
             list($spec, $error) = $this->errors[$i];
-            $this->output->writeln($this->color('white', sprintf("  %d)%s:", $i + 1, $spec->getTitle())));
+            $this->output->writeln(sprintf("  %d)%s:", $i + 1, $spec->getTitle()));
             $this->output->writeln($this->color('error', sprintf("     %s", $error->getMessage())));
             $trace = preg_replace('/^#/m', "      #", $error->getTraceAsString());
             $this->output->writeln($this->color('muted', $trace));

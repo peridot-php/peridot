@@ -42,6 +42,13 @@ abstract class AbstractBaseReporter
     );
 
     /**
+     * @var array
+     */
+    protected $symbols = array(
+        'check' => '✓'
+    );
+
+    /**
      * @param Runner $runner
      * @param OutputInterface $output
      */
@@ -72,6 +79,15 @@ abstract class AbstractBaseReporter
     {
         $color = $this->colors[$key];
         return sprintf("%s%s%s", $color['left'], $text, $color['right']);
+    }
+
+    /**
+     * @param $name
+     * @return string
+     */
+    public function symbol($name)
+    {
+        return $this->symbols[$name];
     }
 
     /**
