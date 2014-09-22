@@ -21,6 +21,10 @@ class SpecReporter extends AbstractBaseReporter
     {
         $root = Context::getInstance()->getCurrentSuite();
 
+        $this->runner->on('start', function() {
+            $this->output->writeln("");
+        });
+
         $this->runner->on('suite:start', function(Suite $suite) use ($root) {
             if ($suite != $root) {
                 ++$this->column;
