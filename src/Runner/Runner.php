@@ -42,7 +42,7 @@ class Runner
         });
 
         $this->suite->on('suite:start', function($suite) {
-            $this->emit('suite', [$suite]);
+            $this->emit('suite:start', [$suite]);
         });
 
         $this->suite->on('suite:end', function($suite) {

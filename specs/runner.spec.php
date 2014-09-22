@@ -90,17 +90,17 @@ describe("Runner", function() {
             assert($emitted === $this->passingSpec, 'pass event should have been emitted');
         });
 
-        it("should emit a suite event every time a suite starts", function() {
+        it("should emit a suite:start event every time a suite starts", function() {
             $child = new Suite("child suite", function() {});
             $grandchild = new Suite("grandchild suite", function() {});
             $child->addSpec($grandchild);
             $this->suite->addSpec($child);
             $count = 0;
-            $this->runner->on('suite', function() use (&$count) {
+            $this->runner->on('suite:start', function() use (&$count) {
                 $count++;
             });
             $this->runner->run(new SpecResult());
-            assert(3 == $count, "expected 3 suite events to fire");
+            assert(3 == $count, "expected 3 suite:start events to fire");
         });
 
         it("should emit a suite:end every time a suite ends", function() {
