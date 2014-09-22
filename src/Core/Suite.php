@@ -8,8 +8,6 @@ use Evenement\EventEmitterTrait;
  */
 class Suite extends AbstractSpec
 {
-    use EventEmitterTrait;
-
     /**
      * Specs belonging to this suite
      *
@@ -67,6 +65,15 @@ class Suite extends AbstractSpec
     {
         $this->emit('suite:start', [$this]);
         foreach ($this->specs as $spec) {
+
+            $spec->on('suite:start', function($suite) {
+                $this->emit('suite:start', [$suite]);
+            });
+
+            $spec->on('suite:end', function($suite) {
+               $this->emit('suite:end', [$suite]);
+            });
+
             $this->bindCallables($spec);
             $spec->run($result);
         }

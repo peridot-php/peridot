@@ -41,6 +41,14 @@ class Runner
             $this->emit('pass', [$spec]);
         });
 
+        $this->suite->on('suite:start', function($suite) {
+            $this->emit('suite', [$suite]);
+        });
+
+        $this->suite->on('suite:end', function($suite) {
+            $this->emit('suite:end', [$suite]);
+        });
+
         $this->emit('start');
         $this->suite->run($result);
         $this->emit('end');

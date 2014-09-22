@@ -1,5 +1,6 @@
 <?php
 namespace Peridot\Core;
+use Evenement\EventEmitterTrait;
 
 /**
  * Class AbstractSpec
@@ -7,6 +8,7 @@ namespace Peridot\Core;
  */
 abstract class AbstractSpec implements SpecInterface
 {
+    use EventEmitterTrait;
     /**
      * The spec definition as a callable
      *

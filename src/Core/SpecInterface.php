@@ -1,11 +1,12 @@
 <?php
 namespace Peridot\Core;
+use Evenement\EventEmitterInterface;
 
 /**
  * Interface SpecInterface
  * @package Peridot\Core
  */
-interface SpecInterface
+interface SpecInterface extends EventEmitterInterface
 {
     /**
      * @param SpecResult $result
