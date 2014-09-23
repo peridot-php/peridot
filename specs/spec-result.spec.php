@@ -34,13 +34,16 @@ describe("SpecResult", function() {
 
         it('should emit a spec:failed event', function() {
             $emitted = null;
-            $this->result->on('spec:failed', function ($spec) use (&$emitted){
+            $exception = null;
+            $this->result->on('spec:failed', function ($spec, $e) use (&$emitted, &$exception){
                 $emitted = $spec;
+                $exception = $e;
             });
 
             $spec = new Spec('spec', function() {});
-            $this->result->failSpec($spec);
-            assert($emitted === $spec, 'should have emitted spec:failed event');
+            $e = new \Exception("failure");
+            $this->result->failSpec($spec, $e);
+            assert($emitted === $spec && $exception != null, 'should have emitted spec:failed event with a spec and exception');
        });
     });
 

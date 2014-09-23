@@ -1,5 +1,6 @@
 <?php
 namespace Peridot\Core;
+use Evenement\EventEmitterTrait;
 
 /**
  * Class AbstractSpec
@@ -7,6 +8,7 @@ namespace Peridot\Core;
  */
 abstract class AbstractSpec implements SpecInterface
 {
+    use EventEmitterTrait;
     /**
      * The spec definition as a callable
      *
@@ -34,6 +36,11 @@ abstract class AbstractSpec implements SpecInterface
      * @var string
      */
     protected $description;
+
+    /**
+     * @var SpecInterface
+     */
+    protected $parent;
 
     /**
      * Constructor
@@ -84,5 +91,37 @@ abstract class AbstractSpec implements SpecInterface
     public function getDefinition()
     {
         return $this->definition;
+    }
+
+    /**
+     * @param SpecInterface $parent
+     */
+    public function setParent(SpecInterface $parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return SpecInterface
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        $parts = [];
+        $node = $this;
+        while ($node != null) {
+            array_unshift($parts, $node->getDescription());
+            $node = $node->getParent();
+        }
+        return implode(' ' ,$parts);
     }
 }

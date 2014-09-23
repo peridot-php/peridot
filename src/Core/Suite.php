@@ -1,5 +1,6 @@
 <?php
 namespace Peridot\Core;
+use Evenement\EventEmitterTrait;
 
 /**
  * Class Suite maps to describe() style functions as well as context() style functions
@@ -21,6 +22,7 @@ class Suite extends AbstractSpec
      */
     public function addSpec(SpecInterface $spec)
     {
+        $spec->setParent($this);
         $this->specs[] = $spec;
     }
 
@@ -61,10 +63,21 @@ class Suite extends AbstractSpec
      */
     public function run(SpecResult $result)
     {
+        $this->emit('suite:start', [$this]);
         foreach ($this->specs as $spec) {
+
+            $spec->on('suite:start', function($suite) {
+                $this->emit('suite:start', [$suite]);
+            });
+
+            $spec->on('suite:end', function($suite) {
+               $this->emit('suite:end', [$suite]);
+            });
+
             $this->bindCallables($spec);
             $spec->run($result);
         }
+        $this->emit('suite:end', [$this]);
     }
 
     /**

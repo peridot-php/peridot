@@ -25,7 +25,7 @@ class Context
      */
     private function __construct()
     {
-        $this->suites = [new Suite("root suite", function() {})];
+        $this->suites = [new Suite("", function() {})];
     }
 
     /**

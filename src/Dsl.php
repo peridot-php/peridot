@@ -41,6 +41,6 @@ function beforeEach(callable $fn) {
  * Change default assert behavior to throw exceptions
  */
 assert_options(ASSERT_WARNING, false);
-assert_options(ASSERT_CALLBACK, function($script, $line, $message) {
-    throw new Exception($message);
+assert_options(ASSERT_CALLBACK, function($script, $line, $message, $description) {
+    throw new Exception($description);
 });

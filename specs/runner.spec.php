@@ -44,13 +44,13 @@ describe("Runner", function() {
     describe("->run()", function() {
 
         beforeEach(function() {
-            $suite = new Suite("runner test suite", function() {});
+            $this->suite = new Suite("runner test suite", function() {});
             $this->passingSpec = new Spec("passing spec", function() {});
             $this->failingSpec = new Spec("failing spec", function() { throw new \Exception("fail"); });
-            $suite->addSpec($this->passingSpec);
-            $suite->addSpec($this->failingSpec);
+            $this->suite->addSpec($this->passingSpec);
+            $this->suite->addSpec($this->failingSpec);
 
-            $this->runner = new Runner($suite);
+            $this->runner = new Runner($this->suite);
         });
 
         it("should emit a start event when the runner starts", function() {
@@ -74,11 +74,13 @@ describe("Runner", function() {
 
         it("should emit a fail event when a spec fails", function() {
             $emitted = null;
-            $this->runner->on('fail', function($spec) use (&$emitted) {
+            $exception = null;
+            $this->runner->on('fail', function($spec, $e) use (&$emitted, &$exception) {
                 $emitted = $spec;
+                $exception = $e;
             });
             $this->runner->run(new SpecResult());
-            assert($emitted === $this->failingSpec, 'fail event should have been emitted');
+            assert($emitted === $this->failingSpec && !is_null($exception), 'fail event should have been emitted with spec and exception');
         });
 
         it("should emit a pass event when a spec passes", function() {
@@ -88,6 +90,32 @@ describe("Runner", function() {
             });
             $this->runner->run(new SpecResult());
             assert($emitted === $this->passingSpec, 'pass event should have been emitted');
+        });
+
+        it("should emit a suite:start event every time a suite starts", function() {
+            $child = new Suite("child suite", function() {});
+            $grandchild = new Suite("grandchild suite", function() {});
+            $child->addSpec($grandchild);
+            $this->suite->addSpec($child);
+            $count = 0;
+            $this->runner->on('suite:start', function() use (&$count) {
+                $count++;
+            });
+            $this->runner->run(new SpecResult());
+            assert(3 == $count, "expected 3 suite:start events to fire");
+        });
+
+        it("should emit a suite:end every time a suite ends", function() {
+            $child = new Suite("child suite", function() {});
+            $grandchild = new Suite("grandchild suite", function() {});
+            $child->addSpec($grandchild);
+            $this->suite->addSpec($child);
+            $count = 0;
+            $this->runner->on('suite:end', function() use (&$count) {
+                $count++;
+            });
+            $this->runner->run(new SpecResult());
+            assert(3 == $count, "expected 3 suite:end events to fire");
         });
     });
 });

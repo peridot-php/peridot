@@ -25,7 +25,7 @@ class Spec extends AbstractSpec
             try {
                 $setUp();
             } catch (Exception $e) {
-                $result->failSpec($this);
+                $result->failSpec($this, $e);
                 $this->runTearDown();
                 return;
             }
@@ -35,8 +35,8 @@ class Spec extends AbstractSpec
         try {
             $boundSpec();
             $result->passSpec($this);
-        } catch (Exception $e) {
-            $result->failSpec($this);
+        } catch (\Exception $e) {
+            $result->failSpec($this, $e);
         }
 
         $this->runTearDown();

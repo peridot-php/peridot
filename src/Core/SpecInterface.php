@@ -1,11 +1,12 @@
 <?php
 namespace Peridot\Core;
+use Evenement\EventEmitterInterface;
 
 /**
  * Interface SpecInterface
  * @package Peridot\Core
  */
-interface SpecInterface
+interface SpecInterface extends EventEmitterInterface
 {
     /**
      * @param SpecResult $result
@@ -38,4 +39,22 @@ interface SpecInterface
      * @return callable
      */
     public function getDefinition();
+
+    /**
+     * @return SpecInterface
+     */
+    public function getParent();
+
+    /**
+     * @param SpecInterface $parent
+     * @return mixed
+     */
+    public function setParent(SpecInterface $parent);
+
+    /**
+     * Returns the full description including parent descriptions
+     *
+     * @return string
+     */
+    public function getTitle();
 } 
