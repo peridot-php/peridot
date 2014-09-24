@@ -124,4 +124,24 @@ abstract class AbstractSpec implements SpecInterface
         }
         return implode(' ' ,$parts);
     }
+
+    /**
+     * Return all registered setup functions
+     *
+     * @return array
+     */
+    public function getSetUpFunctions()
+    {
+        return $this->setUpFns;
+    }
+
+    /**
+     * Return all registered tear down functions
+     *
+     * @return array
+     */
+    public function getTearDownFunctions()
+    {
+        return $this->tearDownFns;
+    }
 }

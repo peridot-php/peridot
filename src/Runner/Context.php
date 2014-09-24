@@ -76,6 +76,16 @@ class Context
     }
 
     /**
+     * Add a tear down function for all specs in the current suite
+     *
+     * @param callable $fn
+     */
+    public function afterEach(callable $fn)
+    {
+        $this->getCurrentSuite()->addTearDownFunction($fn);
+    }
+
+    /**
      * Singleton access to SuiteFactory
      *
      * @return Context
