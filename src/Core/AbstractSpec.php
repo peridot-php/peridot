@@ -43,7 +43,7 @@ abstract class AbstractSpec implements SpecInterface
     protected $parent;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $pending = false;
 
@@ -133,11 +133,11 @@ abstract class AbstractSpec implements SpecInterface
     /**
      * {@inheritdoc}
      *
-     * @return bool
+     * @return bool|null
      */
     public function isPending()
     {
-        return (bool) $this->pending;
+        return $this->pending;
     }
 
     /**

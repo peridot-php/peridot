@@ -103,4 +103,12 @@ class SpecResult
     {
         return $this->specCount;
     }
+
+    /**
+     * @return int
+     */
+    public function getPendingCount()
+    {
+        return $this->pendingCount;
+    }
 }

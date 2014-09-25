@@ -42,9 +42,10 @@ class Context
      * @param $description
      * @param callable $fn
      */
-    public function describe($description, callable $fn)
+    public function describe($description, callable $fn, $pending = false)
     {
         $suite = new Suite($description, $fn);
+        $suite->setPending($pending);
         $this->getCurrentSuite()->addSpec($suite);
         array_unshift($this->suites, $suite);
         call_user_func($suite->getDefinition());

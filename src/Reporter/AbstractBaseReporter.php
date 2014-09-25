@@ -32,13 +32,19 @@ abstract class AbstractBaseReporter
     protected $passing = 0;
 
     /**
+     * @var int
+     */
+    protected $pending = 0;
+
+    /**
      * @var array
      */
     protected $colors = array(
         'white' => ['left' => '<fg=white>', 'right' => '</fg=white>'],
         'success' => ['left' => '<fg=green>', 'right' => '</fg=green>'],
         'error' => ['left' => '<fg=red>', 'right' => '</fg=red>'],
-        'muted' => ['left' => "\033[90m", 'right' => "\033[0m"]
+        'muted' => ['left' => "\033[90m", 'right' => "\033[0m"],
+        'pending' => ['left' => '<fg=cyan>', 'right' => '</fg=cyan>'],
     );
 
     /**
@@ -63,6 +69,10 @@ abstract class AbstractBaseReporter
 
         $this->runner->on('pass', function() {
             $this->passing++;
+        });
+
+        $this->runner->on('pending', function() {
+            $this->pending++;
         });
 
         $this->init();

@@ -13,11 +13,6 @@ class SpecReporter extends AbstractBaseReporter
     protected $column = 0;
 
     /**
-     * @var array
-     */
-    protected $errors = [];
-
-    /**
      * Initialize reporter. Setup and listen for runner events
      *
      * @return void
@@ -61,6 +56,14 @@ class SpecReporter extends AbstractBaseReporter
             ));
         });
 
+        $this->runner->on('pending', function(Spec $spec) {
+            $this->output->writeln(sprintf(
+                $this->color('pending', "  %s- %s"),
+                $this->indent(),
+                $spec->getDescription()
+            ));
+        });
+
         $this->runner->on('end', function() {
             $this->footer();
         });
@@ -84,6 +87,9 @@ class SpecReporter extends AbstractBaseReporter
         $this->output->writeln($this->color('success', sprintf("\n  %d passing", $this->passing)));
         if ($this->errors) {
             $this->output->writeln($this->color('error', sprintf("  %d failing", count($this->errors))));
+        }
+        if ($this->pending) {
+            $this->output->writeln($this->color('pending', sprintf("  %d pending", count($this->pending))));
         }
         $this->output->writeln("");
         for ($i = 0; $i < count($this->errors); $i++) {

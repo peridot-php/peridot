@@ -40,8 +40,7 @@ function it($description, callable $fn) {
  * @param callable $fn
  */
 function xdescribe($description, callable $fn) {
-    $suite = Context::getInstance()->describe($description, $fn);
-    $suite->setPending(true);
+    Context::getInstance()->describe($description, $fn, true);
 }
 
 /**
