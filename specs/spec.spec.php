@@ -49,6 +49,14 @@ describe("Spec", function() {
             assert("1 run, 1 failed" == $result->getSummary(), "result summary should have shown 1 failed");
         });
 
+        it("should add pending results to result", function () {
+            $spec = new Spec('shouldnt run', function() {});
+            $spec->setPending(true);
+            $result = new SpecResult();
+            $spec->run($result);
+            assert("1 run, 0 failed, 1 pending" == $result->getSummary(), "result summary should have shown 1 pending");
+        });
+
         it('should run tear down functions even if spec fails', function () {
             $spec = new Spec('failing spec with tear downs', function() {
                 throw new Exception('fail');

@@ -22,6 +22,7 @@ class Spec extends AbstractSpec
         $result->startSpec();
 
         if ($this->isPending()) {
+            $result->pendSpec($this);
             return;
         }
 

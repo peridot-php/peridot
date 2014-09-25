@@ -27,6 +27,13 @@ class SpecResult
     protected $failureCount = 0;
 
     /**
+     * Tracks total number of pending specs run against this result
+     *
+     * @var int
+     */
+    protected $pendingCount = 0;
+
+    /**
      * Returns a summary string containing total specs run and total specs
      * failed
      *
@@ -34,7 +41,11 @@ class SpecResult
      */
     public function getSummary()
     {
-        return sprintf('%d run, %d failed', $this->specCount, $this->failureCount);
+        $summary = sprintf('%d run, %d failed', $this->specCount, $this->failureCount);
+        if ($this->pendingCount > 0) {
+            $summary .= sprintf(', %d pending', $this->pendingCount);
+        }
+        return $summary;
     }
 
     /**
@@ -46,6 +57,16 @@ class SpecResult
     {
         $this->failureCount++;
         $this->emit('spec:failed', [$spec, $e]);
+    }
+
+    /**
+     * Notify result that spec is pending
+     *
+     * @param SpecInterface $spec
+     */
+    public function pendSpec(SpecInterface $spec)
+    {
+        $this->pendingCount++;
     }
 
     /**
