@@ -107,4 +107,13 @@ describe("Spec", function() {
            assert($spec->getTitle() == "parent nested should be rad", "title should include text from parents");
        });
     });
+
+    describe('->setPending()', function() {
+       it('should set the pending status', function() {
+           $spec = new Spec("spec", function() {});
+           assert($spec->isPending() === false, "spec should be pending by default");
+           $spec->setPending(true);
+           assert($spec->isPending(), "spec should be pending");
+       });
+    });
 });

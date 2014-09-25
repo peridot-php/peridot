@@ -57,4 +57,19 @@ interface SpecInterface extends EventEmitterInterface
      * @return string
      */
     public function getTitle();
+
+    /**
+     * Return whether or not the spec is pending
+     *
+     * @return bool
+     */
+    public function isPending();
+
+    /**
+     * Set the pending status of the spec
+     *
+     * @param bool $state
+     * @return void
+     */
+    public function setPending($state);
 } 

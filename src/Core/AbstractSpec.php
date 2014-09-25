@@ -43,6 +43,11 @@ abstract class AbstractSpec implements SpecInterface
     protected $parent;
 
     /**
+     * @var bool
+     */
+    protected $pending = false;
+
+    /**
      * Constructor
      *
      * @param string $description
@@ -123,5 +128,25 @@ abstract class AbstractSpec implements SpecInterface
             $node = $node->getParent();
         }
         return implode(' ' ,$parts);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function isPending()
+    {
+        return (bool) $this->pending;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param bool $state
+     */
+    public function setPending($state)
+    {
+        $this->pending = (bool) $state;
     }
 }
