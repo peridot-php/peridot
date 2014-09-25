@@ -38,6 +38,16 @@ function beforeEach(callable $fn) {
 }
 
 /**
+ * Add a tear down function for all specs in the
+ * current suite
+ *
+ * @param callable $fn
+ */
+function afterEach(callable $fn) {
+    Context::getInstance()->afterEach($fn);
+}
+
+/**
  * Change default assert behavior to throw exceptions
  */
 assert_options(ASSERT_WARNING, false);
