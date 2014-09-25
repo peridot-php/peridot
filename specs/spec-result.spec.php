@@ -63,4 +63,22 @@ describe("SpecResult", function() {
             assert($emitted === $spec, 'should have emitted spec:passed event');
         });
     });
+
+    describe("->pendSpec()", function() {
+        beforeEach(function() {
+            $this->result = new SpecResult();
+        });
+
+        it('should emit a spec:pending event', function() {
+            $emitted = null;
+            $this->result->on('spec:pending', function ($spec) use (&$emitted){
+                $emitted = $spec;
+            });
+
+            $spec = new Spec('spec', function() {});
+            $spec->setPending(true);
+            $this->result->pendSpec($spec);
+            assert($emitted === $spec, 'should have emitted spec:pending event');
+        });
+    });
 });

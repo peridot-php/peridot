@@ -67,6 +67,7 @@ class SpecResult
     public function pendSpec(SpecInterface $spec)
     {
         $this->pendingCount++;
+        $this->emit('spec:pending', [$spec]);
     }
 
     /**
