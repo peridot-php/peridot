@@ -92,6 +92,16 @@ describe("Runner", function() {
             assert($emitted === $this->passingSpec, 'pass event should have been emitted');
         });
 
+        it("should emit a pending event when a spec is pending", function() {
+            $emitted = null;
+            $this->runner->on('pending', function($spec) use (&$emitted) {
+                $emitted = $spec;
+            });
+            $this->passingSpec->setPending(true);
+            $this->runner->run(new SpecResult());
+            assert($emitted === $this->passingSpec, 'pending event should have been emitted');
+        });
+
         it("should emit a suite:start event every time a suite starts", function() {
             $child = new Suite("child suite", function() {});
             $grandchild = new Suite("grandchild suite", function() {});
