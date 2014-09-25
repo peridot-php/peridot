@@ -135,7 +135,7 @@ abstract class AbstractSpec implements SpecInterface
      *
      * @return bool|null
      */
-    public function isPending()
+    public function getPending()
     {
         return $this->pending;
     }

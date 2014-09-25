@@ -33,24 +33,24 @@ describe('Context', function() {
 
         it("should set pending if value is not null", function() {
             $suite = $this->context->describe("desc", function() {}, true);
-            assert($suite->isPending(), "suite should be pending");
+            assert($suite->getPending(), "suite should be pending");
         });
 
         it("should ignore pending if value is null", function() {
             $suite = $this->context->describe("desc", function() {});
-            assert(is_null($suite->isPending()), "pending status should be null");
+            assert(is_null($suite->getPending()), "pending status should be null");
         });
     });
 
     describe("->it()", function() {
         it("should set pending status if value is not null", function() {
             $spec = $this->context->it("is a spec", function() {}, true);
-            assert($spec->isPending(), "pending status should be true");
+            assert($spec->getPending(), "pending status should be true");
         });
 
         it("should ignore pending status if value is null", function() {
             $spec = $this->context->it("is a spec", function() {});
-            assert(is_null($spec->isPending()), "pending status should be null");
+            assert(is_null($spec->getPending()), "pending status should be null");
         });
     });
 });

@@ -66,8 +66,8 @@ class Suite extends AbstractSpec
         $this->emit('suite:start', [$this]);
         foreach ($this->specs as $spec) {
 
-            if (!is_null($this->isPending())) {
-                $spec->setPending($this->isPending());
+            if (!is_null($this->getPending())) {
+                $spec->setPending($this->getPending());
             }
 
             $spec->on('suite:start', function($suite) {

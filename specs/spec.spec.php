@@ -131,9 +131,9 @@ describe("Spec", function() {
     describe('->setPending()', function() {
        it('should set the pending status', function() {
            $spec = new Spec("spec", function() {});
-           assert(is_null($spec->isPending()), "spec pending should be null by default");
+           assert(is_null($spec->getPending()), "spec pending should be null by default");
            $spec->setPending(true);
-           assert($spec->isPending(), "spec should be pending");
+           assert($spec->getPending(), "spec should be pending");
        });
     });
 });
