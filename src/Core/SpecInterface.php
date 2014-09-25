@@ -22,11 +22,25 @@ interface SpecInterface extends EventEmitterInterface
     public function addSetUpFunction(callable $setupFn);
 
     /**
+     * Return all registered setup functions
+     *
+     * @return array
+     */
+    public function getSetUpFunctions();
+
+    /**
      * Add a function to execute after the spec runs
      *
      * @param callable $tearDownFn
      */
     public function addTearDownFunction(callable $tearDownFn);
+
+    /**
+     * Return all registered tear down functions
+     *
+     * @return array
+     */
+    public function getTearDownFunctions();
 
     /**
      * @return string

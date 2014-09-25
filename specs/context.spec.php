@@ -53,4 +53,20 @@ describe('Context', function() {
             assert(is_null($spec->getPending()), "pending status should be null");
         });
     });
+
+    describe('->beforeEach()', function() {
+        it('should register an beforeEach callback on the current suite', function() {
+            $before = function() {};
+            $this->context->beforeEach($before);
+            assert($this->context->getCurrentSuite()->getSetUpFunctions()[0] === $before, "expected beforeEach to register setup function");
+        });
+    });
+
+    describe('->afterEach()', function() {
+       it('should register an afterEach callback on the current suite', function() {
+           $after = function() {};
+           $this->context->afterEach($after);
+           assert($this->context->getCurrentSuite()->getTearDownFunctions()[0] === $after, "expected afterEach to register tear down function");
+       });
+    });
 });
