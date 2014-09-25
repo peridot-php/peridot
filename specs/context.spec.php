@@ -30,5 +30,15 @@ describe('Context', function() {
             assert($specs[0] === $sibling1, "sibling1 should have been added to parent");
             assert($specs[1] === $sibling2, "sibling2 should have been added to parent");
         });
+
+        it("should set pending if value is not null", function() {
+            $suite = $this->context->describe("desc", function() {}, true);
+            assert($suite->isPending(), "suite should be pending");
+        });
+
+        it("should ignore pending if value is null", function() {
+            $suite = $this->context->describe("desc", function() {});
+            assert(is_null($suite->isPending()), "pending status should be null");
+        });
     });
 });
