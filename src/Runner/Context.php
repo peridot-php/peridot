@@ -62,6 +62,7 @@ class Context
     {
         $spec = new Spec($description, $fn);
         $this->getCurrentSuite()->addSpec($spec);
+        return $spec;
     }
 
     /**

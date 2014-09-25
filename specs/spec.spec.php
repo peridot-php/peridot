@@ -94,6 +94,18 @@ describe("Spec", function() {
             $spec->run(new SpecResult());;
             assert(!isset($spec->log), 'test should have been skipped');
         });
+
+        context("when spec is pending", function() {
+           it("should not execute", function() {
+               $neverRan = true;
+               $spec = new Spec('shouldnt run', function() use (&$neverRan) {
+                   $neverRan = false;
+               });
+               $spec->setPending(true);
+               $spec->run(new SpecResult());
+               assert($neverRan, 'pending spec should not have run');
+           });
+        });
     });
 
     describe("->getTitle()", function() {

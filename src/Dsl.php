@@ -13,6 +13,12 @@ function describe($description, callable $fn) {
     Context::getInstance()->describe($description, $fn);
 }
 
+/**
+ * Identical to describe. Useful for test readability
+ *
+ * @param $description
+ * @param callable $fn
+ */
 function context($description, callable $fn) {
     describe($description, $fn);
 }
@@ -25,6 +31,38 @@ function context($description, callable $fn) {
  */
 function it($description, callable $fn) {
     Context::getInstance()->it($description, $fn);
+}
+
+/**
+ * Create a pending suite
+ *
+ * @param $description
+ * @param callable $fn
+ */
+function xdescribe($description, callable $fn) {
+    $suite = Context::getInstance()->describe($description, $fn);
+    $suite->setPending(true);
+}
+
+/**
+ * Create a pending context
+ *
+ * @param $description
+ * @param callable $fn
+ */
+function xcontext($description, callable $fn) {
+    xdescribe($description, $fn);
+}
+
+/**
+ * Create a pending spec
+ *
+ * @param $description
+ * @param callable $fn
+ */
+function xit($description, callable $fn) {
+    $spec = Context::getInstance()->it($description, $fn);
+    $spec->setPending(true);
 }
 
 /**
