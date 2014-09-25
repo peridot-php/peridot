@@ -23,6 +23,7 @@ class Suite extends AbstractSpec
     public function addSpec(SpecInterface $spec)
     {
         $spec->setParent($this);
+        $spec->setPending($this->isPending());
         $this->specs[] = $spec;
     }
 

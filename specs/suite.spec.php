@@ -86,5 +86,13 @@ describe("Suite", function() {
             assert($spec->getParent() === $suite, "added spec should have parent property set");
         });
 
+        it("should transfer pending status", function() {
+            $suite = new Suite("test suite", function() {});
+            $suite->setPending(true);
+            $spec = new Spec("test spec", function() {});
+            $suite->addSpec($spec);
+            assert($spec->isPending(), "spec should be pending");
+        });
+
     });
 });
