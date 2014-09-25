@@ -45,7 +45,7 @@ abstract class AbstractSpec implements SpecInterface
     /**
      * @var bool|null
      */
-    protected $pending = false;
+    protected $pending = null;
 
     /**
      * Constructor

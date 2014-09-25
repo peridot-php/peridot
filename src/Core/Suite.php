@@ -23,7 +23,6 @@ class Suite extends AbstractSpec
     public function addSpec(SpecInterface $spec)
     {
         $spec->setParent($this);
-        $spec->setPending($this->isPending());
         $this->specs[] = $spec;
     }
 
@@ -66,6 +65,10 @@ class Suite extends AbstractSpec
     {
         $this->emit('suite:start', [$this]);
         foreach ($this->specs as $spec) {
+
+            if (!is_null($this->isPending())) {
+                $spec->setPending($this->isPending());
+            }
 
             $spec->on('suite:start', function($suite) {
                 $this->emit('suite:start', [$suite]);

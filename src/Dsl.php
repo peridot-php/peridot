@@ -60,8 +60,7 @@ function xcontext($description, callable $fn) {
  * @param callable $fn
  */
 function xit($description, callable $fn) {
-    $spec = Context::getInstance()->it($description, $fn);
-    $spec->setPending(true);
+    Context::getInstance()->it($description, $fn, true);
 }
 
 /**

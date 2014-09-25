@@ -89,7 +89,7 @@ class SpecReporter extends AbstractBaseReporter
             $this->output->writeln($this->color('error', sprintf("  %d failing", count($this->errors))));
         }
         if ($this->pending) {
-            $this->output->writeln($this->color('pending', sprintf("  %d pending", count($this->pending))));
+            $this->output->writeln($this->color('pending', sprintf("  %d pending", $this->pending)));
         }
         $this->output->writeln("");
         for ($i = 0; $i < count($this->errors); $i++) {

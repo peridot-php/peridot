@@ -56,21 +56,6 @@ describe("Suite", function() {
             assert('torntorn' == $spec1->log . $spec2->log, "tear down should have run for both specs");
         });
 
-        it("should pass pending statis to specs", function() {
-            $suite = new Suite("Suite", function() {});
-            $suite->setPending(true);
-            $fn = function() {};
-            $spec1 = new ItWasRun("should have log", $fn);
-            $spec2 = new ItWasRun("should have log too", $fn);
-            $suite->addSpec($spec1);
-            $suite->addSpec($spec2);
-
-            $result = new SpecResult();
-            $suite->run($result);
-
-            assert(2 == $result->getPendingCount(), "");
-        });
-
         it("should emit a suite:start event", function() {
             $suite = new Suite("Suite", function() {});
             $emitted = null;
