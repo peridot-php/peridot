@@ -61,7 +61,7 @@ interface SpecInterface extends EventEmitterInterface
     /**
      * Return whether or not the spec is pending
      *
-     * @return bool
+     * @return bool|null
      */
     public function isPending();
 

@@ -41,4 +41,16 @@ describe('Context', function() {
             assert(is_null($suite->isPending()), "pending status should be null");
         });
     });
+
+    describe("->it()", function() {
+        it("should set pending status if value is not null", function() {
+            $spec = $this->context->it("is a spec", function() {}, true);
+            assert($spec->isPending(), "pending status should be true");
+        });
+
+        it("should ignore pending status if value is null", function() {
+            $spec = $this->context->it("is a spec", function() {});
+            assert(is_null($spec->isPending()), "pending status should be null");
+        });
+    });
 });
