@@ -56,6 +56,20 @@ describe("Suite", function() {
             assert('torntorn' == $spec1->log . $spec2->log, "tear down should have run for both specs");
         });
 
+        it("should set pending status on specs if not null", function() {
+            $suite = new Suite("Suite", function() {});
+            $suite->setPending(true);
+            $fn = function() {};
+
+            $spec1 = new ItWasRun("should have log", $fn);
+            $suite->addSpec($spec1);
+
+            $result = new SpecResult();
+            $suite->run($result);
+
+            assert($spec1->getPending(), "spec should be pending");
+        });
+
         it("should emit a suite:start event", function() {
             $suite = new Suite("Suite", function() {});
             $emitted = null;
