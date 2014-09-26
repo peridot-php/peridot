@@ -16,7 +16,7 @@ class BasicReporter extends AbstractBaseReporter
     /**
      * @var array
      */
-    protected $counts = ['pass' => 0, 'fail' => 0];
+    protected $counts = ['pass' => 0, 'fail' => 0, 'pending' => 0];
 
     /**
      * {@inheritdoc}
@@ -31,8 +31,17 @@ class BasicReporter extends AbstractBaseReporter
            $this->counts['pass']++;
         });
 
+        $this->runner->on('pending', function() {
+           $this->counts['pending']++;
+        });
+
         $this->runner->on('end', function() {
-           $this->output->writeln(sprintf('%d run, %d failed', $this->counts['pass'], $this->counts['fail']));
+           $this->output->writeln(sprintf(
+               '%d run, %d failed, %d pending',
+               $this->counts['pass'],
+               $this->counts['fail'],
+               $this->counts['pending']
+           ));
         });
     }
 } 

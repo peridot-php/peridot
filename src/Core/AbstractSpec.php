@@ -1,5 +1,8 @@
 <?php
+
 namespace Peridot\Core;
+
+use Closure;
 use Evenement\EventEmitterTrait;
 
 /**
@@ -9,24 +12,23 @@ use Evenement\EventEmitterTrait;
 abstract class AbstractSpec implements SpecInterface
 {
     use EventEmitterTrait;
+
     /**
-     * The spec definition as a callable
+     * The spec definition as a callable.
      *
      * @var callable
      */
     protected $definition;
 
     /**
-     * A collection of functions to run
-     * before specs execute
+     * A collection of functions to run before specs execute.
      *
      * @var array
      */
     protected $setUpFns = [];
 
     /**
-     * A collection of functions to run
-     * after specs execute
+     * A collection of functions to run after specs execute.
      *
      * @var array
      */
@@ -43,7 +45,12 @@ abstract class AbstractSpec implements SpecInterface
     protected $parent;
 
     /**
-     * Constructor
+     * @var bool|null
+     */
+    protected $pending = null;
+
+    /**
+     * Constructor.
      *
      * @param string $description
      * @param callable $definition
@@ -57,26 +64,22 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param callable $setupFn
      */
     public function addSetUpFunction(callable $setupFn)
     {
-        $this->setUpFns[] = \Closure::bind($setupFn, $this, $this);
+        $this->setUpFns[] = Closure::bind($setupFn, $this, $this);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @param callable $tearDownFn
      */
     public function addTearDownFunction(callable $tearDownFn)
     {
-        $this->tearDownFns[] = \Closure::bind($tearDownFn, $this, $this);
+        $this->tearDownFns[] = Closure::bind($tearDownFn, $this, $this);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -85,8 +88,6 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return callable
      */
     public function getDefinition()
     {
@@ -94,7 +95,7 @@ abstract class AbstractSpec implements SpecInterface
     }
 
     /**
-     * @param SpecInterface $parent
+     * {@inheritdoc}
      */
     public function setParent(SpecInterface $parent)
     {
@@ -102,7 +103,7 @@ abstract class AbstractSpec implements SpecInterface
     }
 
     /**
-     * @return SpecInterface
+     * {@inheritdoc}
      */
     public function getParent()
     {
@@ -111,8 +112,6 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function getTitle()
     {
@@ -126,9 +125,23 @@ abstract class AbstractSpec implements SpecInterface
     }
 
     /**
-     * Return all registered setup functions
-     *
-     * @return array
+     * {@inheritdoc}
+     */
+    public function getPending()
+    {
+        return $this->pending;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPending($state)
+    {
+        $this->pending = (bool)$state;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getSetUpFunctions()
     {
@@ -136,9 +149,7 @@ abstract class AbstractSpec implements SpecInterface
     }
 
     /**
-     * Return all registered tear down functions
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getTearDownFunctions()
     {

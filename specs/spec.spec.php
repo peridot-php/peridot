@@ -49,6 +49,14 @@ describe("Spec", function() {
             assert("1 run, 1 failed" == $result->getSummary(), "result summary should have shown 1 failed");
         });
 
+        it("should add pending results to result", function () {
+            $spec = new Spec('shouldnt run', function() {});
+            $spec->setPending(true);
+            $result = new SpecResult();
+            $spec->run($result);
+            assert("1 run, 0 failed, 1 pending" == $result->getSummary(), "result summary should have shown 1 pending");
+        });
+
         it('should run tear down functions even if spec fails', function () {
             $spec = new Spec('failing spec with tear downs', function() {
                 throw new Exception('fail');
@@ -94,6 +102,18 @@ describe("Spec", function() {
             $spec->run(new SpecResult());;
             assert(!isset($spec->log), 'test should have been skipped');
         });
+
+        context("when spec is pending", function() {
+           it("should not execute", function() {
+               $neverRan = true;
+               $spec = new Spec('shouldnt run', function() use (&$neverRan) {
+                   $neverRan = false;
+               });
+               $spec->setPending(true);
+               $spec->run(new SpecResult());
+               assert($neverRan, 'pending spec should not have run');
+           });
+        });
     });
 
     describe("->getTitle()", function() {
@@ -105,6 +125,15 @@ describe("Spec", function() {
            $root->addSpec($child);
 
            assert($spec->getTitle() == "parent nested should be rad", "title should include text from parents");
+       });
+    });
+
+    describe('->setPending()', function() {
+       it('should set the pending status', function() {
+           $spec = new Spec("spec", function() {});
+           assert(is_null($spec->getPending()), "spec pending should be null by default");
+           $spec->setPending(true);
+           assert($spec->getPending(), "spec should be pending");
        });
     });
 });

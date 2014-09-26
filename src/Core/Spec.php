@@ -21,6 +21,11 @@ class Spec extends AbstractSpec
     {
         $result->startSpec();
 
+        if ($this->getPending()) {
+            $result->pendSpec($this);
+            return;
+        }
+
         foreach ($this->setUpFns as $setUp) {
             try {
                 $setUp();

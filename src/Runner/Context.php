@@ -42,9 +42,12 @@ class Context
      * @param $description
      * @param callable $fn
      */
-    public function describe($description, callable $fn)
+    public function describe($description, callable $fn, $pending = null)
     {
         $suite = new Suite($description, $fn);
+        if (!is_null($pending)) {
+            $suite->setPending($pending);
+        }
         $this->getCurrentSuite()->addSpec($suite);
         array_unshift($this->suites, $suite);
         call_user_func($suite->getDefinition());
@@ -58,10 +61,14 @@ class Context
      * @param $description
      * @param $fn
      */
-    public function it($description, callable $fn)
+    public function it($description, callable $fn, $pending = null)
     {
         $spec = new Spec($description, $fn);
+        if (!is_null($pending)) {
+            $spec->setPending($pending);
+        }
         $this->getCurrentSuite()->addSpec($spec);
+        return $spec;
     }
 
     /**

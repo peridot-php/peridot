@@ -41,6 +41,10 @@ class Runner
             $this->emit('pass', [$spec]);
         });
 
+        $result->on('spec:pending', function($spec) {
+            $this->emit('pending', [$spec]);
+        });
+
         $this->suite->on('suite:start', function($suite) {
             $this->emit('suite:start', [$suite]);
         });
