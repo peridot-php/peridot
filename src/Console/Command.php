@@ -46,7 +46,7 @@ class Command extends ConsoleCommand
         $configuration = $this->getConfiguration($input);
 
         $result = new SpecResult();
-        $loader = new SuiteLoader($configuration->grep);
+        $loader = new SuiteLoader($configuration->getGrep());
         $loader->load($path);
         $runner = new Runner(Context::getInstance()->getCurrentSuite());
         $reporter = new SpecReporter($runner, $output);
@@ -69,7 +69,7 @@ class Command extends ConsoleCommand
         $configuration = new Configuration();
 
         if ($grep = $input->getOption('grep')) {
-            $configuration->grep = $grep;
+            $configuration->setGrep($grep);
         }
 
         return $configuration;
