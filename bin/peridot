@@ -1,18 +1,15 @@
 #!/usr/bin/env php
 <?php
 
-use Peridot\Core\SpecResult;
-use Peridot\Runner\Runner;
-use Peridot\Runner\SuiteLoader;
-use Peridot\Runner\Context;
+use Peridot\Console\Application;
 
 $autoload = null;
-if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+if (file_exists(__DIR__ . '/../autoload.php')) {
+    // peridot is in [project]/vendor/bin
+    $autoload = realpath(__DIR__ . '/../autoload.php');
+} elseif (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     // peridot is in [project]/bin/
     $autoload = realpath(__DIR__ . '/../vendor/autoload.php');
-} elseif (file_exists(__DIR__ . '/../autoload.php')) {
-    // peridoot is in [project]/vendor/bin
-    $autoload = realpath(__DIR__ . '/../autoload.php');
 }
 
 if (!$autoload) {
@@ -25,8 +22,6 @@ if (!$autoload) {
 }
 
 require_once $autoload;
-
-use Peridot\Console\Application;
 
 $application = new Application();
 $application->run();
