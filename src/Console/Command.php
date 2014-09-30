@@ -10,6 +10,7 @@ use Peridot\Runner\SuiteLoader;
 use Symfony\Component\Console\Command\Command as ConsoleCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -28,8 +29,10 @@ class Command extends ConsoleCommand
      */
     protected function configure()
     {
-        $this->
-            addArgument('path', InputArgument::REQUIRED, 'The path to a directory or file containing specs.');
+        $this
+            ->addArgument('path', InputArgument::REQUIRED, 'The path to a directory or file containing specs')
+            ->addOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern>');
+
     }
 
     /**
@@ -40,7 +43,7 @@ class Command extends ConsoleCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $path = $input->getArgument('path');
-        $configuration = new Configuration();
+        $configuration = $this->getConfiguration($input);
 
         $result = new SpecResult();
         $loader = new SuiteLoader($configuration->grep);
@@ -53,5 +56,22 @@ class Command extends ConsoleCommand
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * Read configuration information from input
+     *
+     * @param InputInterface $input
+     * @return Configuration
+     */
+    protected function getConfiguration(InputInterface $input)
+    {
+        $configuration = new Configuration();
+
+        if ($grep = $input->getOption('grep')) {
+            $configuration->grep = $grep;
+        }
+
+        return $configuration;
     }
 } 

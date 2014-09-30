@@ -9,7 +9,7 @@ describe("Runner", function() {
 
     beforeEach(function() {
         $this->result = new SpecResult();
-        $this->loader = new SuiteLoader();
+        $this->loader = new SuiteLoader('*.spec.php');
     });
 
     context("running a single suite", function() {
