@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class AbstractBaseReporter
  * @package Peridot\Reporter
  */
-abstract class AbstractBaseReporter
+abstract class AbstractBaseReporter implements ReporterInterface
 {
     /**
      * @var \Peridot\Runner\Runner
