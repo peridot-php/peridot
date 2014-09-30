@@ -13,6 +13,11 @@ class Configuration
     protected $grep = '*.spec.php';
 
     /**
+     * @var string
+     */
+    protected $reporter = 'spec';
+
+    /**
      * Set the pattern used to load specs
      *
      * @param string $grep
@@ -31,5 +36,22 @@ class Configuration
     public function getGrep()
     {
         return $this->grep;
+    }
+
+    /**
+     * @param string $reporter
+     */
+    public function setReporter($reporter)
+    {
+        $this->reporter = $reporter;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReporter()
+    {
+        return $this->reporter;
     }
 } 
