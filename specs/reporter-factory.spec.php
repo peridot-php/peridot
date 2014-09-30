@@ -1,4 +1,5 @@
 <?php
+use Peridot\Configuration;
 use Peridot\Core\Suite;
 use Peridot\Reporter\AnonymousReporter;
 use Peridot\Reporter\ReporterFactory;
@@ -8,9 +9,10 @@ use Peridot\Runner\Runner;
 describe('ReporterFactory', function() {
 
     beforeEach(function() {
+        $configuration = new Configuration();
         $runner = new Runner(new Suite("test", function() {}));
         $output = new Symfony\Component\Console\Output\NullOutput();
-        $this->factory = new ReporterFactory($runner, $output);
+        $this->factory = new ReporterFactory($configuration, $runner, $output);
     });
 
     describe('->create()', function() {

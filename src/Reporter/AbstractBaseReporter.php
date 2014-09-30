@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Reporter;
 
+use Peridot\Configuration;
 use Peridot\Core\Spec;
 use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,6 +12,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class AbstractBaseReporter implements ReporterInterface
 {
+    /**
+     * @var \Peridot\Configuration
+     */
+    protected $configuration;
+
     /**
      * @var \Peridot\Runner\Runner
      */
@@ -55,11 +61,13 @@ abstract class AbstractBaseReporter implements ReporterInterface
     );
 
     /**
+     * @param Configuration $configuration
      * @param Runner $runner
      * @param OutputInterface $output
      */
-    public function __construct(Runner $runner, OutputInterface $output)
+    public function __construct(Configuration $configuration, Runner $runner, OutputInterface $output)
     {
+        $this->configuration = $configuration;
         $this->runner = $runner;
         $this->output = $output;
 
@@ -87,6 +95,10 @@ abstract class AbstractBaseReporter implements ReporterInterface
      */
     public function color($key, $text)
     {
+        if (!$this->configuration->areColorsEnabled()) {
+            return $text;
+        }
+
         $color = $this->colors[$key];
         return sprintf("%s%s%s", $color['left'], $text, $color['right']);
     }

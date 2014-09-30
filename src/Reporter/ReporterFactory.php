@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Reporter;
 
+use Peridot\Configuration;
 use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,6 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ReporterFactory
 {
+    /**
+     * @var \Peridot\Configuration
+     */
+    protected $configuration;
+
     /**
      * @var \Peridot\Runner\Runner
      */
@@ -31,11 +37,13 @@ class ReporterFactory
     );
 
     /**
+     * @param Configuration $configuration
      * @param Runner $runner
      * @param OutputInterface $output
      */
-    public function __construct(Runner $runner, OutputInterface $output)
+    public function __construct(Configuration $configuration, Runner $runner, OutputInterface $output)
     {
+        $this->configuration = $configuration;
         $this->runner = $runner;
         $this->output = $output;
     }
@@ -52,10 +60,10 @@ class ReporterFactory
         $factory = isset($reporter['factory']) ? $reporter['factory'] : null;
         $instance = null;
         if (is_string($factory) && class_exists($factory)) {
-            $instance = new $factory($this->runner, $this->output);
+            $instance = new $factory($this->configuration, $this->runner, $this->output);
         }
         if (is_callable($factory)) {
-            $instance = new AnonymousReporter($factory, $this->runner, $this->output);
+            $instance = new AnonymousReporter($factory, $this->configuration, $this->runner, $this->output);
         }
         if (is_null($instance)) {
             throw new \RuntimeException("Reporter class could not be created");
