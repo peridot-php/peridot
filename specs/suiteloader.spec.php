@@ -4,7 +4,7 @@ use Peridot\Runner\SuiteLoader;
 describe("SuiteLoader", function() {
 
     beforeEach(function() {
-       $this->loader = new SuiteLoader();
+       $this->loader = new SuiteLoader('*.spec.php');
        $this->fixtures = __DIR__ . '/../fixtures';
     });
 

@@ -15,9 +15,9 @@ class SuiteLoader
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($pattern)
     {
-        $this->pattern = '*.spec.php';
+        $this->pattern = $pattern;
     }
 
     /**

@@ -1,8 +1,8 @@
 <?php
 namespace Peridot\Console;
 
+use Peridot\Configuration;
 use Peridot\Core\SpecResult;
-use Peridot\Reporter\BasicReporter;
 use Peridot\Reporter\SpecReporter;
 use Peridot\Runner\Context;
 use Peridot\Runner\Runner;
@@ -40,9 +40,10 @@ class Command extends ConsoleCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $path = $input->getArgument('path');
+        $configuration = new Configuration();
 
         $result = new SpecResult();
-        $loader = new SuiteLoader();
+        $loader = new SuiteLoader($configuration->grep);
         $loader->load($path);
         $runner = new Runner(Context::getInstance()->getCurrentSuite());
         $reporter = new SpecReporter($runner, $output);
