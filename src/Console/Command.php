@@ -4,7 +4,6 @@ namespace Peridot\Console;
 use Peridot\Configuration;
 use Peridot\Core\SpecResult;
 use Peridot\Reporter\ReporterFactory;
-use Peridot\Reporter\SpecReporter;
 use Peridot\Runner\Context;
 use Peridot\Runner\Runner;
 use Peridot\Runner\SuiteLoader;
@@ -31,9 +30,10 @@ class Command extends ConsoleCommand
     protected function configure()
     {
         $this
-            ->addArgument('path', InputArgument::REQUIRED, 'The path to a directory or file containing specs')
+            ->addArgument('path', InputArgument::OPTIONAL, 'The path to a directory or file containing specs')
             ->addOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern>')
-            ->addOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select reporter to use as listed by --reporters');
+            ->addOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select reporter to use as listed by --reporters')
+            ->addOption('reporters', null, InputOption::VALUE_NONE, 'List all available reporters');
     }
 
     /**
@@ -43,14 +43,19 @@ class Command extends ConsoleCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $path = $input->getArgument('path');
+        $runner = new Runner(Context::getInstance()->getCurrentSuite());
+        $factory = new ReporterFactory($runner, $output);
+        if ($input->getOption('reporters')) {
+            $this->listReporters($factory, $output);
+            return 0;
+        }
+
         $configuration = $this->getConfiguration($input);
 
         $result = new SpecResult();
         $loader = new SuiteLoader($configuration->getGrep());
-        $loader->load($path);
-        $runner = new Runner(Context::getInstance()->getCurrentSuite());
-        $reporter = (new ReporterFactory($runner, $output))->create($configuration->getReporter());
+        $loader->load($configuration->getPath());
+        $factory->create($configuration->getReporter());
         $runner->run($result);
 
         if ($result->getFailureCount() > 0) {
@@ -69,6 +74,10 @@ class Command extends ConsoleCommand
     {
         $configuration = new Configuration();
 
+        if ($path = $input->getArgument('path')) {
+            $configuration->setPath($path);
+        }
+
         if ($grep = $input->getOption('grep')) {
             $configuration->setGrep($grep);
         }
@@ -78,5 +87,20 @@ class Command extends ConsoleCommand
         }
 
         return $configuration;
+    }
+
+    /**
+     * Output available reporters
+     *
+     * @param ReporterFactory $factory
+     * @param OutputInterface $output
+     */
+    protected function listReporters(ReporterFactory $factory, OutputInterface $output)
+    {
+        $output->writeln("");
+        foreach ($factory->getReporters() as $name => $info) {
+            $output->writeln(sprintf("    %s - %s", $name, $info['description']));
+        }
+        $output->writeln("");
     }
 } 

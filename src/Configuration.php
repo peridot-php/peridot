@@ -18,6 +18,19 @@ class Configuration
     protected $reporter = 'spec';
 
     /**
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->path = getcwd();
+    }
+
+    /**
      * Set the pattern used to load specs
      *
      * @param string $grep
@@ -53,5 +66,22 @@ class Configuration
     public function getReporter()
     {
         return $this->reporter;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 } 
