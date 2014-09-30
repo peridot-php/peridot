@@ -32,6 +32,7 @@ class Command extends ConsoleCommand
         $this
             ->addArgument('path', InputArgument::OPTIONAL, 'The path to a directory or file containing specs')
             ->addOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern>')
+            ->addOption('no-colors', 'c', InputOption::VALUE_NONE, 'Disable output colors')
             ->addOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select reporter to use as listed by --reporters')
             ->addOption('reporters', null, InputOption::VALUE_NONE, 'List all available reporters');
     }
@@ -43,14 +44,14 @@ class Command extends ConsoleCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $configuration = $this->getConfiguration($input);
         $runner = new Runner(Context::getInstance()->getCurrentSuite());
-        $factory = new ReporterFactory($runner, $output);
+        $factory = new ReporterFactory($configuration, $runner, $output);
+
         if ($input->getOption('reporters')) {
             $this->listReporters($factory, $output);
             return 0;
         }
-
-        $configuration = $this->getConfiguration($input);
 
         $result = new SpecResult();
         $loader = new SuiteLoader($configuration->getGrep());
@@ -80,6 +81,10 @@ class Command extends ConsoleCommand
 
         if ($grep = $input->getOption('grep')) {
             $configuration->setGrep($grep);
+        }
+
+        if ($noColors = $input->getOption('no-colors')) {
+            $configuration->disableColors();
         }
 
         if ($reporter = $input->getOption('reporter')) {

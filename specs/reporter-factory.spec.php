@@ -1,4 +1,5 @@
 <?php
+use Peridot\Configuration;
 use Peridot\Core\Suite;
 use Peridot\Reporter\AnonymousReporter;
 use Peridot\Reporter\ReporterFactory;
@@ -8,9 +9,10 @@ use Peridot\Runner\Runner;
 describe('ReporterFactory', function() {
 
     beforeEach(function() {
+        $configuration = new Configuration();
         $runner = new Runner(new Suite("test", function() {}));
         $output = new Symfony\Component\Console\Output\NullOutput();
-        $this->factory = new ReporterFactory($runner, $output);
+        $this->factory = new ReporterFactory($configuration, $runner, $output);
     });
 
     describe('->create()', function() {
@@ -30,6 +32,18 @@ describe('ReporterFactory', function() {
         context("using a valid name with an invalid factory", function() {
             it("should throw an exception", function() {
                 $this->factory->register('nope', 'doesnt work', 'Not\A\Class');
+                $exception = null;
+                try {
+                    $this->factory->create('nope');
+                } catch (RuntimeException $e) {
+                    $exception = $e;
+                }
+                assert(!is_null($exception), 'exception should have been thrown');
+            });
+        });
+
+        context("using an invalid name", function() {
+            it("should throw an exception", function() {
                 $exception = null;
                 try {
                     $this->factory->create('nope');

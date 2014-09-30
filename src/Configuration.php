@@ -8,6 +8,11 @@ namespace Peridot;
 class Configuration 
 {
     /**
+     * @var boolean
+     */
+    protected $colorsEnabled = true;
+
+    /**
      * @var string
      */
     protected $grep = '*.spec.php';
@@ -83,5 +88,22 @@ class Configuration
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableColors()
+    {
+        $this->colorsEnabled = false;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function areColorsEnabled()
+    {
+        return $this->colorsEnabled;
     }
 } 
