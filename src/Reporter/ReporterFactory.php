@@ -48,8 +48,8 @@ class ReporterFactory
      */
     public function create($name)
     {
-        $reporter = $this->reporters[$name];
-        $factory = $reporter['factory'];
+        $reporter = isset($this->reporters[$name]) ? $this->reporters[$name] : null;
+        $factory = isset($reporter['factory']) ? $reporter['factory'] : null;
         $instance = null;
         if (is_string($factory) && class_exists($factory)) {
             $instance = new $factory($this->runner, $this->output);

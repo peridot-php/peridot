@@ -39,6 +39,18 @@ describe('ReporterFactory', function() {
                 assert(!is_null($exception), 'exception should have been thrown');
             });
         });
+
+        context("using an invalid name", function() {
+            it("should throw an exception", function() {
+                $exception = null;
+                try {
+                    $this->factory->create('nope');
+                } catch (RuntimeException $e) {
+                    $exception = $e;
+                }
+                assert(!is_null($exception), 'exception should have been thrown');
+            });
+        });
     });
 
     describe('->getReporters()', function() {
