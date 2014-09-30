@@ -51,7 +51,7 @@ class ReporterFactory
         $reporter = $this->reporters[$name];
         $factory = $reporter['factory'];
         $instance = null;
-        if (class_exists($factory)) {
+        if (is_string($factory) && class_exists($factory)) {
             $instance = new $factory($this->runner, $this->output);
         }
         if (is_callable($factory)) {
