@@ -2,6 +2,7 @@
 use Peridot\Configuration;
 use Peridot\Core\Suite;
 use Peridot\Reporter\AnonymousReporter;
+use Peridot\Reporter\ReporterInterface;
 use Peridot\Runner\Runner;
 
 describe('AnonymousReporter', function() {
@@ -16,10 +17,10 @@ describe('AnonymousReporter', function() {
         $configuration = null;
         $runner = null;
         $output = null;
-        $reporter = new AnonymousReporter(function($c, $r, $o) use (&$configuration, &$runner, &$output) {
-            $configuration = $c;
-            $runner = $r;
-            $output = $o;
+        new AnonymousReporter(function(ReporterInterface $reporter) use (&$configuration, &$runner, &$output) {
+            $configuration = $reporter->getConfiguration();
+            $runner = $reporter->getRunner();
+            $output = $reporter->getOutput();
         }, $this->configuration, $this->runner, $this->output);
         assert(
             !is_null($configuration) && !is_null($runner) && !is_null($output),

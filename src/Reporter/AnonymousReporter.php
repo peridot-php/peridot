@@ -37,6 +37,6 @@ class AnonymousReporter extends AbstractBaseReporter
      */
     public function init()
     {
-        call_user_func($this->initFn, $this->configuration, $this->runner, $this->output);
+        call_user_func($this->initFn, $this);
     }
 }

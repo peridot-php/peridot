@@ -113,6 +113,30 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
+     * @return \Symfony\Component\Console\Output\OutputInterface
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
+     * @return \Peridot\Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * @return \Peridot\Runner\Runner
+     */
+    public function getRunner()
+    {
+        return $this->runner;
+    }
+
+    /**
      * Initialize reporter. Setup and listen for runner events
      *
      * @return void
