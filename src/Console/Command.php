@@ -34,6 +34,7 @@ class Command extends ConsoleCommand
             ->addOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern>')
             ->addOption('no-colors', 'c', InputOption::VALUE_NONE, 'Disable output colors')
             ->addOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select reporter to use as listed by --reporters')
+            ->addOption('bail', 'b', InputOption::VALUE_NONE, 'Stop on failure')
             ->addOption('reporters', null, InputOption::VALUE_NONE, 'List all available reporters');
     }
 
@@ -89,6 +90,10 @@ class Command extends ConsoleCommand
 
         if ($reporter = $input->getOption('reporter')) {
             $configuration->setReporter($reporter);
+        }
+
+        if ($bail = $input->getOption('bail')) {
+            $configuration->stopOnFailure();
         }
 
         return $configuration;

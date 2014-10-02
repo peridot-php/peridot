@@ -154,8 +154,6 @@ describe("Runner", function() {
                 $result = new SpecResult();
                 $runner->run($result);
 
-                var_dump($result->getSpecCount());
-
                 assert($result->getSpecCount() === 3, "spec count should be 2");
             });
 
