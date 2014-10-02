@@ -89,6 +89,24 @@ describe("Suite", function() {
             $suite->run(new SpecResult());
             assert($suite === $emitted, 'suite end event should have been emitted');
         });
+
+        it("should stop when a halt event is received", function() {
+            $suite = new Suite("halt suite", function() {});
+            $passing = new Spec("passing spec", function() {});
+            $halting = new Spec("halting spec", function() use ($suite) {
+                $suite->emit('halt');
+            });
+            $passing2 = new Spec("passing2 spec", function() {});
+
+            $suite->addSpec($passing);
+            $suite->addSpec($halting);
+            $suite->addSpec($passing2);
+
+            $result = new SpecResult();
+            $suite->run($result);
+
+            assert($result->getSpecCount() == 2, "spec count should be 2");
+        });
     });
 
     describe("->addSpec()", function() {

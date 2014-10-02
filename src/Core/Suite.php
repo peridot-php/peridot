@@ -16,6 +16,13 @@ class Suite extends AbstractSpec
     protected $specs = [];
 
     /**
+     * Has the suite been halted
+     *
+     * @var bool
+     */
+    protected $halted = false;
+
+    /**
      * Add a spec to the suite
      *
      * @param Spec $spec
@@ -64,7 +71,16 @@ class Suite extends AbstractSpec
     public function run(SpecResult $result)
     {
         $this->emit('suite:start', [$this]);
+
+        $this->on('halt', function() {
+            $this->halted = true;
+        });
+
         foreach ($this->specs as $spec) {
+
+            if ($this->halted) {
+                break;
+            }
 
             if (!is_null($this->getPending())) {
                 $spec->setPending($this->getPending());
