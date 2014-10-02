@@ -10,7 +10,7 @@ describe('ReporterFactory', function() {
 
     beforeEach(function() {
         $configuration = new Configuration();
-        $runner = new Runner(new Suite("test", function() {}));
+        $runner = new Runner(new Suite("test", function() {}), $configuration);
         $output = new Symfony\Component\Console\Output\NullOutput();
         $this->factory = new ReporterFactory($configuration, $runner, $output);
     });

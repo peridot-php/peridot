@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Runner;
 
+use Peridot\Configuration;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 use Evenement\EventEmitterTrait;
@@ -19,13 +20,19 @@ class Runner
     protected $suite;
 
     /**
+     * @var \Peridot\Configuration
+     */
+    protected $configuration;
+
+    /**
      * Constructor
      *
      * @param SpecResult $result
      */
-    public function __construct(Suite $suite)
+    public function __construct(Suite $suite, Configuration $configuration)
     {
         $this->suite = $suite;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -34,6 +41,9 @@ class Runner
     public function run(SpecResult $result)
     {
         $result->on('spec:failed', function($spec, $e) {
+            if ($this->configuration->shouldStopOnFailure()) {
+                $this->suite->emit('halt');
+            }
             $this->emit('fail', [$spec, $e]);
         });
 

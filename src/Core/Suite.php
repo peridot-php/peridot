@@ -74,6 +74,9 @@ class Suite extends AbstractSpec
 
         $this->on('halt', function() {
             $this->halted = true;
+            foreach ($this->specs as $spec) {
+                $spec->emit('halt');
+            }
         });
 
         foreach ($this->specs as $spec) {

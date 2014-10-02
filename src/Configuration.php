@@ -28,6 +28,11 @@ class Configuration
     protected $path;
 
     /**
+     * @var bool
+     */
+    protected $stopOnFailure = false;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -105,5 +110,21 @@ class Configuration
     public function areColorsEnabled()
     {
         return $this->colorsEnabled;
+    }
+
+    /**
+     * @return void
+     */
+    public function stopOnFailure()
+    {
+        $this->stopOnFailure = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function shouldStopOnFailure()
+    {
+        return $this->stopOnFailure;
     }
 } 

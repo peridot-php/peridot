@@ -1,4 +1,5 @@
 <?php
+use Peridot\Configuration;
 use Peridot\Core\Spec;
 use Peridot\Core\Suite;
 use Peridot\Runner\Runner;
@@ -18,7 +19,7 @@ describe("Runner", function() {
             $suite->addSpec(new Spec("should do a thing", function() {}));
             $suite->addSpec(new Spec("should fail a thing", function() { throw new \Exception("Fail");}));
 
-            $runner = new Runner($suite);
+            $runner = new Runner($suite, new Configuration());
             $runner->run($this->result);
             assert('2 run, 1 failed' == $this->result->getSummary(), 'result summary should show 2/1');
         });
@@ -35,7 +36,7 @@ describe("Runner", function() {
             $parent->addSpec($child);
             $child->addSpec($grandchild);
 
-            $runner = new Runner($parent);
+            $runner = new Runner($parent, new Configuration());
             $runner->run($this->result);
             assert('3 run, 1 failed' == $this->result->getSummary(), 'result summary should show 3/1');
         });
@@ -50,7 +51,7 @@ describe("Runner", function() {
             $this->suite->addSpec($this->passingSpec);
             $this->suite->addSpec($this->failingSpec);
 
-            $this->runner = new Runner($this->suite);
+            $this->runner = new Runner($this->suite, new Configuration());
         });
 
         it("should emit a start event when the runner starts", function() {
@@ -126,6 +127,38 @@ describe("Runner", function() {
             });
             $this->runner->run(new SpecResult());
             assert(3 == $count, "expected 3 suite:end events to fire");
+        });
+
+        context("when configured to bail on failure", function() {
+
+            it("should stop running on failure", function() {
+                $suite = new Suite("suite", function() {});
+                $passing = new Spec("passing spec", function() {});
+                $suite->addSpec($passing);
+
+                $childSuite = new Suite("child suite", function() {});
+                $passingChild = new Spec("passing child", function() {});
+                $failingChild = new Spec("failing child", function() { throw new Exception("booo"); });
+                $passing2Child = new Spec("passing2 child", function() {});
+                $childSuite->addSpec($passingChild);
+                $childSuite->addSpec($failingChild);
+                $childSuite->addSpec($passing2Child);
+                $suite->addSpec($childSuite);
+
+                $passing2 = new Spec("passing2 spec", function() {});
+                $suite->addSpec($passing2);
+
+                $configuration = new Configuration();
+                $configuration->stopOnFailure();
+                $runner = new Runner($suite, $configuration);
+                $result = new SpecResult();
+                $runner->run($result);
+
+                var_dump($result->getSpecCount());
+
+                assert($result->getSpecCount() === 3, "spec count should be 2");
+            });
+
         });
     });
 });

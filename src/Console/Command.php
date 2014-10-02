@@ -45,7 +45,7 @@ class Command extends ConsoleCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configuration = $this->getConfiguration($input);
-        $runner = new Runner(Context::getInstance()->getCurrentSuite());
+        $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration);
         $factory = new ReporterFactory($configuration, $runner, $output);
 
         if ($input->getOption('reporters')) {

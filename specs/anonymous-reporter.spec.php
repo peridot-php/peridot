@@ -9,7 +9,7 @@ describe('AnonymousReporter', function() {
 
     beforeEach(function() {
         $this->configuration = new Configuration();
-        $this->runner = new Runner(new Suite("test", function() {}));
+        $this->runner = new Runner(new Suite("test", function() {}), $this->configuration);
         $this->output = new Symfony\Component\Console\Output\NullOutput();
     });
 
