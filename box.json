@@ -1,0 +1,6 @@
+{
+    "directories": ["src/", "vendor/"],
+    "main": "bin/peridot",
+    "output": "peridot.phar",
+    "stub": true
+}
