@@ -104,6 +104,9 @@ class Command extends ConsoleCommand
 
         if ($config = $input->getOption('configuration')) {
             $configuration->setConfigurationFile($config);
+            if (! file_exists($configuration->getConfigurationFile())) {
+                throw new \RuntimeException("Configuration file specified but does not exist");
+            }
         }
 
         return $configuration;

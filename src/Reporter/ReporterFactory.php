@@ -66,7 +66,7 @@ class ReporterFactory
             $instance = new AnonymousReporter($factory, $this->configuration, $this->runner, $this->output);
         }
         if (is_null($instance)) {
-            throw new \RuntimeException("Reporter class could not be created");
+            throw new \RuntimeException("Reporter $name does not exist");
         }
         return $instance;
     }
