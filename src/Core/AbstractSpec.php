@@ -50,6 +50,13 @@ abstract class AbstractSpec implements SpecInterface
     protected $pending = null;
 
     /**
+     * This is oddly named so using it will only be VERY intentional
+     *
+     * @var Scope
+     */
+    protected $________peridotScope;
+
+    /**
      * Constructor.
      *
      * @param string $description
@@ -57,7 +64,7 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function __construct($description, callable $definition)
     {
-
+        $this->________peridotScope = new Scope();
         $this->definition = $definition;
         $this->description = $description;
     }
@@ -67,7 +74,11 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function addSetUpFunction(callable $setupFn)
     {
-        $this->setUpFns[] = Closure::bind($setupFn, $this, $this);
+        $this->setUpFns[] = Closure::bind(
+            $setupFn,
+            $this->________peridotScope,
+            $this->________peridotScope
+        );
     }
 
     /**
@@ -75,7 +86,11 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function addTearDownFunction(callable $tearDownFn)
     {
-        $this->tearDownFns[] = Closure::bind($tearDownFn, $this, $this);
+        $this->tearDownFns[] = Closure::bind(
+            $tearDownFn,
+            $this->________peridotScope,
+            $this->________peridotScope
+        );
     }
 
     /**
@@ -154,5 +169,13 @@ abstract class AbstractSpec implements SpecInterface
     public function getTearDownFunctions()
     {
         return $this->tearDownFns;
+    }
+
+    /**
+     * @return \Peridot\Core\Scope
+     */
+    public function getScope()
+    {
+        return $this->________peridotScope;
     }
 }

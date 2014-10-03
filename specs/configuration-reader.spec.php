@@ -7,14 +7,14 @@ use Symfony\Component\Console\Input\ArrayInput;
 describe('ConfigurationReader', function() {
 
     beforeEach(function() {
-        $this->defn = array(
+        $this->definition = array(
             'path' => 'mypath',
             '--grep' => 'mygrep',
             '--no-colors' => true,
             '--bail' => true,
             '--configuration' => __FILE__
         );
-        $this->input = new ArrayInput($this->defn, new InputDefinition());
+        $this->input = new ArrayInput($this->definition, new InputDefinition());
     });
 
     describe("->read()", function() {
@@ -31,8 +31,8 @@ describe('ConfigurationReader', function() {
         });
 
         it("should throw an exception if configuration is specified but does not exist", function() {
-            $this->defn['--configuration'] = '/path/to/nope.php';
-            $input = new ArrayInput($this->defn, new InputDefinition());
+            $this->definition['--configuration'] = '/path/to/nope.php';
+            $input = new ArrayInput($this->definition, new InputDefinition());
             $reader = new ConfigurationReader($input);
             $exception = null;
             try {

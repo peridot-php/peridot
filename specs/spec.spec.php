@@ -12,7 +12,7 @@ describe("Spec", function() {
                 $this->wasRun = true;
             });
             $spec->run(new SpecResult());
-            assert($spec->wasRun, "spec should have run");
+            assert($spec->wasRun(), "spec should have run");
         });
 
         it("should run setup functions", function() {
@@ -21,7 +21,7 @@ describe("Spec", function() {
                 $this->log .= "setUp ";
             });
             $spec->run(new SpecResult());
-            assert($spec->log == "setUp ", "spec should have been setup");
+            assert($spec->log() == "setUp ", "spec should have been setup");
         });
 
         it("should run teardown functions", function() {
@@ -30,7 +30,7 @@ describe("Spec", function() {
                 $this->log .= "tearDown ";
             });
             $spec->run(new SpecResult());
-            assert($spec->log == "tearDown ", "spec should have been torn down");
+            assert($spec->log() == "tearDown ", "spec should have been torn down");
         });
 
         it("should modify a passed in result", function () {
@@ -65,7 +65,7 @@ describe("Spec", function() {
                 $this->log = 'tearing down';
             });
             $spec->run(new SpecResult());;
-            assert($spec->log == 'tearing down', 'spec should have been torn down after failure');
+            assert($spec->getScope()->log == 'tearing down', 'spec should have been torn down after failure');
         });
 
         it('should run tear down functions even if setup fails', function () {
@@ -77,7 +77,7 @@ describe("Spec", function() {
                 $this->log = 'tearing down';
             });
             $spec->run(new SpecResult());;
-            assert($spec->log == 'tearing down', 'spec should have been torn down after failure');
+            assert($spec->getScope()->log == 'tearing down', 'spec should have been torn down after failure');
         });
 
         it('should continue if tear down fails', function () {
@@ -95,12 +95,13 @@ describe("Spec", function() {
             $spec = new Spec('spec is skipped', function() {
                 $this->log = 'testing';
             });
+            $spec->getScope()->log = "";
             $spec->addSetUpFunction(function() {
                 throw new Exception('set up failure');
             });
 
             $spec->run(new SpecResult());;
-            assert(!isset($spec->log), 'test should have been skipped');
+            assert(empty($spec->getScope()->log), 'test should have been skipped');
         });
 
         context("when spec is pending", function() {

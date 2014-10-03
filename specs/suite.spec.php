@@ -53,7 +53,7 @@ describe("Suite", function() {
             $result = new SpecResult();
             $suite->run($result);
 
-            assert('torntorn' == $spec1->log . $spec2->log, "tear down should have run for both specs");
+            assert('torntorn' == $spec1->log() . $spec2->log(), "tear down should have run for both specs");
         });
 
         it("should set pending status on specs if not null", function() {
