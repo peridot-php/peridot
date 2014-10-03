@@ -8,9 +8,7 @@ use Peridot\Runner\Context;
 use Peridot\Runner\Runner;
 use Peridot\Runner\SuiteLoader;
 use Symfony\Component\Console\Command\Command as ConsoleCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -29,14 +27,7 @@ class Command extends ConsoleCommand
      */
     protected function configure()
     {
-        $this
-            ->addArgument('path', InputArgument::OPTIONAL, 'The path to a directory or file containing specs')
-            ->addOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern>')
-            ->addOption('no-colors', 'C', InputOption::VALUE_NONE, 'Disable output colors')
-            ->addOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select reporter to use as listed by --reporters')
-            ->addOption('bail', 'b', InputOption::VALUE_NONE, 'Stop on failure')
-            ->addOption('configuration', 'c', InputOption::VALUE_OPTIONAL, 'A php file containing peridot configuration')
-            ->addOption('reporters', null, InputOption::VALUE_NONE, 'List all available reporters');
+        $this->setDefinition(new InputDefinition());
     }
 
     /**
@@ -46,7 +37,7 @@ class Command extends ConsoleCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configuration = $this->getConfiguration($input);
+        $configuration = ConfigurationReader::readInput($input);
         $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration);
         $factory = new ReporterFactory($configuration, $runner, $output);
 
@@ -74,42 +65,6 @@ class Command extends ConsoleCommand
             return 1;
         }
         return 0;
-    }
-
-    /**
-     * Read configuration information from input
-     *
-     * @param InputInterface $input
-     * @return Configuration
-     */
-    protected function getConfiguration(InputInterface $input)
-    {
-        $configuration = new Configuration();
-
-        if ($path = $input->getArgument('path')) {
-            $configuration->setPath($path);
-        }
-
-        if ($grep = $input->getOption('grep')) {
-            $configuration->setGrep($grep);
-        }
-
-        if ($noColors = $input->getOption('no-colors')) {
-            $configuration->disableColors();
-        }
-
-        if ($bail = $input->getOption('bail')) {
-            $configuration->stopOnFailure();
-        }
-
-        if ($config = $input->getOption('configuration')) {
-            $configuration->setConfigurationFile($config);
-            if (! file_exists($configuration->getConfigurationFile())) {
-                throw new \RuntimeException("Configuration file specified but does not exist");
-            }
-        }
-
-        return $configuration;
     }
 
     /**
