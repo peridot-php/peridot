@@ -28,6 +28,11 @@ class Configuration
     protected $path;
 
     /**
+     * @var string
+     */
+    protected $configurationFile;
+
+    /**
      * @var bool
      */
     protected $stopOnFailure = false;
@@ -38,6 +43,7 @@ class Configuration
     public function __construct()
     {
         $this->path = getcwd();
+        $this->configurationFile = $this->path . DIRECTORY_SEPARATOR . 'peridot.php';
     }
 
     /**
@@ -113,11 +119,12 @@ class Configuration
     }
 
     /**
-     * @return void
+     * @return $this
      */
     public function stopOnFailure()
     {
         $this->stopOnFailure = true;
+        return $this;
     }
 
     /**
@@ -126,5 +133,27 @@ class Configuration
     public function shouldStopOnFailure()
     {
         return $this->stopOnFailure;
+    }
+
+    /**
+     * @param string $configurationFile
+     */
+    public function setConfigurationFile($configurationFile)
+    {
+        $this->configurationFile = $configurationFile;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfigurationFile()
+    {
+        $file = $this->configurationFile;
+        $relative = getcwd() . DIRECTORY_SEPARATOR . $file;
+        if (file_exists($relative)) {
+            return $relative;
+        }
+        return $file;
     }
 } 

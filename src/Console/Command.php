@@ -32,9 +32,10 @@ class Command extends ConsoleCommand
         $this
             ->addArgument('path', InputArgument::OPTIONAL, 'The path to a directory or file containing specs')
             ->addOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern>')
-            ->addOption('no-colors', 'c', InputOption::VALUE_NONE, 'Disable output colors')
+            ->addOption('no-colors', 'C', InputOption::VALUE_NONE, 'Disable output colors')
             ->addOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select reporter to use as listed by --reporters')
             ->addOption('bail', 'b', InputOption::VALUE_NONE, 'Stop on failure')
+            ->addOption('configuration', 'c', InputOption::VALUE_OPTIONAL, 'A php file containing peridot configuration')
             ->addOption('reporters', null, InputOption::VALUE_NONE, 'List all available reporters');
     }
 
@@ -49,9 +50,18 @@ class Command extends ConsoleCommand
         $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration);
         $factory = new ReporterFactory($configuration, $runner, $output);
 
+        if (file_exists($configuration->getConfigurationFile())) {
+            $this->loadConfiguration($runner, $configuration, $factory);
+        }
+
         if ($input->getOption('reporters')) {
             $this->listReporters($factory, $output);
             return 0;
+        }
+
+        //Defer selection of importer to account for user registered reporters
+        if ($reporter = $input->getOption('reporter')) {
+            $configuration->setReporter($reporter);
         }
 
         $result = new SpecResult();
@@ -88,12 +98,12 @@ class Command extends ConsoleCommand
             $configuration->disableColors();
         }
 
-        if ($reporter = $input->getOption('reporter')) {
-            $configuration->setReporter($reporter);
-        }
-
         if ($bail = $input->getOption('bail')) {
             $configuration->stopOnFailure();
+        }
+
+        if ($config = $input->getOption('configuration')) {
+            $configuration->setConfigurationFile($config);
         }
 
         return $configuration;
@@ -113,4 +123,20 @@ class Command extends ConsoleCommand
         }
         $output->writeln("");
     }
-} 
+
+    /**
+     * Load configuration file. If the configuration file returns
+     * a callable, it will be executed with the runner, configuration, and reporter factory
+     *
+     * @param Runner $runner
+     * @param Configuration $configuration
+     * @param ReporterFactory $reporters
+     */
+    protected function loadConfiguration(Runner $runner, Configuration $configuration, ReporterFactory $reporters)
+    {
+        $func = include $configuration->getConfigurationFile();
+        if (is_callable($func)) {
+            $func($runner, $configuration, $reporters);
+        }
+    }
+}
