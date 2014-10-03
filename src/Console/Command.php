@@ -59,7 +59,7 @@ class Command extends ConsoleCommand
             return 0;
         }
 
-        //Defer selection of importer to account for user registered reporters
+        //Defer selection of reporter to account for user registered reporters
         if ($reporter = $input->getOption('reporter')) {
             $configuration->setReporter($reporter);
         }
