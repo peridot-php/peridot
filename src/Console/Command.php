@@ -17,6 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Command extends ConsoleCommand
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         parent::__construct('peridot');
