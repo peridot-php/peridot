@@ -62,7 +62,10 @@ class Spec extends AbstractSpec
     }
 
     /**
-     * @return mixed
+     * Returns the spec's definition bound to
+     * the spec's scope
+     *
+     * @return Closure
      */
     protected function getBoundDefinition()
     {

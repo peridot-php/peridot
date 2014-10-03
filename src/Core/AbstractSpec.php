@@ -71,6 +71,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param callable $setupFn
      */
     public function addSetUpFunction(callable $setupFn)
     {
@@ -83,6 +85,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param callable $tearDownFn
      */
     public function addTearDownFunction(callable $tearDownFn)
     {
@@ -95,6 +99,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function getDescription()
     {
@@ -103,6 +109,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return callable
      */
     public function getDefinition()
     {
@@ -111,6 +119,9 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param SpecInterface $parent
+     * @return mixed|void
      */
     public function setParent(SpecInterface $parent)
     {
@@ -119,6 +130,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return SpecInterface
      */
     public function getParent()
     {
@@ -127,6 +140,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function getTitle()
     {
@@ -141,6 +156,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool|null
      */
     public function getPending()
     {
@@ -149,6 +166,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param bool $state
      */
     public function setPending($state)
     {
@@ -157,6 +176,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return array
      */
     public function getSetUpFunctions()
     {
@@ -165,6 +186,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return array
      */
     public function getTearDownFunctions()
     {
@@ -172,6 +195,8 @@ abstract class AbstractSpec implements SpecInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return \Peridot\Core\Scope
      */
     public function getScope()

@@ -32,7 +32,6 @@ class ReporterFactory
      * @var array
      */
     protected $reporters = array(
-        'basic' => ['description' => 'a simple summary', 'factory' => 'Peridot\Reporter\BasicReporter'],
         'spec' => ['description' => 'hierarchical spec list', 'factory' => 'Peridot\Reporter\SpecReporter']
     );
 
@@ -66,7 +65,7 @@ class ReporterFactory
             $instance = new AnonymousReporter($factory, $this->configuration, $this->runner, $this->output);
         }
         if (is_null($instance)) {
-            throw new \RuntimeException("Reporter $name does not exist");
+            throw new \RuntimeException("Reporter class could not be created");
         }
         return $instance;
     }
