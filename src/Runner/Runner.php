@@ -60,5 +60,9 @@ class Runner
         $this->emit('start');
         $this->suite->run($result);
         $this->emit('end');
+
+        if ($oldHandler) {
+            set_error_handler($oldHandler);
+        }
     }
 }

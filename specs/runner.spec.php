@@ -128,7 +128,7 @@ describe("Runner", function() {
             assert(3 == $count, "expected 3 suite:end events to fire");
         });
 
-        it("should emit an error event with error information", function() {
+        $behavesLikeErrorEmitter = function() {
             $this->suite->addSpec(new Spec("my spec", function() {
                 trigger_error("This is a user notice", E_USER_NOTICE);
             }));
@@ -146,6 +146,18 @@ describe("Runner", function() {
             $this->runner->run(new SpecResult());
             assert($error['errno'] == E_USER_NOTICE, "error event should have passed error constant");
             assert($error['errstr'] == "This is a user notice");
+        };
+
+        it("should emit an error event with error information", $behavesLikeErrorEmitter);
+
+        it("should restore a previous error handler", function() use ($behavesLikeErrorEmitter) {
+            $handler = function($errno, $errstr, $errfile, $errline) {
+                //such errors handled. wow!
+            };
+            set_error_handler($handler);
+            call_user_func(Closure::bind($behavesLikeErrorEmitter, $this, $this));
+            $old = set_error_handler(function($n,$s,$f,$l) {});
+            assert($handler === $old, "runner should have restored previous handler");
         });
     });
 });
