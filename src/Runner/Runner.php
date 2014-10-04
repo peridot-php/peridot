@@ -33,6 +33,10 @@ class Runner
      */
     public function run(SpecResult $result)
     {
+        $oldHandler = set_error_handler(function($errno, $errstr, $errfile, $errline) {
+           $this->emit('error', [$errno, $errstr, $errfile, $errline]);
+        });
+
         $result->on('spec:failed', function($spec, $e) {
             $this->emit('fail', [$spec, $e]);
         });

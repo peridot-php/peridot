@@ -127,5 +127,25 @@ describe("Runner", function() {
             $this->runner->run(new SpecResult());
             assert(3 == $count, "expected 3 suite:end events to fire");
         });
+
+        it("should emit an error event with error information", function() {
+            $this->suite->addSpec(new Spec("my spec", function() {
+                trigger_error("This is a user notice", E_USER_NOTICE);
+            }));
+
+            $error = [];
+            $this->runner->on('error', function($errno, $errstr, $errfile, $errline) use (&$error) {
+                $error = array(
+                    'errno' => $errno,
+                    'errstr' => $errstr,
+                    'errfile' => $errfile,
+                    'errline' => $errline
+                );
+            });
+
+            $this->runner->run(new SpecResult());
+            assert($error['errno'] == E_USER_NOTICE, "error event should have passed error constant");
+            assert($error['errstr'] == "This is a user notice");
+        });
     });
 });
