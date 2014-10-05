@@ -84,7 +84,8 @@ class SpecReporter extends AbstractBaseReporter
      */
     public function footer()
     {
-        $this->output->writeln($this->color('success', sprintf("\n  %d passing", $this->passing)));
+        $this->output->write($this->color('success', sprintf("\n  %d passing", $this->passing)));
+        $this->output->writeln(sprintf($this->color('muted', " (%s)"), \PHP_Timer::timeSinceStartOfRequest()));
         if ($this->errors) {
             $this->output->writeln($this->color('error', sprintf("  %d failing", count($this->errors))));
         }
