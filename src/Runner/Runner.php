@@ -33,7 +33,7 @@ class Runner
      */
     public function run(SpecResult $result)
     {
-        $oldHandler = set_error_handler(function($errno, $errstr, $errfile, $errline) {
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
            $this->emit('error', [$errno, $errstr, $errfile, $errline]);
         });
 
@@ -61,8 +61,6 @@ class Runner
         $this->suite->run($result);
         $this->emit('end');
 
-        if ($oldHandler) {
-            set_error_handler($oldHandler);
-        }
+        restore_error_handler();
     }
 }
