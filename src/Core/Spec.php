@@ -36,9 +36,9 @@ class Spec extends AbstractSpec
             }
         }
 
-        $boundSpec = Closure::bind($this->definition, $this, $this);
+        $boundSpec = $this->getBoundDefinition();
         try {
-            $boundSpec();
+            call_user_func($boundSpec);
             $result->passSpec($this);
         } catch (\Exception $e) {
             $result->failSpec($this, $e);
@@ -59,5 +59,20 @@ class Spec extends AbstractSpec
                 continue;
             }
         }
+    }
+
+    /**
+     * Returns the spec's definition bound to
+     * the spec's scope
+     *
+     * @return Closure
+     */
+    protected function getBoundDefinition()
+    {
+        return Closure::bind(
+            $this->definition,
+            $this->peridotScopeVariableDoNotTouchThanks,
+            $this->peridotScopeVariableDoNotTouchThanks
+        );
     }
 }

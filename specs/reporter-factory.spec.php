@@ -10,7 +10,7 @@ describe('ReporterFactory', function() {
 
     beforeEach(function() {
         $configuration = new Configuration();
-        $runner = new Runner(new Suite("test", function() {}));
+        $runner = new Runner(new Suite("test", function() {}), $configuration);
         $output = new Symfony\Component\Console\Output\NullOutput();
         $this->factory = new ReporterFactory($configuration, $runner, $output);
     });
@@ -23,7 +23,7 @@ describe('ReporterFactory', function() {
             });
 
             it("should return an anonymous reporter if callable used", function() {
-                $this->factory->register('spec2', 'desc', function($runner, $output) {});
+                $this->factory->register('spec2', 'desc', function($reporter) {});
                 $reporter = $this->factory->create('spec2');
                 assert($reporter instanceof AnonymousReporter, "should create AnonymousReporter");
             });

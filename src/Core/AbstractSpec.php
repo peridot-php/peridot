@@ -50,6 +50,13 @@ abstract class AbstractSpec implements SpecInterface
     protected $pending = null;
 
     /**
+     * This is oddly named so using it will only be VERY intentional
+     *
+     * @var Scope
+     */
+    protected $peridotScopeVariableDoNotTouchThanks;
+
+    /**
      * Constructor.
      *
      * @param string $description
@@ -57,29 +64,43 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function __construct($description, callable $definition)
     {
-
+        $this->peridotScopeVariableDoNotTouchThanks = new Scope();
         $this->definition = $definition;
         $this->description = $description;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param callable $setupFn
      */
     public function addSetUpFunction(callable $setupFn)
     {
-        $this->setUpFns[] = Closure::bind($setupFn, $this, $this);
+        $this->setUpFns[] = Closure::bind(
+            $setupFn,
+            $this->peridotScopeVariableDoNotTouchThanks,
+            $this->peridotScopeVariableDoNotTouchThanks
+        );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param callable $tearDownFn
      */
     public function addTearDownFunction(callable $tearDownFn)
     {
-        $this->tearDownFns[] = Closure::bind($tearDownFn, $this, $this);
+        $this->tearDownFns[] = Closure::bind(
+            $tearDownFn,
+            $this->peridotScopeVariableDoNotTouchThanks,
+            $this->peridotScopeVariableDoNotTouchThanks
+        );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function getDescription()
     {
@@ -88,6 +109,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return callable
      */
     public function getDefinition()
     {
@@ -96,6 +119,9 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param SpecInterface $parent
+     * @return mixed|void
      */
     public function setParent(SpecInterface $parent)
     {
@@ -104,6 +130,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return SpecInterface
      */
     public function getParent()
     {
@@ -112,6 +140,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function getTitle()
     {
@@ -126,6 +156,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool|null
      */
     public function getPending()
     {
@@ -134,6 +166,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param bool $state
      */
     public function setPending($state)
     {
@@ -142,6 +176,8 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return array
      */
     public function getSetUpFunctions()
     {
@@ -150,9 +186,21 @@ abstract class AbstractSpec implements SpecInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return array
      */
     public function getTearDownFunctions()
     {
         return $this->tearDownFns;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Peridot\Core\Scope
+     */
+    public function getScope()
+    {
+        return $this->peridotScopeVariableDoNotTouchThanks;
     }
 }

@@ -86,4 +86,12 @@ interface SpecInterface extends EventEmitterInterface
      * @return void
      */
     public function setPending($state);
+
+    /**
+     * Return scope for this spec. Scope contains instance variables
+     * for a spec
+     *
+     * @return Scope
+     */
+    public function getScope();
 } 

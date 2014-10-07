@@ -53,7 +53,7 @@ describe("Suite", function() {
             $result = new SpecResult();
             $suite->run($result);
 
-            assert('torntorn' == $spec1->log . $spec2->log, "tear down should have run for both specs");
+            assert('torntorn' == $spec1->log() . $spec2->log(), "tear down should have run for both specs");
         });
 
         it("should set pending status on specs if not null", function() {
@@ -88,6 +88,24 @@ describe("Suite", function() {
             });
             $suite->run(new SpecResult());
             assert($suite === $emitted, 'suite end event should have been emitted');
+        });
+
+        it("should stop when a halt event is received", function() {
+            $suite = new Suite("halt suite", function() {});
+            $passing = new Spec("passing spec", function() {});
+            $halting = new Spec("halting spec", function() use ($suite) {
+                $suite->emit('halt');
+            });
+            $passing2 = new Spec("passing2 spec", function() {});
+
+            $suite->addSpec($passing);
+            $suite->addSpec($halting);
+            $suite->addSpec($passing2);
+
+            $result = new SpecResult();
+            $suite->run($result);
+
+            assert($result->getSpecCount() == 2, "spec count should be 2");
         });
     });
 

@@ -32,7 +32,6 @@ class ReporterFactory
      * @var array
      */
     protected $reporters = array(
-        'basic' => ['description' => 'a simple summary', 'factory' => 'Peridot\Reporter\BasicReporter'],
         'spec' => ['description' => 'hierarchical spec list', 'factory' => 'Peridot\Reporter\SpecReporter']
     );
 
