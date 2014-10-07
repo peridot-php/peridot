@@ -40,6 +40,10 @@ class Runner
      */
     public function run(SpecResult $result)
     {
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+           $this->emit('error', [$errno, $errstr, $errfile, $errline]);
+        });
+
         $result->on('spec:failed', function($spec, $e) {
             if ($this->configuration->shouldStopOnFailure()) {
                 $this->suite->emit('halt');
@@ -66,5 +70,7 @@ class Runner
         $this->emit('start');
         $this->suite->run($result);
         $this->emit('end');
+
+        restore_error_handler();
     }
 }
