@@ -43,6 +43,11 @@ abstract class AbstractBaseReporter implements ReporterInterface
     protected $pending = 0;
 
     /**
+     * @var int
+     */
+    protected $time;
+
+    /**
      * @var array
      */
     protected $colors = array(
@@ -70,6 +75,14 @@ abstract class AbstractBaseReporter implements ReporterInterface
         $this->configuration = $configuration;
         $this->runner = $runner;
         $this->output = $output;
+
+        $this->runner->on('start', function() {
+            \PHP_Timer::start();
+        });
+
+        $this->runner->on('end', function() {
+            $this->time = \PHP_Timer::stop();
+        });
 
         $this->runner->on('fail', function(Spec $spec, \Exception $e) {
             $this->errors[] = [$spec, $e];
