@@ -54,11 +54,10 @@ abstract class AbstractSpec implements SpecInterface
     protected $eventEmitter;
 
     /**
-     * This is oddly named so using it will only be VERY intentional
      *
      * @var Scope
      */
-    protected $peridotScopeVariableDoNotTouchThanks;
+    protected $scope;
 
     /**
      * Constructor.
@@ -70,7 +69,7 @@ abstract class AbstractSpec implements SpecInterface
     {
         $this->definition = $definition;
         $this->description = $description;
-        $this->peridotScopeVariableDoNotTouchThanks = new Scope();
+        $this->scope = new Scope();
     }
 
     /**
@@ -82,8 +81,8 @@ abstract class AbstractSpec implements SpecInterface
     {
         $this->setUpFns[] = Closure::bind(
             $setupFn,
-            $this->peridotScopeVariableDoNotTouchThanks,
-            $this->peridotScopeVariableDoNotTouchThanks
+            $this->scope,
+            $this->scope
         );
     }
 
@@ -96,8 +95,8 @@ abstract class AbstractSpec implements SpecInterface
     {
         $this->tearDownFns[] = Closure::bind(
             $tearDownFn,
-            $this->peridotScopeVariableDoNotTouchThanks,
-            $this->peridotScopeVariableDoNotTouchThanks
+            $this->scope,
+            $this->scope
         );
     }
 
@@ -205,7 +204,7 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function getScope()
     {
-        return $this->peridotScopeVariableDoNotTouchThanks;
+        return $this->scope;
     }
 
     /**

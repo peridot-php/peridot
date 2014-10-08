@@ -71,8 +71,8 @@ class Spec extends AbstractSpec
     {
         return Closure::bind(
             $this->definition,
-            $this->peridotScopeVariableDoNotTouchThanks,
-            $this->peridotScopeVariableDoNotTouchThanks
+            $this->scope,
+            $this->scope
         );
     }
 }
