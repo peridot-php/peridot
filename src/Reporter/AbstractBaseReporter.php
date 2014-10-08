@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Reporter;
 
+use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Core\Spec;
 use Peridot\Runner\Runner;
@@ -43,6 +44,11 @@ abstract class AbstractBaseReporter implements ReporterInterface
     protected $pending = 0;
 
     /**
+     * @var \Evenement\EventEmitterInterface
+     */
+    protected $eventEmitter;
+
+    /**
      * @var int
      */
     protected $time;
@@ -70,29 +76,35 @@ abstract class AbstractBaseReporter implements ReporterInterface
      * @param Runner $runner
      * @param OutputInterface $output
      */
-    public function __construct(Configuration $configuration, Runner $runner, OutputInterface $output)
+    public function __construct(
+        Configuration $configuration,
+        Runner $runner,
+        OutputInterface $output,
+        EventEmitterInterface $eventEmitter
+    )
     {
         $this->configuration = $configuration;
         $this->runner = $runner;
         $this->output = $output;
+        $this->eventEmitter = $eventEmitter;
 
-        $this->runner->on('start', function() {
+        $this->eventEmitter->on('start', function() {
             \PHP_Timer::start();
         });
 
-        $this->runner->on('end', function() {
+        $this->eventEmitter->on('end', function() {
             $this->time = \PHP_Timer::stop();
         });
 
-        $this->runner->on('fail', function(Spec $spec, \Exception $e) {
+        $this->eventEmitter->on('fail', function(Spec $spec, \Exception $e) {
             $this->errors[] = [$spec, $e];
         });
 
-        $this->runner->on('pass', function() {
+        $this->eventEmitter->on('pass', function() {
             $this->passing++;
         });
 
-        $this->runner->on('pending', function() {
+        $this->eventEmitter->on('pending', function() {
             $this->pending++;
         });
 

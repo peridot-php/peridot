@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Console;
 
+use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Core\SpecResult;
 use Peridot\Reporter\ReporterFactory;
@@ -18,11 +19,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Command extends ConsoleCommand
 {
     /**
+     * @var \Evenement\EventEmitterInterface
+     */
+    protected $eventEmitter;
+
+    /**
      * Constructor
      */
-    public function __construct()
+    public function __construct(EventEmitterInterface $eventEmitter)
     {
         parent::__construct('peridot');
+        $this->eventEmitter = $eventEmitter;
     }
 
     /**
@@ -33,8 +40,8 @@ class Command extends ConsoleCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configuration = ConfigurationReader::readInput($input);
-        $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration);
-        $factory = new ReporterFactory($configuration, $runner, $output);
+        $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration, $this->eventEmitter);
+        $factory = new ReporterFactory($configuration, $runner, $output, $this->eventEmitter);
 
         if (file_exists($configuration->getConfigurationFile())) {
             $this->loadConfiguration($runner, $configuration, $factory);
@@ -50,7 +57,7 @@ class Command extends ConsoleCommand
             $configuration->setReporter($reporter);
         }
 
-        $result = new SpecResult();
+        $result = new SpecResult($this->eventEmitter);
         $loader = new SuiteLoader($configuration->getGrep());
         $loader->load($configuration->getPath());
         $factory->create($configuration->getReporter());

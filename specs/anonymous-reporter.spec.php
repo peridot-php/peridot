@@ -1,4 +1,5 @@
 <?php
+use Evenement\EventEmitter;
 use Peridot\Configuration;
 use Peridot\Core\Suite;
 use Peridot\Reporter\AnonymousReporter;
@@ -9,7 +10,7 @@ describe('AnonymousReporter', function() {
 
     beforeEach(function() {
         $this->configuration = new Configuration();
-        $this->runner = new Runner(new Suite("test", function() {}), $this->configuration);
+        $this->runner = new Runner(new Suite("test", function() {}), $this->configuration, new EventEmitter());
         $this->output = new Symfony\Component\Console\Output\NullOutput();
     });
 
@@ -21,7 +22,7 @@ describe('AnonymousReporter', function() {
             $configuration = $reporter->getConfiguration();
             $runner = $reporter->getRunner();
             $output = $reporter->getOutput();
-        }, $this->configuration, $this->runner, $this->output);
+        }, $this->configuration, $this->runner, $this->output, new EventEmitter());
         assert(
             !is_null($configuration) && !is_null($runner) && !is_null($output),
             'configuration, runner, and output should not be null'

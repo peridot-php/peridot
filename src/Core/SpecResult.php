@@ -2,6 +2,7 @@
 
 namespace Peridot\Core;
 
+use Evenement\EventEmitterInterface;
 use Evenement\EventEmitterTrait;
 
 /**
@@ -10,8 +11,6 @@ use Evenement\EventEmitterTrait;
  */
 class SpecResult
 {
-    use EventEmitterTrait;
-
     /**
      * Tracks total specs run against this result
      *
@@ -32,6 +31,21 @@ class SpecResult
      * @var int
      */
     protected $pendingCount = 0;
+
+    /**
+     * @var \Evenement\EventEmitterInterface
+     */
+    protected $eventEmitter;
+
+    /**
+     * Constructor
+     *
+     * @param EventEmitterInterface $eventEmitter
+     */
+    public function __construct(EventEmitterInterface $eventEmitter)
+    {
+        $this->eventEmitter = $eventEmitter;
+    }
 
     /**
      * Returns a summary string containing total specs run and total specs
@@ -56,7 +70,7 @@ class SpecResult
     public function failSpec(SpecInterface $spec, \Exception $e)
     {
         $this->failureCount++;
-        $this->emit('spec:failed', [$spec, $e]);
+        $this->eventEmitter->emit('spec:failed', [$spec, $e]);
     }
 
     /**
@@ -67,7 +81,7 @@ class SpecResult
     public function pendSpec(SpecInterface $spec)
     {
         $this->pendingCount++;
-        $this->emit('spec:pending', [$spec]);
+        $this->eventEmitter->emit('spec:pending', [$spec]);
     }
 
     /**
@@ -77,7 +91,7 @@ class SpecResult
      */
     public function passSpec(SpecInterface $spec)
     {
-        $this->emit('spec:passed', [$spec]);
+        $this->eventEmitter->emit('spec:passed', [$spec]);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Reporter;
 
+use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,10 +25,16 @@ class AnonymousReporter extends AbstractBaseReporter
      * @param Runner $runner
      * @param OutputInterface $output
      */
-    public function __construct(callable $init, Configuration $configuration, Runner $runner, OutputInterface $output)
+    public function __construct(
+        callable $init,
+        Configuration $configuration,
+        Runner $runner,
+        OutputInterface $output,
+        EventEmitterInterface $eventEmitter
+    )
     {
         $this->initFn = $init;
-        parent::__construct($configuration, $runner, $output);
+        parent::__construct($configuration, $runner, $output, $eventEmitter);
     }
 
     /**

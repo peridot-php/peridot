@@ -1,10 +1,15 @@
 <?php
+use Evenement\EventEmitter;
 use Peridot\Core\Spec;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 use Peridot\Test\ItWasRun;
 
 describe("Suite", function() {
+
+    beforeEach(function() {
+       $this->eventEmitter = new EventEmitter();
+    });
 
     describe('->run()', function() {
         it("should run multiple specs", function () {
@@ -14,7 +19,8 @@ describe("Suite", function() {
                 throw new \Exception('woooooo!');
             }));
 
-            $result = new SpecResult();
+            $result = new SpecResult($this->eventEmitter);
+            $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
             assert('2 run, 1 failed' == $result->getSummary(), "result summary should show 2/1");
         });
@@ -32,7 +38,8 @@ describe("Suite", function() {
             $suite->addSpec(new ItWasRun("should have log", $fn));
             $suite->addSpec(new ItWasRun("should also have log", $fn));
 
-            $result = new SpecResult();
+            $result = new SpecResult($this->eventEmitter);
+            $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
             assert('2 run, 0 failed' == $result->getSummary(), "result summary should show 2/0");
         });
@@ -50,7 +57,8 @@ describe("Suite", function() {
             $suite->addSpec($spec1);
             $suite->addSpec($spec2);
 
-            $result = new SpecResult();
+            $result = new SpecResult($this->eventEmitter);
+            $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
 
             assert('torntorn' == $spec1->log() . $spec2->log(), "tear down should have run for both specs");
@@ -64,7 +72,8 @@ describe("Suite", function() {
             $spec1 = new ItWasRun("should have log", $fn);
             $suite->addSpec($spec1);
 
-            $result = new SpecResult();
+            $result = new SpecResult($this->eventEmitter);
+            $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
 
             assert($spec1->getPending(), "spec should be pending");
@@ -73,28 +82,33 @@ describe("Suite", function() {
         it("should emit a suite:start event", function() {
             $suite = new Suite("Suite", function() {});
             $emitted = null;
-            $suite->on('suite:start', function($s) use (&$emitted) {
+            $this->eventEmitter->on('suite:start', function($s) use (&$emitted) {
                 $emitted = $s;
             });
-            $suite->run(new SpecResult());
+            $result = new SpecResult($this->eventEmitter);
+            $suite->setEventEmitter($this->eventEmitter);
+            $suite->run($result);
             assert($suite === $emitted, 'suite start event should have been emitted');
         });
 
         it("should emit a suite:end event", function() {
             $suite = new Suite("Suite", function() {});
             $emitted = null;
-            $suite->on('suite:end', function($s) use (&$emitted) {
+            $this->eventEmitter->on('suite:end', function($s) use (&$emitted) {
                 $emitted = $s;
             });
-            $suite->run(new SpecResult());
+            $result = new SpecResult($this->eventEmitter);
+            $suite->setEventEmitter($this->eventEmitter);
+            $suite->run($result);
             assert($suite === $emitted, 'suite end event should have been emitted');
         });
 
         it("should stop when a halt event is received", function() {
             $suite = new Suite("halt suite", function() {});
             $passing = new Spec("passing spec", function() {});
-            $halting = new Spec("halting spec", function() use ($suite) {
-                $suite->emit('halt');
+            $emitter = $this->eventEmitter;
+            $halting = new Spec("halting spec", function() use ($emitter) {
+                $emitter->emit('halt');
             });
             $passing2 = new Spec("passing2 spec", function() {});
 
@@ -102,7 +116,8 @@ describe("Suite", function() {
             $suite->addSpec($halting);
             $suite->addSpec($passing2);
 
-            $result = new SpecResult();
+            $result = new SpecResult($this->eventEmitter);
+            $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
 
             assert($result->getSpecCount() == 2, "spec count should be 2");

@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Runner;
 
+use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
@@ -12,8 +13,6 @@ use Evenement\EventEmitterTrait;
  */
 class Runner
 {
-    use EventEmitterTrait;
-
     /**
      * @var \Peridot\Core\Suite
      */
@@ -25,14 +24,20 @@ class Runner
     protected $configuration;
 
     /**
+     * @var \Evenement\EventEmitterInterface
+     */
+    protected $eventEmitter;
+
+    /**
      * Constructor
      *
      * @param SpecResult $result
      */
-    public function __construct(Suite $suite, Configuration $configuration)
+    public function __construct(Suite $suite, Configuration $configuration, EventEmitterInterface $eventEmitter)
     {
         $this->suite = $suite;
         $this->configuration = $configuration;
+        $this->eventEmitter = $eventEmitter;
     }
 
     /**
@@ -41,35 +46,28 @@ class Runner
     public function run(SpecResult $result)
     {
         set_error_handler(function($errno, $errstr, $errfile, $errline) {
-           $this->emit('error', [$errno, $errstr, $errfile, $errline]);
+           $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
         });
 
-        $result->on('spec:failed', function($spec, $e) {
+        $this->eventEmitter->on('spec:failed', function($spec, $e) {
             if ($this->configuration->shouldStopOnFailure()) {
-                $this->suite->emit('halt');
+                $this->eventEmitter->emit('halt');
             }
-            $this->emit('fail', [$spec, $e]);
+            $this->eventEmitter->emit('fail', [$spec, $e]);
         });
 
-        $result->on('spec:passed', function($spec) {
-            $this->emit('pass', [$spec]);
+        $this->eventEmitter->on('spec:passed', function($spec) {
+            $this->eventEmitter->emit('pass', [$spec]);
         });
 
-        $result->on('spec:pending', function($spec) {
-            $this->emit('pending', [$spec]);
+        $this->eventEmitter->on('spec:pending', function($spec) {
+            $this->eventEmitter->emit('pending', [$spec]);
         });
 
-        $this->suite->on('suite:start', function($suite) {
-            $this->emit('suite:start', [$suite]);
-        });
-
-        $this->suite->on('suite:end', function($suite) {
-            $this->emit('suite:end', [$suite]);
-        });
-
-        $this->emit('start');
+        $this->eventEmitter->emit('start');
+        $this->suite->setEventEmitter($this->eventEmitter);
         $this->suite->run($result);
-        $this->emit('end');
+        $this->eventEmitter->emit('end');
 
         restore_error_handler();
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Console;
 
+use Evenement\EventEmitterInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Command\ListCommand;
@@ -15,11 +16,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends ConsoleApplication
 {
     /**
-     * Constructor
+     * @var \Evenement\EventEmitterInterface
      */
-    public function __construct()
+    protected $eventEmitter;
+
+    /**
+     * Constructor
+     *
+     * @param EventEmitterInterface $eventEmitter
+     */
+    public function __construct(EventEmitterInterface $eventEmitter)
     {
         parent::__construct(Version::NAME, Version::NUMBER);
+        $this->eventEmitter = $eventEmitter;
         require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Dsl.php';
     }
 
@@ -28,7 +37,7 @@ class Application extends ConsoleApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        $this->add(new Command());
+        $this->add(new Command($this->eventEmitter));
         return parent::doRun($input, $output);
     }
 

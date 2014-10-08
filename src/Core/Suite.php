@@ -1,5 +1,6 @@
 <?php
 namespace Peridot\Core;
+use Evenement\EventEmitterInterface;
 use Evenement\EventEmitterTrait;
 
 /**
@@ -70,13 +71,10 @@ class Suite extends AbstractSpec
      */
     public function run(SpecResult $result)
     {
-        $this->emit('suite:start', [$this]);
+        $this->eventEmitter->emit('suite:start', [$this]);
 
-        $this->on('halt', function() {
+        $this->eventEmitter->on('halt', function() {
             $this->halted = true;
-            foreach ($this->specs as $spec) {
-                $spec->emit('halt');
-            }
         });
 
         foreach ($this->specs as $spec) {
@@ -89,18 +87,11 @@ class Suite extends AbstractSpec
                 $spec->setPending($this->getPending());
             }
 
-            $spec->on('suite:start', function($suite) {
-                $this->emit('suite:start', [$suite]);
-            });
-
-            $spec->on('suite:end', function($suite) {
-               $this->emit('suite:end', [$suite]);
-            });
-
             $this->bindCallables($spec);
+            $spec->setEventEmitter($this->eventEmitter);
             $spec->run($result);
         }
-        $this->emit('suite:end', [$this]);
+        $this->eventEmitter->emit('suite:end', [$this]);
     }
 
     /**

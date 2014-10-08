@@ -6,7 +6,7 @@ use Evenement\EventEmitterInterface;
  * Interface SpecInterface
  * @package Peridot\Core
  */
-interface SpecInterface extends EventEmitterInterface
+interface SpecInterface
 {
     /**
      * @param SpecResult $result

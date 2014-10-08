@@ -1,4 +1,5 @@
 <?php
+use Evenement\EventEmitter;
 use Peridot\Core\Spec;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
@@ -11,7 +12,7 @@ describe("Spec", function() {
             $spec = new ItWasRun("this should run", function() {
                 $this->wasRun = true;
             });
-            $spec->run(new SpecResult());
+            $spec->run(new SpecResult(new EventEmitter()));
             assert($spec->wasRun(), "spec should have run");
         });
 
@@ -20,7 +21,7 @@ describe("Spec", function() {
             $spec->addSetUpFunction(function() {
                 $this->log .= "setUp ";
             });
-            $spec->run(new SpecResult());
+            $spec->run(new SpecResult(new EventEmitter()));
             assert($spec->log() == "setUp ", "spec should have been setup");
         });
 
@@ -29,13 +30,13 @@ describe("Spec", function() {
             $spec->addTearDownFunction(function() {
                 $this->log .= "tearDown ";
             });
-            $spec->run(new SpecResult());
+            $spec->run(new SpecResult(new EventEmitter()));
             assert($spec->log() == "tearDown ", "spec should have been torn down");
         });
 
         it("should modify a passed in result", function () {
             $spec = new ItWasRun("this should return a result", function () {});
-            $result = new SpecResult();
+            $result = new SpecResult(new EventEmitter());
             $spec->run($result);
             assert("1 run, 0 failed" == $result->getSummary(), "result summary should have shown 1 run");
         });
@@ -44,7 +45,7 @@ describe("Spec", function() {
             $spec = new ItWasRun("this should return a failed result", function () {
                 throw new \Exception('blaaargh');
             });
-            $result = new SpecResult();
+            $result = new SpecResult(new EventEmitter());
             $spec->run($result);
             assert("1 run, 1 failed" == $result->getSummary(), "result summary should have shown 1 failed");
         });
@@ -52,7 +53,7 @@ describe("Spec", function() {
         it("should add pending results to result", function () {
             $spec = new Spec('shouldnt run', function() {});
             $spec->setPending(true);
-            $result = new SpecResult();
+            $result = new SpecResult(new EventEmitter());
             $spec->run($result);
             assert("1 run, 0 failed, 1 pending" == $result->getSummary(), "result summary should have shown 1 pending");
         });
@@ -64,7 +65,7 @@ describe("Spec", function() {
             $spec->addTearDownFunction(function() {
                 $this->log = 'tearing down';
             });
-            $spec->run(new SpecResult());;
+            $spec->run(new SpecResult(new EventEmitter()));;
             assert($spec->getScope()->log == 'tearing down', 'spec should have been torn down after failure');
         });
 
@@ -76,7 +77,7 @@ describe("Spec", function() {
             $spec->addTearDownFunction(function() {
                 $this->log = 'tearing down';
             });
-            $spec->run(new SpecResult());;
+            $spec->run(new SpecResult(new EventEmitter()));
             assert($spec->getScope()->log == 'tearing down', 'spec should have been torn down after failure');
         });
 
@@ -86,7 +87,7 @@ describe("Spec", function() {
                 throw new Exception('tear down failure');
             });
 
-            $result = new SpecResult();
+            $result = new SpecResult(new EventEmitter());
             $spec->run($result);;
             assert("1 run, 0 failed" == $result->getSummary(), "result summary should have shown 1 run");
         });
@@ -100,7 +101,7 @@ describe("Spec", function() {
                 throw new Exception('set up failure');
             });
 
-            $spec->run(new SpecResult());;
+            $spec->run(new SpecResult(new EventEmitter()));
             assert(empty($spec->getScope()->log), 'test should have been skipped');
         });
 
@@ -111,7 +112,7 @@ describe("Spec", function() {
                    $neverRan = false;
                });
                $spec->setPending(true);
-               $spec->run(new SpecResult());
+               $spec->run(new SpecResult(new EventEmitter()));
                assert($neverRan, 'pending spec should not have run');
            });
         });

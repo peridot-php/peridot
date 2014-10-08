@@ -1,14 +1,21 @@
 <?php
 
+use Evenement\EventEmitter;
 use Peridot\Core\Spec;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 use Peridot\Test\ItWasRun;
 
 describe("SpecResult", function() {
+
+    beforeEach(function() {
+        $this->eventEmitter = new EventEmitter();
+    });
+
     it("should return the number of tests run", function() {
-        $result = new SpecResult();
+        $result = new SpecResult($this->eventEmitter);
         $suite = new Suite("Suite", function() {});
+        $suite->setEventEmitter($this->eventEmitter);
         $suite->addspec(new ItWasRun("this was run", function () {}));
         $suite->addspec(new ItWasRun("this was also run", function () {}));
         $suite->run($result);
@@ -16,8 +23,9 @@ describe("SpecResult", function() {
     });
 
     it("should return the number of tests failed", function() {
-        $result = new SpecResult();
+        $result = new SpecResult($this->eventEmitter);
         $suite = new Suite("Suite", function() {});
+        $suite->setEventEmitter($this->eventEmitter);
         $suite->addspec(new ItWasRun("this was run", function () {}));
         $suite->addspec(new ItWasRun("this was also run", function () {}));
         $suite->addspec(new ItWasRun("this failed", function () {
@@ -29,13 +37,14 @@ describe("SpecResult", function() {
 
     describe("->failSpec()", function() {
         beforeEach(function() {
-            $this->result = new SpecResult();
+            $this->emitter = new EventEmitter();
+            $this->result = new SpecResult($this->emitter);
         });
 
         it('should emit a spec:failed event', function() {
             $emitted = null;
             $exception = null;
-            $this->result->on('spec:failed', function ($spec, $e) use (&$emitted, &$exception){
+            $this->emitter->on('spec:failed', function ($spec, $e) use (&$emitted, &$exception){
                 $emitted = $spec;
                 $exception = $e;
             });
@@ -49,12 +58,13 @@ describe("SpecResult", function() {
 
     describe("->passSpec()", function() {
         beforeEach(function() {
-            $this->result = new SpecResult();
+            $this->emitter = new EventEmitter();
+            $this->result = new SpecResult($this->emitter);
         });
 
         it('should emit a spec:passed event', function() {
             $emitted = null;
-            $this->result->on('spec:passed', function ($spec) use (&$emitted){
+            $this->emitter->on('spec:passed', function ($spec) use (&$emitted){
                 $emitted = $spec;
             });
 
@@ -66,12 +76,13 @@ describe("SpecResult", function() {
 
     describe("->pendSpec()", function() {
         beforeEach(function() {
-            $this->result = new SpecResult();
+            $this->emitter = new EventEmitter();
+            $this->result = new SpecResult($this->emitter);
         });
 
         it('should emit a spec:pending event', function() {
             $emitted = null;
-            $this->result->on('spec:pending', function ($spec) use (&$emitted){
+            $this->emitter->on('spec:pending', function ($spec) use (&$emitted){
                 $emitted = $spec;
             });
 
