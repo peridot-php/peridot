@@ -79,11 +79,11 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function addSetUpFunction(callable $setupFn)
     {
-        $this->setUpFns[] = Closure::bind(
+        array_unshift($this->setUpFns, Closure::bind(
             $setupFn,
             $this->scope,
             $this->scope
-        );
+        ));
     }
 
     /**
@@ -93,11 +93,11 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function addTearDownFunction(callable $tearDownFn)
     {
-        $this->tearDownFns[] = Closure::bind(
+        array_unshift($this->tearDownFns, Closure::bind(
             $tearDownFn,
             $this->scope,
             $this->scope
-        );
+        ));
     }
 
     /**

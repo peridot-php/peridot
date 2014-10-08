@@ -37,14 +37,14 @@ describe("SpecResult", function() {
 
     describe("->failSpec()", function() {
         beforeEach(function() {
-            $this->emitter = new EventEmitter();
-            $this->result = new SpecResult($this->emitter);
+            $this->eventEmitter = new EventEmitter();
+            $this->result = new SpecResult($this->eventEmitter);
         });
 
         it('should emit a spec:failed event', function() {
             $emitted = null;
             $exception = null;
-            $this->emitter->on('spec:failed', function ($spec, $e) use (&$emitted, &$exception){
+            $this->eventEmitter->on('spec:failed', function ($spec, $e) use (&$emitted, &$exception){
                 $emitted = $spec;
                 $exception = $e;
             });
