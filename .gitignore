@@ -1,4 +1,5 @@
+code-coverage-report/
 vendor/
-.idea
+.idea/
 composer.lock
 peridot.phar
