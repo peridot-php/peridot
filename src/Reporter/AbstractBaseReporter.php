@@ -162,6 +162,14 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
+     * @return EventEmitterInterface
+     */
+    public function getEventEmitter()
+    {
+        return $this->eventEmitter;
+    }
+
+    /**
      * Initialize reporter. Setup and listen for runner events
      *
      * @return void

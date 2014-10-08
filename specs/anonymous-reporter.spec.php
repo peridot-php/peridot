@@ -9,8 +9,9 @@ use Peridot\Runner\Runner;
 describe('AnonymousReporter', function() {
 
     beforeEach(function() {
+        $this->eventEmitter = new EventEmitter();
         $this->configuration = new Configuration();
-        $this->runner = new Runner(new Suite("test", function() {}), $this->configuration, new EventEmitter());
+        $this->runner = new Runner(new Suite("test", function() {}), $this->configuration, $this->eventEmitter);
         $this->output = new Symfony\Component\Console\Output\NullOutput();
     });
 
@@ -18,14 +19,16 @@ describe('AnonymousReporter', function() {
         $configuration = null;
         $runner = null;
         $output = null;
-        new AnonymousReporter(function(ReporterInterface $reporter) use (&$configuration, &$runner, &$output) {
+        $emitter = null;
+        new AnonymousReporter(function(ReporterInterface $reporter) use (&$configuration, &$runner, &$output, &$emitter) {
             $configuration = $reporter->getConfiguration();
             $runner = $reporter->getRunner();
             $output = $reporter->getOutput();
-        }, $this->configuration, $this->runner, $this->output, new EventEmitter());
+            $emitter = $reporter->getEventEmitter();
+        }, $this->configuration, $this->runner, $this->output, $this->eventEmitter);
         assert(
-            !is_null($configuration) && !is_null($runner) && !is_null($output),
-            'configuration, runner, and output should not be null'
+            !is_null($configuration) && !is_null($runner) && !is_null($output) && !is_null($emitter),
+            'configuration, runner, output, and emitter should not be null'
         );
     });
 
