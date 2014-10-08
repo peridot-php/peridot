@@ -2,7 +2,8 @@
 namespace Peridot\Console;
 
 use Symfony\Component\Console\Application as ConsoleApplication;
-use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Command\HelpCommand;
+use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,16 +33,13 @@ class Application extends ConsoleApplication
     }
 
     /**
-     * The default InputDefinition for the application. Leave it to specific
-     * Tester objects for specifying further definitions
+     * Return the peridot input definition
      *
-     * @return InputDefinition
+     * @return InputDefinition|\Symfony\Component\Console\Input\InputDefinition
      */
-    public function getDefinition()
+    protected function getDefaultInputDefinition()
     {
-        return new InputDefinition(array(
-            new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.')
-        ));
+        return new InputDefinition();
     }
 
     /**

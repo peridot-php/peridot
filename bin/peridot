@@ -28,6 +28,8 @@ if (!defined('PERIDOT_COMPOSER_INSTALL')) {
 require_once PERIDOT_COMPOSER_INSTALL;
 
 use Peridot\Console\Application;
+use Peridot\Console\InputDefinition;
+use Symfony\Component\Console\Input\ArgvInput;
 
 $application = new Application();
-$application->run();
+$application->run(new ArgvInput(null, new InputDefinition()));

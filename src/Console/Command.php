@@ -26,14 +26,6 @@ class Command extends ConsoleCommand
     }
 
     /**
-     * Configure the command
-     */
-    protected function configure()
-    {
-        $this->setDefinition(new InputDefinition());
-    }
-
-    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int|null|void
