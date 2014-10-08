@@ -82,7 +82,7 @@ describe("Suite", function() {
         it("should emit a suite:start event", function() {
             $suite = new Suite("Suite", function() {});
             $emitted = null;
-            $this->eventEmitter->on('suite:start', function($s) use (&$emitted) {
+            $this->eventEmitter->on('suite.start', function($s) use (&$emitted) {
                 $emitted = $s;
             });
             $result = new SpecResult($this->eventEmitter);
@@ -94,7 +94,7 @@ describe("Suite", function() {
         it("should emit a suite:end event", function() {
             $suite = new Suite("Suite", function() {});
             $emitted = null;
-            $this->eventEmitter->on('suite:end', function($s) use (&$emitted) {
+            $this->eventEmitter->on('suite.end', function($s) use (&$emitted) {
                 $emitted = $s;
             });
             $result = new SpecResult($this->eventEmitter);
@@ -108,7 +108,7 @@ describe("Suite", function() {
             $passing = new Spec("passing spec", function() {});
             $emitter = $this->eventEmitter;
             $halting = new Spec("halting spec", function() use ($emitter) {
-                $emitter->emit('halt');
+                $emitter->emit('suite.halt');
             });
             $passing2 = new Spec("passing2 spec", function() {});
 

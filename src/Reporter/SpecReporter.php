@@ -21,25 +21,25 @@ class SpecReporter extends AbstractBaseReporter
     {
         $root = Context::getInstance()->getCurrentSuite();
 
-        $this->eventEmitter->on('start', function() {
+        $this->eventEmitter->on('runner.start', function() {
             $this->output->writeln("");
         });
 
-        $this->eventEmitter->on('suite:start', function(Suite $suite) use ($root) {
+        $this->eventEmitter->on('suite.start', function(Suite $suite) use ($root) {
             if ($suite != $root) {
                 ++$this->column;
                 $this->output->writeln(sprintf('%s%s', $this->indent(), $suite->getDescription()));
             }
         });
 
-        $this->eventEmitter->on('suite:end', function() {
+        $this->eventEmitter->on('suite.end', function() {
             --$this->column;
             if ($this->column == 0) {
                 $this->output->writeln("");
             }
         });
 
-        $this->eventEmitter->on('pass', function(Spec $spec) {
+        $this->eventEmitter->on('spec.passed', function(Spec $spec) {
             $this->output->writeln(sprintf(
                 "  %s%s %s",
                 $this->indent(),
@@ -48,7 +48,7 @@ class SpecReporter extends AbstractBaseReporter
             ));
         });
 
-        $this->eventEmitter->on('fail', function(Spec $spec, \Exception $e) {
+        $this->eventEmitter->on('spec.failed', function(Spec $spec, \Exception $e) {
             $this->output->writeln(sprintf(
                 "  %s%s",
                 $this->indent(),
@@ -56,7 +56,7 @@ class SpecReporter extends AbstractBaseReporter
             ));
         });
 
-        $this->eventEmitter->on('pending', function(Spec $spec) {
+        $this->eventEmitter->on('spec.pending', function(Spec $spec) {
             $this->output->writeln(sprintf(
                 $this->color('pending', "  %s- %s"),
                 $this->indent(),
@@ -64,7 +64,7 @@ class SpecReporter extends AbstractBaseReporter
             ));
         });
 
-        $this->eventEmitter->on('end', function() {
+        $this->eventEmitter->on('runner.end', function() {
             $this->footer();
         });
     }

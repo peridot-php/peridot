@@ -88,23 +88,23 @@ abstract class AbstractBaseReporter implements ReporterInterface
         $this->output = $output;
         $this->eventEmitter = $eventEmitter;
 
-        $this->eventEmitter->on('start', function() {
+        $this->eventEmitter->on('runner.start', function() {
             \PHP_Timer::start();
         });
 
-        $this->eventEmitter->on('end', function() {
+        $this->eventEmitter->on('runner.end', function() {
             $this->time = \PHP_Timer::stop();
         });
 
-        $this->eventEmitter->on('fail', function(Spec $spec, \Exception $e) {
+        $this->eventEmitter->on('spec.failed', function(Spec $spec, \Exception $e) {
             $this->errors[] = [$spec, $e];
         });
 
-        $this->eventEmitter->on('pass', function() {
+        $this->eventEmitter->on('spec.passed', function() {
             $this->passing++;
         });
 
-        $this->eventEmitter->on('pending', function() {
+        $this->eventEmitter->on('spec.pending', function() {
             $this->pending++;
         });
 

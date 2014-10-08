@@ -49,25 +49,16 @@ class Runner
            $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
         });
 
-        $this->eventEmitter->on('spec:failed', function($spec, $e) {
+        $this->eventEmitter->on('spec.failed', function($spec, $e) {
             if ($this->configuration->shouldStopOnFailure()) {
-                $this->eventEmitter->emit('halt');
+                $this->eventEmitter->emit('suite.halt');
             }
-            $this->eventEmitter->emit('fail', [$spec, $e]);
         });
 
-        $this->eventEmitter->on('spec:passed', function($spec) {
-            $this->eventEmitter->emit('pass', [$spec]);
-        });
-
-        $this->eventEmitter->on('spec:pending', function($spec) {
-            $this->eventEmitter->emit('pending', [$spec]);
-        });
-
-        $this->eventEmitter->emit('start');
+        $this->eventEmitter->emit('runner.start');
         $this->suite->setEventEmitter($this->eventEmitter);
         $this->suite->run($result);
-        $this->eventEmitter->emit('end');
+        $this->eventEmitter->emit('runner.end');
 
         restore_error_handler();
     }

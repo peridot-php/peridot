@@ -44,7 +44,7 @@ describe("SpecResult", function() {
         it('should emit a spec:failed event', function() {
             $emitted = null;
             $exception = null;
-            $this->eventEmitter->on('spec:failed', function ($spec, $e) use (&$emitted, &$exception){
+            $this->eventEmitter->on('spec.failed', function ($spec, $e) use (&$emitted, &$exception){
                 $emitted = $spec;
                 $exception = $e;
             });
@@ -64,7 +64,7 @@ describe("SpecResult", function() {
 
         it('should emit a spec:passed event', function() {
             $emitted = null;
-            $this->emitter->on('spec:passed', function ($spec) use (&$emitted){
+            $this->emitter->on('spec.passed', function ($spec) use (&$emitted){
                 $emitted = $spec;
             });
 
@@ -82,7 +82,7 @@ describe("SpecResult", function() {
 
         it('should emit a spec:pending event', function() {
             $emitted = null;
-            $this->emitter->on('spec:pending', function ($spec) use (&$emitted){
+            $this->emitter->on('spec.pending', function ($spec) use (&$emitted){
                 $emitted = $spec;
             });
 

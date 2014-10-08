@@ -58,7 +58,7 @@ describe("Runner", function() {
 
         it("should emit a start event when the runner starts", function() {
             $emitted = false;
-            $this->eventEmitter->on('start', function() use (&$emitted) {
+            $this->eventEmitter->on('runner.start', function() use (&$emitted) {
                 $emitted = true;
             });
             $this->runner->run(new SpecResult($this->eventEmitter));
@@ -67,7 +67,7 @@ describe("Runner", function() {
 
         it("should emit an end event when the runner ends", function() {
             $emitted = false;
-            $this->eventEmitter->on('end', function() use (&$emitted) {
+            $this->eventEmitter->on('runner.end', function() use (&$emitted) {
                 $emitted = true;
             });
             $result = new SpecResult(new EventEmitter());
@@ -78,7 +78,7 @@ describe("Runner", function() {
         it("should emit a fail event when a spec fails", function() {
             $emitted = null;
             $exception = null;
-            $this->eventEmitter->on('fail', function($spec, $e) use (&$emitted, &$exception) {
+            $this->eventEmitter->on('spec.failed', function($spec, $e) use (&$emitted, &$exception) {
                 $emitted = $spec;
                 $exception = $e;
             });
@@ -88,7 +88,7 @@ describe("Runner", function() {
 
         it("should emit a pass event when a spec passes", function() {
             $emitted = null;
-            $this->eventEmitter->on('pass', function($spec) use (&$emitted) {
+            $this->eventEmitter->on('spec.passed', function($spec) use (&$emitted) {
                 $emitted = $spec;
             });
             $this->runner->run(new SpecResult($this->eventEmitter));
@@ -97,7 +97,7 @@ describe("Runner", function() {
 
         it("should emit a pending event when a spec is pending", function() {
             $emitted = null;
-            $this->eventEmitter->on('pending', function($spec) use (&$emitted) {
+            $this->eventEmitter->on('spec.pending', function($spec) use (&$emitted) {
                 $emitted = $spec;
             });
             $this->passingSpec->setPending(true);
@@ -111,7 +111,7 @@ describe("Runner", function() {
             $child->addSpec($grandchild);
             $this->suite->addSpec($child);
             $count = 0;
-            $this->eventEmitter->on('suite:start', function() use (&$count) {
+            $this->eventEmitter->on('suite.start', function() use (&$count) {
                 $count++;
             });
             $this->runner->run(new SpecResult($this->eventEmitter));
@@ -124,7 +124,7 @@ describe("Runner", function() {
             $child->addSpec($grandchild);
             $this->suite->addSpec($child);
             $count = 0;
-            $this->eventEmitter->on('suite:end', function() use (&$count) {
+            $this->eventEmitter->on('suite.end', function() use (&$count) {
                 $count++;
             });
             $this->runner->run(new SpecResult($this->eventEmitter));

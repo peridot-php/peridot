@@ -70,7 +70,7 @@ class SpecResult
     public function failSpec(SpecInterface $spec, \Exception $e)
     {
         $this->failureCount++;
-        $this->eventEmitter->emit('spec:failed', [$spec, $e]);
+        $this->eventEmitter->emit('spec.failed', [$spec, $e]);
     }
 
     /**
@@ -81,7 +81,7 @@ class SpecResult
     public function pendSpec(SpecInterface $spec)
     {
         $this->pendingCount++;
-        $this->eventEmitter->emit('spec:pending', [$spec]);
+        $this->eventEmitter->emit('spec.pending', [$spec]);
     }
 
     /**
@@ -91,7 +91,7 @@ class SpecResult
      */
     public function passSpec(SpecInterface $spec)
     {
-        $this->eventEmitter->emit('spec:passed', [$spec]);
+        $this->eventEmitter->emit('spec.passed', [$spec]);
     }
 
     /**

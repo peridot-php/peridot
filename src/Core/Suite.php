@@ -71,9 +71,9 @@ class Suite extends AbstractSpec
      */
     public function run(SpecResult $result)
     {
-        $this->eventEmitter->emit('suite:start', [$this]);
+        $this->eventEmitter->emit('suite.start', [$this]);
 
-        $this->eventEmitter->on('halt', function() {
+        $this->eventEmitter->on('suite.halt', function() {
             $this->halted = true;
         });
 
@@ -91,7 +91,7 @@ class Suite extends AbstractSpec
             $spec->setEventEmitter($this->eventEmitter);
             $spec->run($result);
         }
-        $this->eventEmitter->emit('suite:end', [$this]);
+        $this->eventEmitter->emit('suite.end', [$this]);
     }
 
     /**
