@@ -44,7 +44,7 @@ class Command extends ConsoleCommand
         $factory = new ReporterFactory($configuration, $runner, $output, $this->eventEmitter);
 
         if (file_exists($configuration->getConfigurationFile())) {
-            $this->loadConfiguration($runner, $configuration, $factory);
+            $this->loadConfiguration($this->eventEmitter, $configuration, $factory);
         }
 
         if ($input->getOption('reporters')) {
@@ -88,15 +88,15 @@ class Command extends ConsoleCommand
      * Load configuration file. If the configuration file returns
      * a callable, it will be executed with the runner, configuration, and reporter factory
      *
-     * @param Runner $runner
+     * @param EventEmitterInterface $emitter
      * @param Configuration $configuration
      * @param ReporterFactory $reporters
      */
-    protected function loadConfiguration(Runner $runner, Configuration $configuration, ReporterFactory $reporters)
+    protected function loadConfiguration(EventEmitterInterface $emitter, Configuration $configuration, ReporterFactory $reporters)
     {
         $func = include $configuration->getConfigurationFile();
         if (is_callable($func)) {
-            $func($runner, $configuration, $reporters);
+            $func($emitter, $configuration, $reporters);
         }
     }
 }
