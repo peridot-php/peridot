@@ -46,6 +46,8 @@ class Application extends ConsoleApplication
             $this->loadConfiguration($this->eventEmitter, $configuration, $factory);
         }
 
+        $this->eventEmitter->emit('peridot.start', [$this->getDefinition()]);
+
         $this->add(new Command($runner, $configuration, $factory, $this->eventEmitter));
 
         return parent::doRun($input, $output);
