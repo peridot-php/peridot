@@ -20,9 +20,9 @@ class AnonymousReporter extends AbstractBaseReporter
     /**
      * Creates a reporter out of a callable
      *
-     * @param callable $init
-     * @param Configuration $configuration
-     * @param Runner $runner
+     * @param callable        $init
+     * @param Configuration   $configuration
+     * @param Runner          $runner
      * @param OutputInterface $output
      */
     public function __construct(

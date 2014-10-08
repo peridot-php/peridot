@@ -72,8 +72,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
     );
 
     /**
-     * @param Configuration $configuration
-     * @param Runner $runner
+     * @param Configuration   $configuration
+     * @param Runner          $runner
      * @param OutputInterface $output
      */
     public function __construct(
@@ -88,23 +88,23 @@ abstract class AbstractBaseReporter implements ReporterInterface
         $this->output = $output;
         $this->eventEmitter = $eventEmitter;
 
-        $this->eventEmitter->on('runner.start', function() {
+        $this->eventEmitter->on('runner.start', function () {
             \PHP_Timer::start();
         });
 
-        $this->eventEmitter->on('runner.end', function() {
+        $this->eventEmitter->on('runner.end', function () {
             $this->time = \PHP_Timer::stop();
         });
 
-        $this->eventEmitter->on('spec.failed', function(Spec $spec, \Exception $e) {
+        $this->eventEmitter->on('spec.failed', function (Spec $spec, \Exception $e) {
             $this->errors[] = [$spec, $e];
         });
 
-        $this->eventEmitter->on('spec.passed', function() {
+        $this->eventEmitter->on('spec.passed', function () {
             $this->passing++;
         });
 
-        $this->eventEmitter->on('spec.pending', function() {
+        $this->eventEmitter->on('spec.pending', function () {
             $this->pending++;
         });
 
@@ -125,6 +125,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
         }
 
         $color = $this->colors[$key];
+
         return sprintf("%s%s%s", $color['left'], $text, $color['right']);
     }
 

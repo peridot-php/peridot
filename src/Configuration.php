@@ -5,7 +5,7 @@ namespace Peridot;
  * Class Configuration
  * @package Peridot
  */
-class Configuration 
+class Configuration
 {
     /**
      * @var boolean
@@ -54,6 +54,7 @@ class Configuration
     public function setGrep($grep)
     {
         $this->grep = $grep;
+
         return $this;
     }
 
@@ -73,6 +74,7 @@ class Configuration
     public function setReporter($reporter)
     {
         $this->reporter = $reporter;
+
         return $this;
     }
 
@@ -90,6 +92,7 @@ class Configuration
     public function setPath($path)
     {
         $this->path = $path;
+
         return $this;
     }
 
@@ -107,6 +110,7 @@ class Configuration
     public function disableColors()
     {
         $this->colorsEnabled = false;
+
         return $this;
     }
 
@@ -124,6 +128,7 @@ class Configuration
     public function stopOnFailure()
     {
         $this->stopOnFailure = true;
+
         return $this;
     }
 
@@ -141,6 +146,7 @@ class Configuration
     public function setConfigurationFile($configurationFile)
     {
         $this->configurationFile = $configurationFile;
+
         return $this;
     }
 
@@ -154,6 +160,7 @@ class Configuration
         if (file_exists($relative)) {
             return $relative;
         }
+
         return $file;
     }
-} 
+}

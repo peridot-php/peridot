@@ -1,7 +1,5 @@
 <?php
 namespace Peridot\Core;
-use Evenement\EventEmitterInterface;
-use Evenement\EventEmitterTrait;
 
 /**
  * Class Suite maps to describe() style functions as well as context() style functions
@@ -73,7 +71,7 @@ class Suite extends AbstractSpec
     {
         $this->eventEmitter->emit('suite.start', [$this]);
 
-        $this->eventEmitter->on('suite.halt', function() {
+        $this->eventEmitter->on('suite.halt', function () {
             $this->halted = true;
         });
 

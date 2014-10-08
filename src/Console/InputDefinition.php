@@ -24,4 +24,4 @@ class InputDefinition extends Definition
         $this->addOption(new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'));
     }
 
-} 
+}

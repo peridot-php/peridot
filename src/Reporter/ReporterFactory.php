@@ -42,8 +42,8 @@ class ReporterFactory
     );
 
     /**
-     * @param Configuration $configuration
-     * @param Runner $runner
+     * @param Configuration   $configuration
+     * @param Runner          $runner
      * @param OutputInterface $output
      */
     public function __construct(
@@ -79,6 +79,7 @@ class ReporterFactory
         if (is_null($instance)) {
             throw new \RuntimeException("Reporter class could not be created");
         }
+
         return $instance;
     }
 
@@ -101,4 +102,4 @@ class ReporterFactory
     {
         return $this->reporters;
     }
-} 
+}

@@ -4,7 +4,6 @@ namespace Peridot\Core;
 
 use Closure;
 use Evenement\EventEmitterInterface;
-use Evenement\EventEmitterTrait;
 
 /**
  * Class AbstractSpec
@@ -62,7 +61,7 @@ abstract class AbstractSpec implements SpecInterface
     /**
      * Constructor.
      *
-     * @param string $description
+     * @param string   $description
      * @param callable $definition
      */
     public function __construct($description, callable $definition)
@@ -123,7 +122,7 @@ abstract class AbstractSpec implements SpecInterface
     /**
      * {@inheritdoc}
      *
-     * @param SpecInterface $parent
+     * @param  SpecInterface $parent
      * @return mixed|void
      */
     public function setParent(SpecInterface $parent)
@@ -154,6 +153,7 @@ abstract class AbstractSpec implements SpecInterface
             array_unshift($parts, $node->getDescription());
             $node = $node->getParent();
         }
+
         return implode(' ' ,$parts);
     }
 
@@ -174,7 +174,7 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function setPending($state)
     {
-        $this->pending = (bool)$state;
+        $this->pending = (bool) $state;
     }
 
     /**
@@ -213,6 +213,7 @@ abstract class AbstractSpec implements SpecInterface
     public function setEventEmitter(EventEmitterInterface $eventEmitter)
     {
         $this->eventEmitter = $eventEmitter;
+
         return $this;
     }
 

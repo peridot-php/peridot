@@ -3,10 +3,7 @@ namespace Peridot\Console;
 
 use Evenement\EventEmitterInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
-use Symfony\Component\Console\Command\HelpCommand;
-use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -38,6 +35,7 @@ class Application extends ConsoleApplication
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         $this->add(new Command($this->eventEmitter));
+
         return parent::doRun($input, $output);
     }
 
@@ -52,11 +50,11 @@ class Application extends ConsoleApplication
     }
 
     /**
-     * @param InputInterface $input
+     * @param  InputInterface $input
      * @return string
      */
     public function getCommandName(InputInterface $input)
     {
         return 'peridot';
     }
-} 
+}

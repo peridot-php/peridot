@@ -24,7 +24,7 @@ class ConfigurationReader
     /**
      * Read configuration information from input
      *
-     * @param InputInterface $input
+     * @param  InputInterface $input
      * @return Configuration
      */
     public function read()
@@ -60,12 +60,13 @@ class ConfigurationReader
     /**
      * Static access to reader
      *
-     * @param InputInterface $input
+     * @param  InputInterface $input
      * @return mixed
      */
     public static function readInput(InputInterface $input)
     {
         $reader = new static($input);
+
         return $reader->read();
     }
-} 
+}

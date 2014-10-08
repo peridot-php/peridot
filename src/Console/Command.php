@@ -33,8 +33,8 @@ class Command extends ConsoleCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
      * @return int|null|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -49,6 +49,7 @@ class Command extends ConsoleCommand
 
         if ($input->getOption('reporters')) {
             $this->listReporters($factory, $output);
+
             return 0;
         }
 
@@ -66,6 +67,7 @@ class Command extends ConsoleCommand
         if ($result->getFailureCount() > 0) {
             return 1;
         }
+
         return 0;
     }
 
@@ -89,8 +91,8 @@ class Command extends ConsoleCommand
      * a callable, it will be executed with the runner, configuration, and reporter factory
      *
      * @param EventEmitterInterface $emitter
-     * @param Configuration $configuration
-     * @param ReporterFactory $reporters
+     * @param Configuration         $configuration
+     * @param ReporterFactory       $reporters
      */
     protected function loadConfiguration(EventEmitterInterface $emitter, Configuration $configuration, ReporterFactory $reporters)
     {

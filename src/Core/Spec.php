@@ -14,7 +14,7 @@ class Spec extends AbstractSpec
     /**
      * Execute the spec along with any setup and tear down functions.
      *
-     * @param SpecResult $result
+     * @param  SpecResult $result
      * @return void
      */
     public function run(SpecResult $result)
@@ -23,6 +23,7 @@ class Spec extends AbstractSpec
 
         if ($this->getPending()) {
             $result->pendSpec($this);
+
             return;
         }
 
@@ -32,6 +33,7 @@ class Spec extends AbstractSpec
             } catch (Exception $e) {
                 $result->failSpec($this, $e);
                 $this->runTearDown();
+
                 return;
             }
         }

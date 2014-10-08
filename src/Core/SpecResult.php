@@ -3,7 +3,6 @@
 namespace Peridot\Core;
 
 use Evenement\EventEmitterInterface;
-use Evenement\EventEmitterTrait;
 
 /**
  * Class SpecResult
@@ -59,6 +58,7 @@ class SpecResult
         if ($this->pendingCount > 0) {
             $summary .= sprintf(', %d pending', $this->pendingCount);
         }
+
         return $summary;
     }
 

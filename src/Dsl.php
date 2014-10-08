@@ -9,7 +9,8 @@ use Peridot\Core\Spec;
  * @param string $description
  * @param callable $fn
  */
-function describe($description, callable $fn) {
+function describe($description, callable $fn)
+{
     Context::getInstance()->describe($description, $fn);
 }
 
@@ -19,7 +20,8 @@ function describe($description, callable $fn) {
  * @param $description
  * @param callable $fn
  */
-function context($description, callable $fn) {
+function context($description, callable $fn)
+{
     describe($description, $fn);
 }
 
@@ -29,7 +31,8 @@ function context($description, callable $fn) {
  * @param $description
  * @param $fn
  */
-function it($description, callable $fn) {
+function it($description, callable $fn)
+{
     Context::getInstance()->it($description, $fn);
 }
 
@@ -39,7 +42,8 @@ function it($description, callable $fn) {
  * @param $description
  * @param callable $fn
  */
-function xdescribe($description, callable $fn) {
+function xdescribe($description, callable $fn)
+{
     Context::getInstance()->describe($description, $fn, true);
 }
 
@@ -49,7 +53,8 @@ function xdescribe($description, callable $fn) {
  * @param $description
  * @param callable $fn
  */
-function xcontext($description, callable $fn) {
+function xcontext($description, callable $fn)
+{
     xdescribe($description, $fn);
 }
 
@@ -59,7 +64,8 @@ function xcontext($description, callable $fn) {
  * @param $description
  * @param callable $fn
  */
-function xit($description, callable $fn) {
+function xit($description, callable $fn)
+{
     Context::getInstance()->it($description, $fn, true);
 }
 
@@ -69,7 +75,8 @@ function xit($description, callable $fn) {
  *
  * @param callable $fn
  */
-function beforeEach(callable $fn) {
+function beforeEach(callable $fn)
+{
     Context::getInstance()->beforeEach($fn);
 }
 
@@ -79,7 +86,8 @@ function beforeEach(callable $fn) {
  *
  * @param callable $fn
  */
-function afterEach(callable $fn) {
+function afterEach(callable $fn)
+{
     Context::getInstance()->afterEach($fn);
 }
 
@@ -87,6 +95,6 @@ function afterEach(callable $fn) {
  * Change default assert behavior to throw exceptions
  */
 assert_options(ASSERT_WARNING, false);
-assert_options(ASSERT_CALLBACK, function($script, $line, $message, $description) {
+assert_options(ASSERT_CALLBACK, function ($script, $line, $message, $description) {
     throw new Exception($description);
 });

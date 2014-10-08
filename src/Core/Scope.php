@@ -9,7 +9,7 @@ namespace Peridot\Core;
  *
  * @package Peridot\Core
  */
-class Scope 
+class Scope
 {
 
-} 
+}

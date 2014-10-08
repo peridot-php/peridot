@@ -5,7 +5,7 @@ namespace Peridot\Console;
  * Class Version
  * @package Peridot\Console
  */
-class Version 
+class Version
 {
     /**
      * @var int
@@ -16,4 +16,4 @@ class Version
      * @var string
      */
     const NAME = "Peridot";
-} 
+}

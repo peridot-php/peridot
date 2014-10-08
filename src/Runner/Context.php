@@ -1,7 +1,6 @@
 <?php
 namespace Peridot\Runner;
 use Peridot\Core\Spec;
-use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 
 /**
@@ -25,7 +24,7 @@ class Context
      */
     private function __construct()
     {
-        $this->suites = [new Suite("", function() {})];
+        $this->suites = [new Suite("", function () {})];
     }
 
     /**
@@ -52,6 +51,7 @@ class Context
         array_unshift($this->suites, $suite);
         call_user_func($suite->getDefinition());
         array_shift($this->suites);
+
         return $suite;
     }
 
@@ -68,6 +68,7 @@ class Context
             $spec->setPending($pending);
         }
         $this->getCurrentSuite()->addSpec($spec);
+
         return $spec;
     }
 
@@ -102,7 +103,7 @@ class Context
         if (is_null(static::$instance)) {
             static::$instance = new static();
         }
+
         return static::$instance;
     }
 }
-
