@@ -6,10 +6,10 @@ use Evenement\EventEmitterInterface;
  * Interface SpecInterface
  * @package Peridot\Core
  */
-interface SpecInterface extends EventEmitterInterface
+interface SpecInterface
 {
     /**
-     * @param SpecResult $result
+     * @param  SpecResult $result
      * @return mixed
      */
     public function run(SpecResult $result);
@@ -60,7 +60,7 @@ interface SpecInterface extends EventEmitterInterface
     public function getParent();
 
     /**
-     * @param SpecInterface $parent
+     * @param  SpecInterface $parent
      * @return mixed
      */
     public function setParent(SpecInterface $parent);
@@ -82,7 +82,7 @@ interface SpecInterface extends EventEmitterInterface
     /**
      * Set the pending status of the spec
      *
-     * @param bool $state
+     * @param  bool $state
      * @return void
      */
     public function setPending($state);
@@ -94,4 +94,15 @@ interface SpecInterface extends EventEmitterInterface
      * @return Scope
      */
     public function getScope();
-} 
+
+    /**
+     * @param EventEmitterInterface $emitter
+     * @return mixed
+     */
+    public function setEventEmitter(EventEmitterInterface $emitter);
+
+    /**
+     * @return EventEmitterInterface
+     */
+    public function getEventEmitter();
+}

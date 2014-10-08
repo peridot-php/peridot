@@ -1,7 +1,6 @@
 <?php
 namespace Peridot\Test;
 
-use Peridot\Core\Scope;
 use Peridot\Core\Spec;
 
 /**
@@ -11,7 +10,7 @@ use Peridot\Core\Spec;
 class ItWasRun extends Spec
 {
     /**
-     * @param string $description
+     * @param string   $description
      * @param callable $definition
      */
     public function __construct($description, callable $definition)

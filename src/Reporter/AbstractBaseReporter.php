@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Reporter;
 
+use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Core\Spec;
 use Peridot\Runner\Runner;
@@ -43,6 +44,11 @@ abstract class AbstractBaseReporter implements ReporterInterface
     protected $pending = 0;
 
     /**
+     * @var \Evenement\EventEmitterInterface
+     */
+    protected $eventEmitter;
+
+    /**
      * @var int
      */
     protected $time;
@@ -66,33 +72,39 @@ abstract class AbstractBaseReporter implements ReporterInterface
     );
 
     /**
-     * @param Configuration $configuration
-     * @param Runner $runner
+     * @param Configuration   $configuration
+     * @param Runner          $runner
      * @param OutputInterface $output
      */
-    public function __construct(Configuration $configuration, Runner $runner, OutputInterface $output)
+    public function __construct(
+        Configuration $configuration,
+        Runner $runner,
+        OutputInterface $output,
+        EventEmitterInterface $eventEmitter
+    )
     {
         $this->configuration = $configuration;
         $this->runner = $runner;
         $this->output = $output;
+        $this->eventEmitter = $eventEmitter;
 
-        $this->runner->on('start', function() {
+        $this->eventEmitter->on('runner.start', function () {
             \PHP_Timer::start();
         });
 
-        $this->runner->on('end', function() {
+        $this->eventEmitter->on('runner.end', function () {
             $this->time = \PHP_Timer::stop();
         });
 
-        $this->runner->on('fail', function(Spec $spec, \Exception $e) {
+        $this->eventEmitter->on('spec.failed', function (Spec $spec, \Exception $e) {
             $this->errors[] = [$spec, $e];
         });
 
-        $this->runner->on('pass', function() {
+        $this->eventEmitter->on('spec.passed', function () {
             $this->passing++;
         });
 
-        $this->runner->on('pending', function() {
+        $this->eventEmitter->on('spec.pending', function () {
             $this->pending++;
         });
 
@@ -113,6 +125,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
         }
 
         $color = $this->colors[$key];
+
         return sprintf("%s%s%s", $color['left'], $text, $color['right']);
     }
 
@@ -147,6 +160,14 @@ abstract class AbstractBaseReporter implements ReporterInterface
     public function getRunner()
     {
         return $this->runner;
+    }
+
+    /**
+     * @return EventEmitterInterface
+     */
+    public function getEventEmitter()
+    {
+        return $this->eventEmitter;
     }
 
     /**

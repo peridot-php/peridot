@@ -3,7 +3,7 @@
 namespace Peridot\Core;
 
 use Closure;
-use Evenement\EventEmitterTrait;
+use Evenement\EventEmitterInterface;
 
 /**
  * Class AbstractSpec
@@ -11,8 +11,6 @@ use Evenement\EventEmitterTrait;
  */
 abstract class AbstractSpec implements SpecInterface
 {
-    use EventEmitterTrait;
-
     /**
      * The spec definition as a callable.
      *
@@ -50,23 +48,27 @@ abstract class AbstractSpec implements SpecInterface
     protected $pending = null;
 
     /**
-     * This is oddly named so using it will only be VERY intentional
+     * @var \Evenement\EventEmitterInterface
+     */
+    protected $eventEmitter;
+
+    /**
      *
      * @var Scope
      */
-    protected $peridotScopeVariableDoNotTouchThanks;
+    protected $scope;
 
     /**
      * Constructor.
      *
-     * @param string $description
+     * @param string   $description
      * @param callable $definition
      */
     public function __construct($description, callable $definition)
     {
-        $this->peridotScopeVariableDoNotTouchThanks = new Scope();
         $this->definition = $definition;
         $this->description = $description;
+        $this->scope = new Scope();
     }
 
     /**
@@ -76,11 +78,11 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function addSetUpFunction(callable $setupFn)
     {
-        $this->setUpFns[] = Closure::bind(
+        array_unshift($this->setUpFns, Closure::bind(
             $setupFn,
-            $this->peridotScopeVariableDoNotTouchThanks,
-            $this->peridotScopeVariableDoNotTouchThanks
-        );
+            $this->scope,
+            $this->scope
+        ));
     }
 
     /**
@@ -90,11 +92,11 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function addTearDownFunction(callable $tearDownFn)
     {
-        $this->tearDownFns[] = Closure::bind(
+        array_unshift($this->tearDownFns, Closure::bind(
             $tearDownFn,
-            $this->peridotScopeVariableDoNotTouchThanks,
-            $this->peridotScopeVariableDoNotTouchThanks
-        );
+            $this->scope,
+            $this->scope
+        ));
     }
 
     /**
@@ -120,7 +122,7 @@ abstract class AbstractSpec implements SpecInterface
     /**
      * {@inheritdoc}
      *
-     * @param SpecInterface $parent
+     * @param  SpecInterface $parent
      * @return mixed|void
      */
     public function setParent(SpecInterface $parent)
@@ -151,6 +153,7 @@ abstract class AbstractSpec implements SpecInterface
             array_unshift($parts, $node->getDescription());
             $node = $node->getParent();
         }
+
         return implode(' ' ,$parts);
     }
 
@@ -171,7 +174,7 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function setPending($state)
     {
-        $this->pending = (bool)$state;
+        $this->pending = (bool) $state;
     }
 
     /**
@@ -201,6 +204,24 @@ abstract class AbstractSpec implements SpecInterface
      */
     public function getScope()
     {
-        return $this->peridotScopeVariableDoNotTouchThanks;
+        return $this->scope;
+    }
+
+    /**
+     * @param \Evenement\EventEmitterInterface $eventEmitter
+     */
+    public function setEventEmitter(EventEmitterInterface $eventEmitter)
+    {
+        $this->eventEmitter = $eventEmitter;
+
+        return $this;
+    }
+
+    /**
+     * @return \Evenement\EventEmitterInterface
+     */
+    public function getEventEmitter()
+    {
+        return $this->eventEmitter;
     }
 }

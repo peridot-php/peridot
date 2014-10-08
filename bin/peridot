@@ -27,7 +27,10 @@ if (!defined('PERIDOT_COMPOSER_INSTALL')) {
 
 require_once PERIDOT_COMPOSER_INSTALL;
 
+use Evenement\EventEmitter;
 use Peridot\Console\Application;
+use Peridot\Console\InputDefinition;
+use Symfony\Component\Console\Input\ArgvInput;
 
-$application = new Application();
-$application->run();
+$application = new Application(new EventEmitter());
+$application->run(new ArgvInput(null, new InputDefinition()));

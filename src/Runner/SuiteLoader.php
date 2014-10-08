@@ -5,7 +5,7 @@ namespace Peridot\Runner;
  * Class SuiteLoader
  * @package Peridot\Runner
  */
-class SuiteLoader 
+class SuiteLoader
 {
     /**
      * @var string
@@ -52,6 +52,7 @@ class SuiteLoader
             throw new \RuntimeException("Cannot load path $path");
         }
         $pattern = $path . '/' . $this->pattern;
+
         return $this->globRecursive($pattern);
     }
 
@@ -60,7 +61,7 @@ class SuiteLoader
      *
      * @link http://php.net/manual/en/function.glob.php#106595
      * @param $pattern
-     * @param int $flags
+     * @param  int   $flags
      * @return array
      */
     protected function globRecursive($pattern, $flags = 0)
@@ -73,4 +74,4 @@ class SuiteLoader
 
         return $files;
     }
-} 
+}

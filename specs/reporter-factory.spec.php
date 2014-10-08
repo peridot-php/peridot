@@ -1,4 +1,5 @@
 <?php
+use Evenement\EventEmitter;
 use Peridot\Configuration;
 use Peridot\Core\Suite;
 use Peridot\Reporter\AnonymousReporter;
@@ -10,9 +11,9 @@ describe('ReporterFactory', function() {
 
     beforeEach(function() {
         $configuration = new Configuration();
-        $runner = new Runner(new Suite("test", function() {}), $configuration);
+        $runner = new Runner(new Suite("test", function() {}), $configuration, new EventEmitter());
         $output = new Symfony\Component\Console\Output\NullOutput();
-        $this->factory = new ReporterFactory($configuration, $runner, $output);
+        $this->factory = new ReporterFactory($configuration, $runner, $output, new EventEmitter());
     });
 
     describe('->create()', function() {
