@@ -1,5 +1,6 @@
 <?php
 namespace Peridot\Core;
+use Evenement\EventEmitterInterface;
 
 /**
  * Interface SpecInterface
@@ -93,4 +94,15 @@ interface SpecInterface
      * @return Scope
      */
     public function getScope();
+
+    /**
+     * @param EventEmitterInterface $emitter
+     * @return mixed
+     */
+    public function setEventEmitter(EventEmitterInterface $emitter);
+
+    /**
+     * @return EventEmitterInterface
+     */
+    public function getEventEmitter();
 }
