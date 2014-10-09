@@ -24,4 +24,37 @@ class InputDefinition extends Definition
         $this->addOption(new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'));
     }
 
+    /**
+     * Add an argument
+     *
+     * @param InputArgument $name
+     * @param null $mode
+     * @param string $description
+     * @param null $default
+     * @return $this
+     */
+    public function argument($name, $mode = null, $description = '', $default = null)
+    {
+        $this->addArgument(new InputArgument($name, $mode, $description, $default));
+
+        return $this;
+    }
+
+    /**
+     * Add an option
+     *
+     * @param InputOption $name
+     * @param null $shortcut
+     * @param null $mode
+     * @param string $description
+     * @param null $default
+     * @return $this
+     */
+    public function option($name, $shortcut = null, $mode = null, $description = '', $default = null)
+    {
+        $this->addOption(new InputOption($name, $shortcut, $mode, $description, $default));
+
+        return $this;
+    }
+
 }

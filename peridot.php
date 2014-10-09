@@ -25,7 +25,7 @@ return function(EventEmitterInterface $emitter) {
     });
 
     $emitter->on('peridot.start', function(InputDefinition $definition) {
-        $definition->addOption(new InputOption("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text"));
+        $definition->option("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text");
     });
 
     $emitter->on('peridot.preExecute', function($runner, $config, $reporters, $input) use (&$counts, $emitter) {
