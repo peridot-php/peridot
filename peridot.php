@@ -30,14 +30,14 @@ return function(EventEmitterInterface $emitter) {
 
     $emitter->on('peridot.preExecute', function($runner, $config, $reporters, $input) use (&$counts, $emitter) {
         $banner = $input->getOption('banner');
-        $reporters->register('basic', 'a simple summary', function(ReporterInterface $reporter) use (&$counts, $emitter, $banner) {
+        $reporters->register('basic', 'a simple summary', function(ReporterInterface $reporter) use (&$counts, $banner) {
             $output = $reporter->getOutput();
 
-            $emitter->on('runner.start', function() use ($banner, $output) {
+            $reporter->getEventEmitter()->on('runner.start', function() use ($banner, $output) {
                 $output->writeln($banner);
             });
 
-            $emitter->on('runner.end', function() use ($output, &$counts) {
+            $reporter->getEventEmitter()->on('runner.end', function() use ($output, &$counts) {
                 $output->writeln(sprintf(
                     '%d run, %d failed, %d pending',
                     $counts['pass'],
