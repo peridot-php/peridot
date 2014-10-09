@@ -10,7 +10,6 @@ use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -44,8 +43,8 @@ class Application extends ConsoleApplication
     /**
      * {@inheritdoc}
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
      * @return int
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
@@ -56,6 +55,7 @@ class Application extends ConsoleApplication
         } else {
             $in = $this->getInput();
         }
+
         return parent::run($in, $output);
     }
 

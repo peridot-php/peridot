@@ -37,7 +37,7 @@ class Environment
     }
 
     /**
-     * @param string $configuration The default configuration path
+     * @param  string $configuration The default configuration path
      * @return bool
      */
     public function load($configuration)
@@ -64,7 +64,7 @@ class Environment
         if (isset($this->options['c']) || isset($this->options['configuration'])) {
             $keys = ['c', 'configuration'];
             $options = $this->options;
-            $file = array_reduce($keys, function($result, $key) use ($options) {
+            $file = array_reduce($keys, function ($result, $key) use ($options) {
                 return (array_key_exists($key, $options) && is_file($options[$key])) ? $options[$key] : $result;
             }, null);
 
@@ -93,6 +93,7 @@ class Environment
                 call_user_func($callable, $this->eventEmitter);
             }
         }
+
         return true;
     }
-} 
+}

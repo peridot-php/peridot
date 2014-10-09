@@ -27,4 +27,4 @@ trait HasEventEmitterTrait
     {
         return $this->eventEmitter;
     }
-} 
+}

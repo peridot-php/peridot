@@ -27,10 +27,10 @@ class InputDefinition extends Definition
     /**
      * Add an argument
      *
-     * @param InputArgument $name
-     * @param null $mode
-     * @param string $description
-     * @param null $default
+     * @param  InputArgument $name
+     * @param  null          $mode
+     * @param  string        $description
+     * @param  null          $default
      * @return $this
      */
     public function argument($name, $mode = null, $description = '', $default = null)
@@ -43,11 +43,11 @@ class InputDefinition extends Definition
     /**
      * Add an option
      *
-     * @param InputOption $name
-     * @param null $shortcut
-     * @param null $mode
-     * @param string $description
-     * @param null $default
+     * @param  InputOption $name
+     * @param  null        $shortcut
+     * @param  null        $mode
+     * @param  string      $description
+     * @param  null        $default
      * @return $this
      */
     public function option($name, $shortcut = null, $mode = null, $description = '', $default = null)
