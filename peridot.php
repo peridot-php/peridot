@@ -7,7 +7,7 @@ use Peridot\Reporter\ReporterInterface;
 /**
  * Demonstrate registering a runner via peridot config
  */
-return function(EventEmitterInterface $emitter, Configuration $config, ReporterFactory $reporters) {
+return function(EventEmitterInterface $emitter) {
     $counts = ['pass' => 0, 'fail' => 0, 'pending' => 0];
 
     $emitter->on('spec.failed', function() use (&$counts) {
@@ -22,15 +22,17 @@ return function(EventEmitterInterface $emitter, Configuration $config, ReporterF
         $counts['pending']++;
     });
 
-    $reporters->register('basic', 'a simple summary', function(ReporterInterface $reporter) use (&$counts, $emitter) {
-        $output = $reporter->getOutput();
-        $emitter->on('runner.end', function() use ($output, &$counts) {
-            $output->writeln(sprintf(
-                '%d run, %d failed, %d pending',
-                $counts['pass'],
-                $counts['fail'],
-                $counts['pending']
-            ));
+    $emitter->on('peridot.preExecute', function($runner, $config, $reporters) use (&$counts, $emitter) {
+        $reporters->register('basic', 'a simple summary', function(ReporterInterface $reporter) use (&$counts, $emitter) {
+            $output = $reporter->getOutput();
+            $emitter->on('runner.end', function() use ($output, &$counts) {
+                $output->writeln(sprintf(
+                    '%d run, %d failed, %d pending',
+                    $counts['pass'],
+                    $counts['fail'],
+                    $counts['pending']
+                ));
+            });
         });
     });
 };

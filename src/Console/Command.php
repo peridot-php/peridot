@@ -61,6 +61,14 @@ class Command extends ConsoleCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->eventEmitter->emit('peridot.preExecute', [
+            $this->runner,
+            $this->configuration,
+            $this->factory,
+            $input,
+            $output
+        ]);
+
         if ($input->getOption('reporters')) {
             $this->listReporters($output);
 
