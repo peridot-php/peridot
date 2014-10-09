@@ -3,6 +3,7 @@ namespace Peridot\Runner;
 
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
+use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 
@@ -12,6 +13,8 @@ use Peridot\Core\Suite;
  */
 class Runner
 {
+    use HasEventEmitterTrait;
+
     /**
      * @var \Peridot\Core\Suite
      */
@@ -21,11 +24,6 @@ class Runner
      * @var \Peridot\Configuration
      */
     protected $configuration;
-
-    /**
-     * @var \Evenement\EventEmitterInterface
-     */
-    protected $eventEmitter;
 
     /**
      * Constructor

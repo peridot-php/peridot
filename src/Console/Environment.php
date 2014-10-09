@@ -2,18 +2,16 @@
 namespace Peridot\Console;
 
 use Evenement\EventEmitterInterface;
+use Peridot\Core\HasEventEmitterTrait;
 
 class Environment
 {
+    use HasEventEmitterTrait;
+
     /**
      * @var InputDefinition
      */
     protected $definition;
-
-    /**
-     * @var \Evenement\EventEmitterInterface
-     */
-    protected $emitter;
 
     /**
      * Environment options
@@ -34,7 +32,7 @@ class Environment
     )
     {
         $this->definition = $definition;
-        $this->emitter = $emitter;
+        $this->eventEmitter = $emitter;
         $this->options = $options;
     }
 
@@ -53,14 +51,6 @@ class Environment
     public function getDefinition()
     {
         return $this->definition;
-    }
-
-    /**
-     * @return \Evenement\EventEmitterInterface
-     */
-    public function getEmitter()
-    {
-        return $this->emitter;
     }
 
     /**
@@ -100,7 +90,7 @@ class Environment
         if (file_exists($configuration)) {
             $callable = include $configuration;
             if (is_callable($callable)) {
-                call_user_func($callable, $this->emitter);
+                call_user_func($callable, $this->eventEmitter);
             }
         }
         return true;

@@ -3,6 +3,7 @@ namespace Peridot\Reporter;
 
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
+use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -12,6 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ReporterFactory
 {
+    use HasEventEmitterTrait;
+
     /**
      * @var \Peridot\Configuration
      */
@@ -26,11 +29,6 @@ class ReporterFactory
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $output;
-
-    /**
-     * @var \Evenement\EventEmitterInterface
-     */
-    protected $eventEmitter;
 
     /**
      * Registered reporters

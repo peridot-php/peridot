@@ -3,7 +3,6 @@
 namespace Peridot\Core;
 
 use Closure;
-use Evenement\EventEmitterInterface;
 
 /**
  * Class AbstractSpec
@@ -11,6 +10,8 @@ use Evenement\EventEmitterInterface;
  */
 abstract class AbstractSpec implements SpecInterface
 {
+    use HasEventEmitterTrait;
+
     /**
      * The spec definition as a callable.
      *
@@ -46,11 +47,6 @@ abstract class AbstractSpec implements SpecInterface
      * @var bool|null
      */
     protected $pending = null;
-
-    /**
-     * @var \Evenement\EventEmitterInterface
-     */
-    protected $eventEmitter;
 
     /**
      *
@@ -205,23 +201,5 @@ abstract class AbstractSpec implements SpecInterface
     public function getScope()
     {
         return $this->scope;
-    }
-
-    /**
-     * @param \Evenement\EventEmitterInterface $eventEmitter
-     */
-    public function setEventEmitter(EventEmitterInterface $eventEmitter)
-    {
-        $this->eventEmitter = $eventEmitter;
-
-        return $this;
-    }
-
-    /**
-     * @return \Evenement\EventEmitterInterface
-     */
-    public function getEventEmitter()
-    {
-        return $this->eventEmitter;
     }
 }

@@ -3,6 +3,7 @@ namespace Peridot\Reporter;
 
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
+use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\Spec;
 use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,6 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class AbstractBaseReporter implements ReporterInterface
 {
+    use HasEventEmitterTrait;
+
     /**
      * @var \Peridot\Configuration
      */
@@ -42,11 +45,6 @@ abstract class AbstractBaseReporter implements ReporterInterface
      * @var int
      */
     protected $pending = 0;
-
-    /**
-     * @var \Evenement\EventEmitterInterface
-     */
-    protected $eventEmitter;
 
     /**
      * @var int
@@ -160,14 +158,6 @@ abstract class AbstractBaseReporter implements ReporterInterface
     public function getRunner()
     {
         return $this->runner;
-    }
-
-    /**
-     * @return EventEmitterInterface
-     */
-    public function getEventEmitter()
-    {
-        return $this->eventEmitter;
     }
 
     /**

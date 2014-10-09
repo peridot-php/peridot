@@ -36,7 +36,7 @@ class Application extends ConsoleApplication
             fwrite(STDERR, "Configuration file specified but does not exist" . PHP_EOL);
             exit(1);
         }
-        $this->environment->getEmitter()->emit('peridot.start', [$this->environment->getDefinition()]);
+        $this->environment->getEventEmitter()->emit('peridot.start', [$this->environment->getDefinition()]);
         parent::__construct(Version::NAME, Version::NUMBER);
         require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Dsl.php';
     }
@@ -65,10 +65,10 @@ class Application extends ConsoleApplication
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         $configuration = ConfigurationReader::readInput($input);
-        $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration, $this->environment->getEmitter());
-        $factory = new ReporterFactory($configuration, $runner, $output, $this->environment->getEmitter());
+        $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration, $this->environment->getEventEmitter());
+        $factory = new ReporterFactory($configuration, $runner, $output, $this->environment->getEventEmitter());
 
-        $this->add(new Command($runner, $configuration, $factory, $this->environment->getEmitter()));
+        $this->add(new Command($runner, $configuration, $factory, $this->environment->getEventEmitter()));
 
         return parent::doRun($input, $output);
     }
