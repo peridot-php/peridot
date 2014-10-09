@@ -96,7 +96,7 @@ interface SpecInterface
     public function getScope();
 
     /**
-     * @param EventEmitterInterface $emitter
+     * @param  EventEmitterInterface $emitter
      * @return mixed
      */
     public function setEventEmitter(EventEmitterInterface $emitter);

@@ -10,6 +10,8 @@ use Evenement\EventEmitterInterface;
  */
 class SpecResult
 {
+    use HasEventEmitterTrait;
+
     /**
      * Tracks total specs run against this result
      *
@@ -30,11 +32,6 @@ class SpecResult
      * @var int
      */
     protected $pendingCount = 0;
-
-    /**
-     * @var \Evenement\EventEmitterInterface
-     */
-    protected $eventEmitter;
 
     /**
      * Constructor

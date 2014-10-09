@@ -7,7 +7,9 @@ use Peridot\Reporter\ReporterFactory;
 use Peridot\Runner\Context;
 use Peridot\Runner\Runner;
 use Symfony\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -17,20 +19,44 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends ConsoleApplication
 {
     /**
-     * @var \Evenement\EventEmitterInterface
+     * @var Environment
      */
-    protected $eventEmitter;
+    protected $environment;
 
     /**
      * Constructor
      *
      * @param EventEmitterInterface $eventEmitter
      */
-    public function __construct(EventEmitterInterface $eventEmitter)
+    public function __construct(Environment $environment)
     {
+        $this->environment = $environment;
+        if (! $this->environment->load(getcwd() . DIRECTORY_SEPARATOR . 'peridot.php')) {
+            fwrite(STDERR, "Configuration file specified but does not exist" . PHP_EOL);
+            exit(1);
+        }
+        $this->environment->getEventEmitter()->emit('peridot.start', [$this->environment->getDefinition()]);
         parent::__construct(Version::NAME, Version::NUMBER);
-        $this->eventEmitter = $eventEmitter;
         require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Dsl.php';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
+     * @return int
+     */
+    public function run(InputInterface $input = null, OutputInterface $output = null)
+    {
+        $in = null;
+        if (!is_null($input)) {
+            $in = $input;
+        } else {
+            $in = $this->getInput();
+        }
+
+        return parent::run($in, $output);
     }
 
     /**
@@ -39,18 +65,25 @@ class Application extends ConsoleApplication
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         $configuration = ConfigurationReader::readInput($input);
-        $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration, $this->eventEmitter);
-        $factory = new ReporterFactory($configuration, $runner, $output, $this->eventEmitter);
+        $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration, $this->environment->getEventEmitter());
+        $factory = new ReporterFactory($configuration, $runner, $output, $this->environment->getEventEmitter());
 
-        if (file_exists($configuration->getConfigurationFile())) {
-            $this->loadConfiguration($this->eventEmitter, $configuration, $factory);
-        }
-
-        $this->eventEmitter->emit('peridot.start', [$this->getDefinition()]);
-
-        $this->add(new Command($runner, $configuration, $factory, $this->eventEmitter));
+        $this->add(new Command($runner, $configuration, $factory, $this->environment->getEventEmitter()));
 
         return parent::doRun($input, $output);
+    }
+
+    /**
+     * @return ArgvInput
+     */
+    public function getInput()
+    {
+        try {
+            return new ArgvInput(null, $this->environment->getDefinition());
+        } catch (\Exception $e) {
+            $this->renderException($e, new ConsoleOutput());
+            exit(1);
+        }
     }
 
     /**
@@ -60,7 +93,7 @@ class Application extends ConsoleApplication
      */
     protected function getDefaultInputDefinition()
     {
-        return new InputDefinition();
+        return $this->environment->getDefinition();
     }
 
     /**
@@ -70,21 +103,5 @@ class Application extends ConsoleApplication
     public function getCommandName(InputInterface $input)
     {
         return 'peridot';
-    }
-
-    /**
-     * Load configuration file. If the configuration file returns
-     * a callable, it will be executed with the runner, configuration, and reporter factory
-     *
-     * @param EventEmitterInterface $emitter
-     * @param Configuration         $configuration
-     * @param ReporterFactory       $reporters
-     */
-    protected function loadConfiguration(EventEmitterInterface $emitter, Configuration $configuration, ReporterFactory $reporters)
-    {
-        $func = include $configuration->getConfigurationFile();
-        if (is_callable($func)) {
-            $func($emitter, $configuration, $reporters);
-        }
     }
 }
