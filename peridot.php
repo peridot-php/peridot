@@ -1,8 +1,10 @@
 <?php
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
+use Peridot\Console\InputDefinition;
 use Peridot\Reporter\ReporterFactory;
 use Peridot\Reporter\ReporterInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Demonstrate registering a runner via peridot config
@@ -22,9 +24,19 @@ return function(EventEmitterInterface $emitter) {
         $counts['pending']++;
     });
 
-    $emitter->on('peridot.preExecute', function($runner, $config, $reporters) use (&$counts, $emitter) {
-        $reporters->register('basic', 'a simple summary', function(ReporterInterface $reporter) use (&$counts, $emitter) {
+    $emitter->on('peridot.start', function(InputDefinition $definition) {
+        $definition->addOption(new InputOption("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text"));
+    });
+
+    $emitter->on('peridot.preExecute', function($runner, $config, $reporters, $input) use (&$counts, $emitter) {
+        $banner = $input->getOption('banner');
+        $reporters->register('basic', 'a simple summary', function(ReporterInterface $reporter) use (&$counts, $emitter, $banner) {
             $output = $reporter->getOutput();
+
+            $emitter->on('runner.start', function() use ($banner, $output) {
+                $output->writeln($banner);
+            });
+
             $emitter->on('runner.end', function() use ($output, &$counts) {
                 $output->writeln(sprintf(
                     '%d run, %d failed, %d pending',
