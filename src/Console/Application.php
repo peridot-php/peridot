@@ -65,7 +65,7 @@ class Application extends ConsoleApplication
     {
         $configuration = ConfigurationReader::readInput($input);
         $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration, $this->environment->getEventEmitter());
-        $factory = new ReporterFactory($configuration, $runner, $output, $this->environment->getEventEmitter());
+        $factory = new ReporterFactory($configuration, $output, $this->environment->getEventEmitter());
 
         $this->add(new Command($runner, $configuration, $factory, $this->environment->getEventEmitter()));
 

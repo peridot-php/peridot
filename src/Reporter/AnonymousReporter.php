@@ -23,20 +23,18 @@ class AnonymousReporter extends AbstractBaseReporter
      *
      * @param callable $init
      * @param Configuration $configuration
-     * @param Runner $runner
      * @param OutputInterface $output
      * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
         callable $init,
         Configuration $configuration,
-        Runner $runner,
         OutputInterface $output,
         EventEmitterInterface $eventEmitter
     )
     {
         $this->initFn = $init;
-        parent::__construct($configuration, $runner, $output, $eventEmitter);
+        parent::__construct($configuration, $output, $eventEmitter);
     }
 
     /**

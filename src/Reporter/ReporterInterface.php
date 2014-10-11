@@ -43,11 +43,6 @@ interface ReporterInterface
     public function getConfiguration();
 
     /**
-     * @return \Peridot\Runner\Runner
-     */
-    public function getRunner();
-
-    /**
      * @return \Evenement\EventEmitterInterface
      */
     public function getEventEmitter();

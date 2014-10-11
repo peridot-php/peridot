@@ -24,11 +24,6 @@ abstract class AbstractBaseReporter implements ReporterInterface
     protected $configuration;
 
     /**
-     * @var \Peridot\Runner\Runner
-     */
-    protected $runner;
-
-    /**
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $output;
@@ -77,19 +72,16 @@ abstract class AbstractBaseReporter implements ReporterInterface
 
     /**
      * @param Configuration $configuration
-     * @param Runner $runner
      * @param OutputInterface $output
      * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
         Configuration $configuration,
-        Runner $runner,
         OutputInterface $output,
         EventEmitterInterface $eventEmitter
     )
     {
         $this->configuration = $configuration;
-        $this->runner = $runner;
         $this->output = $output;
         $this->eventEmitter = $eventEmitter;
 
@@ -164,16 +156,6 @@ abstract class AbstractBaseReporter implements ReporterInterface
     public function getConfiguration()
     {
         return $this->configuration;
-    }
-
-    /**
-     * Return the Runner associated with the Reporter
-     *
-     * @return \Peridot\Runner\Runner
-     */
-    public function getRunner()
-    {
-        return $this->runner;
     }
 
     /**
