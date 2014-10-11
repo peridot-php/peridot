@@ -3,7 +3,8 @@ namespace Peridot\Core;
 use Evenement\EventEmitterInterface;
 
 /**
- * Interface SpecInterface
+ * Defines the contract for Peridot test fixtures like Spec and Suite
+ *
  * @package Peridot\Core
  */
 interface SpecInterface

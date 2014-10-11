@@ -1,5 +1,7 @@
 destination: docs
 source:
 	- src
+	- vendor/symfony/console
+	- vendor/evenement/evenement/src
 	
 title: Peridot

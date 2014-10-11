@@ -6,7 +6,8 @@ use Closure;
 use Exception;
 
 /**
- * Class Spec - maps to it() style functions
+ * The main test fixture for Peridot. Maps directly to it() style functions.
+ *
  * @package Peridot\Core
  */
 class Spec extends AbstractSpec

@@ -13,7 +13,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Command
+ * The default Peridot CLI command. Responsible for loading and
+ * executing specs.
+ *
  * @package Peridot\Console
  */
 class Command extends ConsoleCommand
@@ -36,7 +38,10 @@ class Command extends ConsoleCommand
     protected $factory;
 
     /**
-     * Constructor
+     * @param Runner $runner
+     * @param Configuration $configuration
+     * @param ReporterFactory $factory
+     * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
         Runner $runner,
@@ -53,9 +58,11 @@ class Command extends ConsoleCommand
     }
 
     /**
+     * Load and run Suites and Specs
+     *
      * @param  InputInterface  $input
      * @param  OutputInterface $output
-     * @return int|null|void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

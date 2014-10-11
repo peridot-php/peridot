@@ -2,7 +2,8 @@
 namespace Peridot\Reporter;
 
 /**
- * Interface ReporterInterface
+ * ReporterInterface is the contract for Peridot reporters.
+ *
  * @package Peridot\Reporter
  */
 interface ReporterInterface

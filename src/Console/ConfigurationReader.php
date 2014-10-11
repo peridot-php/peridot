@@ -4,6 +4,12 @@ namespace Peridot\Console;
 use Peridot\Configuration;
 use Symfony\Component\Console\Input\InputInterface;
 
+/**
+ * The ConfigurationReader is responsible for building a Configuration
+ * object from an InputInterface.
+ *
+ * @package Peridot\Console
+ */
 class ConfigurationReader
 {
     /**
@@ -12,8 +18,6 @@ class ConfigurationReader
     protected $input;
 
     /**
-     * Constructor
-     *
      * @param InputInterface $input
      */
     public function __construct(InputInterface $input)

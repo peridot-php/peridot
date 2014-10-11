@@ -2,7 +2,9 @@
 namespace Peridot\Runner;
 
 /**
- * Class SuiteLoader
+ * SuiteLoader will recursively load spec files given a glob friendly
+ * pattern.
+ *
  * @package Peridot\Runner
  */
 class SuiteLoader
@@ -13,7 +15,7 @@ class SuiteLoader
     protected $pattern;
 
     /**
-     * Constructor
+     * @param string $pattern
      */
     public function __construct($pattern)
     {

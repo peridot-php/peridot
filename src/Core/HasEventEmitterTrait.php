@@ -3,6 +3,11 @@ namespace Peridot\Core;
 
 use Evenement\EventEmitterInterface;
 
+/**
+ * Trait indicating an object supports an EventEmitter via composition.
+ *
+ * @package Peridot\Core
+ */
 trait HasEventEmitterTrait
 {
     /**

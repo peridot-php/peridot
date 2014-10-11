@@ -8,7 +8,8 @@ use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 
 /**
- * Class Runner
+ * The Runner is responsible for running a given Suite.
+ *
  * @package Peridot\Runner
  */
 class Runner
@@ -26,9 +27,9 @@ class Runner
     protected $configuration;
 
     /**
-     * Constructor
-     *
-     * @param SpecResult $result
+     * @param Suite $suite
+     * @param Configuration $configuration
+     * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(Suite $suite, Configuration $configuration, EventEmitterInterface $eventEmitter)
     {
@@ -38,6 +39,8 @@ class Runner
     }
 
     /**
+     * Run the Suite
+     *
      * @param SpecResult $result
      */
     public function run(SpecResult $result)

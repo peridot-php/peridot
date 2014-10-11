@@ -4,6 +4,13 @@ namespace Peridot\Console;
 use Evenement\EventEmitterInterface;
 use Peridot\Core\HasEventEmitterTrait;
 
+/**
+ * Environment is responsible for creating necessary objects and conditions
+ * for Peridot to run. It creates the event emitter, input definition, and includes
+ * user configuration from the Peridot configuration file.
+ *
+ * @package Peridot\Console
+ */
 class Environment
 {
     use HasEventEmitterTrait;
@@ -21,8 +28,8 @@ class Environment
     protected $options;
 
     /**
-     * Constructor
-     *
+     * @param InputDefinition $definition
+     * @param EventEmitterInterface $emitter
      * @param array $options
      */
     public function __construct(
@@ -37,7 +44,11 @@ class Environment
     }
 
     /**
+     * Attempt to load a user configuration file into the Peridot
+     * environment
+     *
      * @param  string $configuration The default configuration path
+     *
      * @return bool
      */
     public function load($configuration)
@@ -46,6 +57,9 @@ class Environment
     }
 
     /**
+     * Return the InputDefinition used to define the available Peridot
+     * options and arguments
+     *
      * @return \Peridot\Console\InputDefinition
      */
     public function getDefinition()

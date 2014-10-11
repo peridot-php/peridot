@@ -8,7 +8,8 @@ use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class ReporterFactory
+ * The ReporterFactory is used to list and register Peridot reporters.
+ *
  * @package Peridot\Reporter
  */
 class ReporterFactory
@@ -40,9 +41,10 @@ class ReporterFactory
     );
 
     /**
-     * @param Configuration   $configuration
-     * @param Runner          $runner
+     * @param Configuration $configuration
+     * @param Runner $runner
      * @param OutputInterface $output
+     * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
         Configuration $configuration,
@@ -82,11 +84,11 @@ class ReporterFactory
     }
 
     /**
-     * Register a named reporter with the factory
+     * Register a named reporter with the factory.
      *
      * @param string $name
      * @param string $description
-     * @param string $factory
+     * @param string $factory Either a callable or a fully qualified class name
      */
     public function register($name, $description, $factory)
     {

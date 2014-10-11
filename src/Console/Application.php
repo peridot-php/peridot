@@ -13,7 +13,8 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Application
+ * The main Peridot application class.
+ *
  * @package Peridot\Console
  */
 class Application extends ConsoleApplication
@@ -24,9 +25,7 @@ class Application extends ConsoleApplication
     protected $environment;
 
     /**
-     * Constructor
-     *
-     * @param EventEmitterInterface $eventEmitter
+     * @param Environment $environment
      */
     public function __construct(Environment $environment)
     {
@@ -74,6 +73,10 @@ class Application extends ConsoleApplication
     }
 
     /**
+     * Fetch the ArgvInput used by Peridot. If any exceptions are thrown due to
+     * a mismatch between the option or argument requested and the input definition, the
+     * exception will be rendered and Peridot will exit with an error code
+     *
      * @return ArgvInput
      */
     public function getInput()
@@ -87,9 +90,9 @@ class Application extends ConsoleApplication
     }
 
     /**
-     * Return the peridot input definition
+     * Return the peridot input definition defined by Environment
      *
-     * @return InputDefinition|\Symfony\Component\Console\Input\InputDefinition
+     * @return InputDefinition
      */
     protected function getDefaultInputDefinition()
     {
@@ -97,6 +100,8 @@ class Application extends ConsoleApplication
     }
 
     /**
+     * Return's peridot as the sole command used by Peridot
+     *
      * @param  InputInterface $input
      * @return string
      */
