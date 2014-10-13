@@ -5,30 +5,30 @@ namespace Peridot\Core;
 use Closure;
 
 /**
- * Base class for Peridot Suites and Specs
+ * Base class for Peridot Suites and Tests
  *
  * @package Peridot\Core
  */
-abstract class AbstractSpec implements SpecInterface
+abstract class AbstractTest implements TestInterface
 {
     use HasEventEmitterTrait;
 
     /**
-     * The spec definition as a callable.
+     * The test definition as a callable.
      *
      * @var callable
      */
     protected $definition;
 
     /**
-     * A collection of functions to run before specs execute.
+     * A collection of functions to run before tests execute.
      *
      * @var array
      */
     protected $setUpFns = [];
 
     /**
-     * A collection of functions to run after specs execute.
+     * A collection of functions to run after tests execute.
      *
      * @var array
      */
@@ -40,7 +40,7 @@ abstract class AbstractSpec implements SpecInterface
     protected $description;
 
     /**
-     * @var SpecInterface
+     * @var TestInterface
      */
     protected $parent;
 
@@ -117,10 +117,10 @@ abstract class AbstractSpec implements SpecInterface
     /**
      * {@inheritdoc}
      *
-     * @param  SpecInterface $parent
+     * @param  TestInterface $parent
      * @return mixed|void
      */
-    public function setParent(SpecInterface $parent)
+    public function setParent(TestInterface $parent)
     {
         $this->parent = $parent;
     }
@@ -128,7 +128,7 @@ abstract class AbstractSpec implements SpecInterface
     /**
      * {@inheritdoc}
      *
-     * @return SpecInterface
+     * @return TestInterface
      */
     public function getParent()
     {

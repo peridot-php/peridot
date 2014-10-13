@@ -4,7 +4,6 @@ namespace Peridot\Reporter;
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Core\HasEventEmitterTrait;
-use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

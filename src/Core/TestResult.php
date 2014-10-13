@@ -5,30 +5,30 @@ namespace Peridot\Core;
 use Evenement\EventEmitterInterface;
 
 /**
- * SpecResults tracks passing, pending, and failing specs.
+ * TestResults tracks passing, pending, and failing tests.
  *
  * @package Peridot\Core
  */
-class SpecResult
+class TestResult
 {
     use HasEventEmitterTrait;
 
     /**
-     * Tracks total specs run against this result
+     * Tracks total tests run against this result
      *
      * @var int
      */
-    protected $specCount = 0;
+    protected $testCount = 0;
 
     /**
-     * Tracks total number of failed specs run against this result
+     * Tracks total number of failed tests run against this result
      *
      * @var int
      */
     protected $failureCount = 0;
 
     /**
-     * Tracks total number of pending specs run against this result
+     * Tracks total number of pending tests run against this result
      *
      * @var int
      */
@@ -43,14 +43,14 @@ class SpecResult
     }
 
     /**
-     * Returns a summary string containing total specs run and total specs
+     * Returns a summary string containing total tests run and total tests
      * failed
      *
      * @return string
      */
     public function getSummary()
     {
-        $summary = sprintf('%d run, %d failed', $this->specCount, $this->failureCount);
+        $summary = sprintf('%d run, %d failed', $this->testCount, $this->failureCount);
         if ($this->pendingCount > 0) {
             $summary .= sprintf(', %d pending', $this->pendingCount);
         }
@@ -59,43 +59,43 @@ class SpecResult
     }
 
     /**
-     * Fail the given spec.
+     * Fail the given test.
      *
-     * @param SpecInterface $spec
+     * @param TestInterface $test
      */
-    public function failSpec(SpecInterface $spec, \Exception $e)
+    public function failTest(TestInterface $test, \Exception $e)
     {
         $this->failureCount++;
-        $this->eventEmitter->emit('spec.failed', [$spec, $e]);
+        $this->eventEmitter->emit('spec.failed', [$test, $e]);
     }
 
     /**
-     * Notify result that spec is pending
+     * Notify result that test is pending
      *
-     * @param SpecInterface $spec
+     * @param TestInterface $test
      */
-    public function pendSpec(SpecInterface $spec)
+    public function pendTest(TestInterface $test)
     {
         $this->pendingCount++;
-        $this->eventEmitter->emit('spec.pending', [$spec]);
+        $this->eventEmitter->emit('spec.pending', [$test]);
     }
 
     /**
-     * Pass the given spec.
+     * Pass the given test.
      *
-     * @param SpecInterface $spec
+     * @param TestInterface $test
      */
-    public function passSpec(SpecInterface $spec)
+    public function passTest(TestInterface $test)
     {
-        $this->eventEmitter->emit('spec.passed', [$spec]);
+        $this->eventEmitter->emit('spec.passed', [$test]);
     }
 
     /**
-     * Increment the spec count
+     * Increment the test count
      */
-    public function startSpec()
+    public function startTest()
     {
-        $this->specCount++;
+        $this->testCount++;
     }
 
     /**
@@ -109,9 +109,9 @@ class SpecResult
     /**
      * @return int
      */
-    public function getSpecCount()
+    public function getTestCount()
     {
-        return $this->specCount;
+        return $this->testCount;
     }
 
     /**

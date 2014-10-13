@@ -3,20 +3,20 @@ namespace Peridot\Core;
 use Evenement\EventEmitterInterface;
 
 /**
- * Defines the contract for Peridot test fixtures like Spec and Suite
+ * Defines the contract for Peridot test fixtures like Test and Suite
  *
  * @package Peridot\Core
  */
-interface SpecInterface
+interface TestInterface
 {
     /**
-     * @param  SpecResult $result
+     * @param  TestResult $result
      * @return mixed
      */
-    public function run(SpecResult $result);
+    public function run(TestResult $result);
 
     /**
-     * Add a function to execute before the spec runs
+     * Add a function to execute before the test runs
      *
      * @param callable $setupFn
      */
@@ -30,7 +30,7 @@ interface SpecInterface
     public function getSetUpFunctions();
 
     /**
-     * Add a function to execute after the spec runs
+     * Add a function to execute after the test runs
      *
      * @param callable $tearDownFn
      */
@@ -49,22 +49,22 @@ interface SpecInterface
     public function getDescription();
 
     /**
-     * Returns the callable definition of the SpecInterface
+     * Returns the callable definition of the TestInterface
      *
      * @return callable
      */
     public function getDefinition();
 
     /**
-     * @return SpecInterface
+     * @return TestInterface
      */
     public function getParent();
 
     /**
-     * @param  SpecInterface $parent
+     * @param  TestInterface $parent
      * @return mixed
      */
-    public function setParent(SpecInterface $parent);
+    public function setParent(TestInterface $parent);
 
     /**
      * Returns the full description including parent descriptions
@@ -74,14 +74,14 @@ interface SpecInterface
     public function getTitle();
 
     /**
-     * Return whether or not the spec is pending
+     * Return whether or not the test is pending
      *
      * @return bool|null
      */
     public function getPending();
 
     /**
-     * Set the pending status of the spec
+     * Set the pending status of the test
      *
      * @param  bool $state
      * @return void
@@ -89,7 +89,7 @@ interface SpecInterface
     public function setPending($state);
 
     /**
-     * Return scope for this spec. Scope contains instance variables
+     * Return scope for this test. Scope contains instance variables
      * for a spec
      *
      * @return Scope

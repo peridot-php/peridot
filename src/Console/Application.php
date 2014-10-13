@@ -1,8 +1,6 @@
 <?php
 namespace Peridot\Console;
 
-use Evenement\EventEmitterInterface;
-use Peridot\Configuration;
 use Peridot\Reporter\ReporterFactory;
 use Peridot\Runner\Context;
 use Peridot\Runner\Runner;

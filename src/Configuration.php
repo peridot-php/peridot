@@ -46,7 +46,7 @@ class Configuration
     }
 
     /**
-     * Set the pattern used to load specs
+     * Set the pattern used to load tests
      *
      * @param string $grep
      */
@@ -58,7 +58,7 @@ class Configuration
     }
 
     /**
-     * Returns the pattern used to load specs
+     * Returns the pattern used to load tests
      *
      * @return string
      */
@@ -90,7 +90,7 @@ class Configuration
     }
 
     /**
-     * Set the path to load specs from
+     * Set the path to load tests from
      *
      * @param string $path
      */
@@ -102,7 +102,7 @@ class Configuration
     }
 
     /**
-     * Return the path being searched for specs
+     * Return the path being searched for tests
      *
      * @return string
      */

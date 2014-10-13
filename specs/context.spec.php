@@ -19,16 +19,16 @@ describe('Context', function() {
                 $child = $context->describe('Child suite', function() use ($context) {
                 });
             });
-            $specs = $parent->getSpecs();
-            assert($specs[0] === $child, "child should have been added to parent");
+            $tests = $parent->getTests();
+            assert($tests[0] === $child, "child should have been added to parent");
         });
 
         it("should allow sibling suites", function() {
             $sibling1 = $this->context->describe('Sibling1 suite', function() {});
             $sibling2 = $this->context->describe('Sibling2 suite', function() {});
-            $specs = $this->context->getCurrentSuite()->getSpecs();
-            assert($specs[0] === $sibling1, "sibling1 should have been added to parent");
-            assert($specs[1] === $sibling2, "sibling2 should have been added to parent");
+            $tests = $this->context->getCurrentSuite()->getTests();
+            assert($tests[0] === $sibling1, "sibling1 should have been added to parent");
+            assert($tests[1] === $sibling2, "sibling2 should have been added to parent");
         });
 
         it("should set pending if value is not null", function() {
@@ -44,13 +44,13 @@ describe('Context', function() {
 
     describe("->it()", function() {
         it("should set pending status if value is not null", function() {
-            $spec = $this->context->it("is a spec", function() {}, true);
-            assert($spec->getPending(), "pending status should be true");
+            $test = $this->context->it("is a spec", function() {}, true);
+            assert($test->getPending(), "pending status should be true");
         });
 
         it("should ignore pending status if value is null", function() {
-            $spec = $this->context->it("is a spec", function() {});
-            assert(is_null($spec->getPending()), "pending status should be null");
+            $test = $this->context->it("is a spec", function() {});
+            assert(is_null($test->getPending()), "pending status should be null");
         });
     });
 

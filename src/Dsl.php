@@ -1,7 +1,5 @@
 <?php
 use Peridot\Runner\Context;
-use Peridot\Core\Suite;
-use Peridot\Core\Spec;
 
 /**
  * Creates a suite and sets it on the suite factory
