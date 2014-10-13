@@ -11,7 +11,6 @@ describe('AnonymousReporter', function() {
     beforeEach(function() {
         $this->eventEmitter = new EventEmitter();
         $this->configuration = new Configuration();
-        $this->runner = new Runner(new Suite("test", function() {}), $this->configuration, $this->eventEmitter);
         $this->output = new Symfony\Component\Console\Output\NullOutput();
     });
 
@@ -20,15 +19,14 @@ describe('AnonymousReporter', function() {
         $runner = null;
         $output = null;
         $emitter = null;
-        new AnonymousReporter(function(ReporterInterface $reporter) use (&$configuration, &$runner, &$output, &$emitter) {
+        new AnonymousReporter(function(ReporterInterface $reporter) use (&$configuration, &$output, &$emitter) {
             $configuration = $reporter->getConfiguration();
-            $runner = $reporter->getRunner();
             $output = $reporter->getOutput();
             $emitter = $reporter->getEventEmitter();
-        }, $this->configuration, $this->runner, $this->output, $this->eventEmitter);
+        }, $this->configuration, $this->output, $this->eventEmitter);
         assert(
-            !is_null($configuration) && !is_null($runner) && !is_null($output) && !is_null($emitter),
-            'configuration, runner, output, and emitter should not be null'
+            !is_null($configuration) && !is_null($output) && !is_null($emitter),
+            'configuration, output, and emitter should not be null'
         );
     });
 

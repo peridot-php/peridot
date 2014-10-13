@@ -8,7 +8,8 @@ use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class ReporterFactory
+ * The ReporterFactory is used to list and register Peridot reporters.
+ *
  * @package Peridot\Reporter
  */
 class ReporterFactory
@@ -40,19 +41,17 @@ class ReporterFactory
     );
 
     /**
-     * @param Configuration   $configuration
-     * @param Runner          $runner
+     * @param Configuration $configuration
      * @param OutputInterface $output
+     * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
         Configuration $configuration,
-        Runner $runner,
         OutputInterface $output,
         EventEmitterInterface $eventEmitter
     )
     {
         $this->configuration = $configuration;
-        $this->runner = $runner;
         $this->output = $output;
         $this->eventEmitter = $eventEmitter;
     }
@@ -69,10 +68,10 @@ class ReporterFactory
         $factory = isset($reporter['factory']) ? $reporter['factory'] : null;
         $instance = null;
         if (is_string($factory) && class_exists($factory)) {
-            $instance = new $factory($this->configuration, $this->runner, $this->output, $this->eventEmitter);
+            $instance = new $factory($this->configuration, $this->output, $this->eventEmitter);
         }
         if (is_callable($factory)) {
-            $instance = new AnonymousReporter($factory, $this->configuration, $this->runner, $this->output, $this->eventEmitter);
+            $instance = new AnonymousReporter($factory, $this->configuration, $this->output, $this->eventEmitter);
         }
         if (is_null($instance)) {
             throw new \RuntimeException("Reporter class could not be created");
@@ -82,11 +81,11 @@ class ReporterFactory
     }
 
     /**
-     * Register a named reporter with the factory
+     * Register a named reporter with the factory.
      *
      * @param string $name
      * @param string $description
-     * @param string $factory
+     * @param string $factory Either a callable or a fully qualified class name
      */
     public function register($name, $description, $factory)
     {

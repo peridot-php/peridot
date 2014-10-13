@@ -5,6 +5,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition as Definition;
 use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * The InputDefinition for Peridot defines what command line arguments
+ * and options are available by default.
+ *
+ * @package Peridot\Console
+ */
 class InputDefinition extends Definition
 {
     /**
@@ -31,7 +37,7 @@ class InputDefinition extends Definition
      * @param  null          $mode
      * @param  string        $description
      * @param  null          $default
-     * @return $this
+     * @return InputDefinition
      */
     public function argument($name, $mode = null, $description = '', $default = null)
     {
@@ -48,7 +54,7 @@ class InputDefinition extends Definition
      * @param  null        $mode
      * @param  string      $description
      * @param  null        $default
-     * @return $this
+     * @return InputDefinition
      */
     public function option($name, $shortcut = null, $mode = null, $description = '', $default = null)
     {

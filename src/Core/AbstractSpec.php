@@ -5,7 +5,8 @@ namespace Peridot\Core;
 use Closure;
 
 /**
- * Class AbstractSpec
+ * Base class for Peridot Suites and Specs
+ *
  * @package Peridot\Core
  */
 abstract class AbstractSpec implements SpecInterface
@@ -55,8 +56,6 @@ abstract class AbstractSpec implements SpecInterface
     protected $scope;
 
     /**
-     * Constructor.
-     *
      * @param string   $description
      * @param callable $definition
      */

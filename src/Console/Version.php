@@ -2,7 +2,8 @@
 namespace Peridot\Console;
 
 /**
- * Class Version
+ * The Version class contains application name and version information.
+ *
  * @package Peridot\Console
  */
 class Version

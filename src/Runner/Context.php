@@ -4,7 +4,9 @@ use Peridot\Core\Spec;
 use Peridot\Core\Suite;
 
 /**
- * Class Context tracks the state of the runner - i.e the current suite
+ * Context tracks the state of the runner - i.e the current Suite, and provides access to
+ * Peridot's global state.
+ *
  * @package Peridot\Runner
  */
 class Context
@@ -36,7 +38,8 @@ class Context
     }
 
     /**
-     * Creates a suite and sets it on the suite factory
+     * Creates a suite and adds it to the current suite. The newly
+     * created suite will become the new "current" suite
      *
      * @param $description
      * @param callable $fn
@@ -94,7 +97,7 @@ class Context
     }
 
     /**
-     * Singleton access to SuiteFactory
+     * Singleton access to Context
      *
      * @return Context
      */

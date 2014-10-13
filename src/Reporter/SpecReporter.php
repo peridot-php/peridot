@@ -5,6 +5,12 @@ use Peridot\Core\Spec;
 use Peridot\Core\Suite;
 use Peridot\Runner\Context;
 
+/**
+ * The SpecReporter is the default Peridot reporter. It organizes Suite and Spec results
+ * in a hierarchical manner.
+ *
+ * @package Peridot\Reporter
+ */
 class SpecReporter extends AbstractBaseReporter
 {
     /**
@@ -77,28 +83,5 @@ class SpecReporter extends AbstractBaseReporter
     public function indent()
     {
         return implode('  ', array_fill(0, $this->column + 1, ''));
-    }
-
-    /**
-     * Output result footer
-     */
-    public function footer()
-    {
-        $this->output->write($this->color('success', sprintf("\n  %d passing", $this->passing)));
-        $this->output->writeln(sprintf($this->color('muted', " (%s)"), \PHP_Timer::timeSinceStartOfRequest()));
-        if ($this->errors) {
-            $this->output->writeln($this->color('error', sprintf("  %d failing", count($this->errors))));
-        }
-        if ($this->pending) {
-            $this->output->writeln($this->color('pending', sprintf("  %d pending", $this->pending)));
-        }
-        $this->output->writeln("");
-        for ($i = 0; $i < count($this->errors); $i++) {
-            list($spec, $error) = $this->errors[$i];
-            $this->output->writeln(sprintf("  %d)%s:", $i + 1, $spec->getTitle()));
-            $this->output->writeln($this->color('error', sprintf("     %s", $error->getMessage())));
-            $trace = preg_replace('/^#/m', "      #", $error->getTraceAsString());
-            $this->output->writeln($this->color('muted', $trace));
-        }
     }
 }

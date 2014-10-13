@@ -2,7 +2,8 @@
 namespace Peridot\Reporter;
 
 /**
- * Interface ReporterInterface
+ * ReporterInterface is the contract for Peridot reporters.
+ *
  * @package Peridot\Reporter
  */
 interface ReporterInterface
@@ -40,11 +41,6 @@ interface ReporterInterface
      * @return \Peridot\Configuration
      */
     public function getConfiguration();
-
-    /**
-     * @return \Peridot\Runner\Runner
-     */
-    public function getRunner();
 
     /**
      * @return \Evenement\EventEmitterInterface

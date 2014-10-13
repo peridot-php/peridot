@@ -5,7 +5,8 @@ namespace Peridot\Core;
 use Evenement\EventEmitterInterface;
 
 /**
- * Class SpecResult
+ * SpecResults tracks passing, pending, and failing specs.
+ *
  * @package Peridot\Core
  */
 class SpecResult
@@ -34,8 +35,6 @@ class SpecResult
     protected $pendingCount = 0;
 
     /**
-     * Constructor
-     *
      * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(EventEmitterInterface $eventEmitter)

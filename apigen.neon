@@ -1,0 +1,11 @@
+destination: docs
+source:
+	- src
+	- vendor/symfony/console
+	- vendor/evenement/evenement/src
+	
+exclude:
+	- *vendor/symfony/console/Symfony/Component/Console/Tests*
+	- *vendor/symfony/console/Symfony/Component/Console/Tester*
+	
+title: Peridot

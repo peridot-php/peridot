@@ -2,3 +2,5 @@ vendor/
 .idea
 composer.lock
 peridot.phar
+.DS_Store
+docs/
