@@ -44,7 +44,7 @@ class Context
      * @param $description
      * @param callable $fn
      */
-    public function describe($description, callable $fn, $pending = null)
+    public function addSuite($description, callable $fn, $pending = null)
     {
         $suite = new Suite($description, $fn);
         if (!is_null($pending)) {
@@ -64,7 +64,7 @@ class Context
      * @param $description
      * @param $fn
      */
-    public function it($description, callable $fn, $pending = null)
+    public function addTest($description, callable $fn, $pending = null)
     {
         $test = new Test($description, $fn);
         if (!is_null($pending)) {
@@ -81,9 +81,9 @@ class Context
      *
      * @param callable $fn
      */
-    public function beforeEach(callable $fn)
+    public function addSetupFunction(callable $fn)
     {
-        $this->getCurrentSuite()->addSetUpFunction($fn);
+        $this->getCurrentSuite()->addSetupFunction($fn);
     }
 
     /**
@@ -91,7 +91,7 @@ class Context
      *
      * @param callable $fn
      */
-    public function afterEach(callable $fn)
+    public function addTearDownFunction(callable $fn)
     {
         $this->getCurrentSuite()->addTearDownFunction($fn);
     }

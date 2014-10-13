@@ -18,7 +18,7 @@ describe("Test", function() {
 
         it("should run setup functions", function() {
             $test = new ItWasRun("this should setup", function() {});
-            $test->addSetUpFunction(function() {
+            $test->addSetupFunction(function() {
                 $this->log .= "setUp ";
             });
             $test->run(new TestResult(new EventEmitter()));
@@ -71,7 +71,7 @@ describe("Test", function() {
 
         it('should run tear down functions even if setup fails', function () {
             $test = new Test('spec', function() {});
-            $test->addSetUpFunction(function() {
+            $test->addSetupFunction(function() {
                 throw new Exception('set up failure');
             });
             $test->addTearDownFunction(function() {
@@ -97,7 +97,7 @@ describe("Test", function() {
                 $this->log = 'testing';
             });
             $test->getScope()->log = "";
-            $test->addSetUpFunction(function() {
+            $test->addSetupFunction(function() {
                 throw new Exception('set up failure');
             });
 

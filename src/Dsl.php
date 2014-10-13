@@ -9,7 +9,7 @@ use Peridot\Runner\Context;
  */
 function describe($description, callable $fn)
 {
-    Context::getInstance()->describe($description, $fn);
+    Context::getInstance()->addSuite($description, $fn);
 }
 
 /**
@@ -31,7 +31,7 @@ function context($description, callable $fn)
  */
 function it($description, callable $fn)
 {
-    Context::getInstance()->it($description, $fn);
+    Context::getInstance()->addTest($description, $fn);
 }
 
 /**
@@ -75,7 +75,7 @@ function xit($description, callable $fn)
  */
 function beforeEach(callable $fn)
 {
-    Context::getInstance()->beforeEach($fn);
+    Context::getInstance()->addSetupFunction($fn);
 }
 
 /**
@@ -86,7 +86,7 @@ function beforeEach(callable $fn)
  */
 function afterEach(callable $fn)
 {
-    Context::getInstance()->afterEach($fn);
+    Context::getInstance()->addTearDownFunction($fn);
 }
 
 /**

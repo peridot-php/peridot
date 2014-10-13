@@ -48,7 +48,7 @@ class Suite extends AbstractTest
      *
      * @param callable $setupFn
      */
-    public function addSetUpFunction(callable $setupFn)
+    public function addSetupFunction(callable $setupFn)
     {
         $this->setUpFns[] = $setupFn;
     }
@@ -101,7 +101,7 @@ class Suite extends AbstractTest
     public function bindCallables(TestInterface $test)
     {
         foreach ($this->setUpFns as $fn) {
-            $test->addSetUpFunction($fn);
+            $test->addSetupFunction($fn);
         }
         foreach ($this->tearDownFns as $fn) {
             $test->addTearDownFunction($fn);

@@ -20,14 +20,14 @@ interface TestInterface
      *
      * @param callable $setupFn
      */
-    public function addSetUpFunction(callable $setupFn);
+    public function addSetupFunction(callable $setupFn);
 
     /**
      * Return all registered setup functions
      *
      * @return array
      */
-    public function getSetUpFunctions();
+    public function getSetupFunctions();
 
     /**
      * Add a function to execute after the test runs

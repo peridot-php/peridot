@@ -71,7 +71,7 @@ abstract class AbstractTest implements TestInterface
      *
      * @param callable $setupFn
      */
-    public function addSetUpFunction(callable $setupFn)
+    public function addSetupFunction(callable $setupFn)
     {
         array_unshift($this->setUpFns, Closure::bind(
             $setupFn,
@@ -177,7 +177,7 @@ abstract class AbstractTest implements TestInterface
      *
      * @return array
      */
-    public function getSetUpFunctions()
+    public function getSetupFunctions()
     {
         return $this->setUpFns;
     }

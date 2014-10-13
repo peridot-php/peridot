@@ -27,7 +27,7 @@ describe("Suite", function() {
 
         it("should pass setup functions to specs", function() {
             $suite = new Suite("Suite", function() {});
-            $suite->addSetUpFunction(function() {
+            $suite->addSetupFunction(function() {
                 $this->log = "setup";
             });
 
