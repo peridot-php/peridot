@@ -65,7 +65,7 @@ class ConfigurationReader
      * Static access to reader
      *
      * @param  InputInterface $input
-     * @return mixed
+     * @return Configuration
      */
     public static function readInput(InputInterface $input)
     {

@@ -34,7 +34,6 @@ class Application extends ConsoleApplication
         }
         $this->environment->getEventEmitter()->emit('peridot.start', [$this->environment->getDefinition()]);
         parent::__construct(Version::NAME, Version::NUMBER);
-        require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Dsl.php';
     }
 
     /**
@@ -62,6 +61,11 @@ class Application extends ConsoleApplication
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         $configuration = ConfigurationReader::readInput($input);
+
+        if (file_exists($configuration->getDsl())) {
+            include $configuration->getDsl();
+        }
+
         $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration, $this->environment->getEventEmitter());
         $factory = new ReporterFactory($configuration, $output, $this->environment->getEventEmitter());
 
