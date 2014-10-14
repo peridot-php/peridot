@@ -35,6 +35,11 @@ class Configuration
     protected $configurationFile;
 
     /**
+     * @var string
+     */
+    protected $dsl;
+
+    /**
      * @var bool
      */
     protected $stopOnFailure = false;
@@ -43,10 +48,11 @@ class Configuration
     {
         $this->path = getcwd();
         $this->configurationFile = $this->path . DIRECTORY_SEPARATOR . 'peridot.php';
+        $this->dsl = __DIR__ . DIRECTORY_SEPARATOR . 'Dsl.php';
     }
 
     /**
-     * Set the pattern used to load specs
+     * Set the pattern used to load tests
      *
      * @param string $grep
      */
@@ -58,7 +64,7 @@ class Configuration
     }
 
     /**
-     * Returns the pattern used to load specs
+     * Returns the pattern used to load tests
      *
      * @return string
      */
@@ -90,7 +96,7 @@ class Configuration
     }
 
     /**
-     * Set the path to load specs from
+     * Set the path to load tests from
      *
      * @param string $path
      */
@@ -102,7 +108,7 @@ class Configuration
     }
 
     /**
-     * Return the path being searched for specs
+     * Return the path being searched for tests
      *
      * @return string
      */
@@ -182,5 +188,28 @@ class Configuration
         }
 
         return $file;
+    }
+
+    /**
+     * Set the path to a DSL file for defining
+     * the test language used
+     *
+     * @param string $dsl
+     */
+    public function setDsl($dsl)
+    {
+        $this->dsl = $dsl;
+        return $this;
+    }
+
+    /**
+     * Get the path to a DSL file containing
+     * test functions to use
+     *
+     * @return string
+     */
+    public function getDsl()
+    {
+        return $this->dsl;
     }
 }

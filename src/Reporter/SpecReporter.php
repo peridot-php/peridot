@@ -1,12 +1,12 @@
 <?php
 namespace Peridot\Reporter;
 
-use Peridot\Core\Spec;
+use Peridot\Core\Test;
 use Peridot\Core\Suite;
 use Peridot\Runner\Context;
 
 /**
- * The SpecReporter is the default Peridot reporter. It organizes Suite and Spec results
+ * The SpecReporter is the default Peridot reporter. It organizes Suite and Test results
  * in a hierarchical manner.
  *
  * @package Peridot\Reporter
@@ -45,28 +45,28 @@ class SpecReporter extends AbstractBaseReporter
             }
         });
 
-        $this->eventEmitter->on('spec.passed', function (Spec $spec) {
+        $this->eventEmitter->on('spec.passed', function (Test $test) {
             $this->output->writeln(sprintf(
                 "  %s%s %s",
                 $this->indent(),
                 $this->color('success', $this->symbol('check')),
-                $this->color('muted', $spec->getDescription())
+                $this->color('muted', $test->getDescription())
             ));
         });
 
-        $this->eventEmitter->on('spec.failed', function (Spec $spec, \Exception $e) {
+        $this->eventEmitter->on('spec.failed', function (Test $test, \Exception $e) {
             $this->output->writeln(sprintf(
                 "  %s%s",
                 $this->indent(),
-                $this->color('error', sprintf("%d) %s", count($this->errors), $spec->getDescription()))
+                $this->color('error', sprintf("%d) %s", count($this->errors), $test->getDescription()))
             ));
         });
 
-        $this->eventEmitter->on('spec.pending', function (Spec $spec) {
+        $this->eventEmitter->on('spec.pending', function (Test $test) {
             $this->output->writeln(sprintf(
                 $this->color('pending', "  %s- %s"),
                 $this->indent(),
-                $spec->getDescription()
+                $test->getDescription()
             ));
         });
 
