@@ -1,14 +1,14 @@
 <?php
 namespace Peridot\Test;
 
-use Peridot\Core\Spec;
+use Peridot\Core\Test;
 
 /**
- * ItWasRun - the first of the specs. Before there was Peridot, there was ItWasRun
+ * ItWasRun - the first of the tests. Before there was Peridot, there was ItWasRun
  *
  * @package Peridot\Test
  */
-class ItWasRun extends Spec
+class ItWasRun extends Test
 {
     /**
      * @param string   $description

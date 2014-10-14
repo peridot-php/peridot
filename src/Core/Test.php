@@ -6,24 +6,24 @@ use Closure;
 use Exception;
 
 /**
- * The main test fixture for Peridot. Maps directly to it() style functions.
+ * The main test fixture for Peridot.
  *
  * @package Peridot\Core
  */
-class Spec extends AbstractSpec
+class Test extends AbstractTest
 {
     /**
-     * Execute the spec along with any setup and tear down functions.
+     * Execute the test along with any setup and tear down functions.
      *
-     * @param  SpecResult $result
+     * @param  TestResult $result
      * @return void
      */
-    public function run(SpecResult $result)
+    public function run(TestResult $result)
     {
-        $result->startSpec();
+        $result->startTest();
 
         if ($this->getPending()) {
-            $result->pendSpec($this);
+            $result->pendTest($this);
 
             return;
         }
@@ -32,26 +32,26 @@ class Spec extends AbstractSpec
             try {
                 $setUp();
             } catch (Exception $e) {
-                $result->failSpec($this, $e);
+                $result->failTest($this, $e);
                 $this->runTearDown();
 
                 return;
             }
         }
 
-        $boundSpec = $this->getBoundDefinition();
+        $boundTest = $this->getBoundDefinition();
         try {
-            call_user_func($boundSpec);
-            $result->passSpec($this);
+            call_user_func($boundTest);
+            $result->passTest($this);
         } catch (\Exception $e) {
-            $result->failSpec($this, $e);
+            $result->failTest($this, $e);
         }
 
         $this->runTearDown();
     }
 
     /**
-     * Execute this spec's tear down functions.
+     * Execute this test's tear down functions.
      */
     protected function runTearDown()
     {
@@ -65,8 +65,8 @@ class Spec extends AbstractSpec
     }
 
     /**
-     * Returns the spec's definition bound to
-     * the spec's scope
+     * Returns the test's definition bound to
+     * the test's scope
      *
      * @return Closure
      */

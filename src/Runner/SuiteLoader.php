@@ -2,7 +2,7 @@
 namespace Peridot\Runner;
 
 /**
- * SuiteLoader will recursively load spec files given a glob friendly
+ * SuiteLoader will recursively load test files given a glob friendly
  * pattern.
  *
  * @package Peridot\Runner
@@ -23,16 +23,16 @@ class SuiteLoader
     }
 
     /**
-     * Load specs. Runs 'include' on all specs
-     * returned by getSpecs
+     * Load specs. Runs 'include' on all tests
+     * returned by getTests
      *
      * @param $path
      */
     public function load($path)
     {
-        $specs = $this->getSpecs($path);
-        foreach ($specs as $spec) {
-            include $spec;
+        $tests = $this->getTests($path);
+        foreach ($tests as $test) {
+            include $test;
         }
     }
 
@@ -45,7 +45,7 @@ class SuiteLoader
      * @return array
      * @throws \RuntimeException
      */
-    public function getSpecs($path)
+    public function getTests($path)
     {
         if (is_file($path)) {
             return [$path];

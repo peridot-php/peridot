@@ -4,7 +4,7 @@ namespace Peridot\Runner;
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Core\HasEventEmitterTrait;
-use Peridot\Core\SpecResult;
+use Peridot\Core\TestResult;
 use Peridot\Core\Suite;
 
 /**
@@ -41,15 +41,15 @@ class Runner
     /**
      * Run the Suite
      *
-     * @param SpecResult $result
+     * @param TestResult $result
      */
-    public function run(SpecResult $result)
+    public function run(TestResult $result)
     {
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
            $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
         });
 
-        $this->eventEmitter->on('spec.failed', function ($spec, $e) {
+        $this->eventEmitter->on('spec.failed', function ($test, $e) {
             if ($this->configuration->shouldStopOnFailure()) {
                 $this->eventEmitter->emit('suite.halt');
             }

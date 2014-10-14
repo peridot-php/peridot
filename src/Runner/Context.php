@@ -1,6 +1,6 @@
 <?php
 namespace Peridot\Runner;
-use Peridot\Core\Spec;
+use Peridot\Core\Test;
 use Peridot\Core\Suite;
 
 /**
@@ -44,13 +44,13 @@ class Context
      * @param $description
      * @param callable $fn
      */
-    public function describe($description, callable $fn, $pending = null)
+    public function addSuite($description, callable $fn, $pending = null)
     {
         $suite = new Suite($description, $fn);
         if (!is_null($pending)) {
             $suite->setPending($pending);
         }
-        $this->getCurrentSuite()->addSpec($suite);
+        $this->getCurrentSuite()->addTest($suite);
         array_unshift($this->suites, $suite);
         call_user_func($suite->getDefinition());
         array_shift($this->suites);
@@ -59,39 +59,39 @@ class Context
     }
 
     /**
-     * Create a spec and add it to the current suite
+     * Create a test and add it to the current suite
      *
      * @param $description
      * @param $fn
      */
-    public function it($description, callable $fn, $pending = null)
+    public function addTest($description, callable $fn, $pending = null)
     {
-        $spec = new Spec($description, $fn);
+        $test = new Test($description, $fn);
         if (!is_null($pending)) {
-            $spec->setPending($pending);
+            $test->setPending($pending);
         }
-        $this->getCurrentSuite()->addSpec($spec);
+        $this->getCurrentSuite()->addTest($test);
 
-        return $spec;
+        return $test;
     }
 
     /**
-     * Add a setup function for all specs in the
+     * Add a setup function for all tests in the
      * current suite
      *
      * @param callable $fn
      */
-    public function beforeEach(callable $fn)
+    public function addSetupFunction(callable $fn)
     {
-        $this->getCurrentSuite()->addSetUpFunction($fn);
+        $this->getCurrentSuite()->addSetupFunction($fn);
     }
 
     /**
-     * Add a tear down function for all specs in the current suite
+     * Add a tear down function for all tests in the current suite
      *
      * @param callable $fn
      */
-    public function afterEach(callable $fn)
+    public function addTearDownFunction(callable $fn)
     {
         $this->getCurrentSuite()->addTearDownFunction($fn);
     }

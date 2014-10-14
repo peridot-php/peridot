@@ -4,7 +4,7 @@ namespace Peridot\Console;
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Core\HasEventEmitterTrait;
-use Peridot\Core\SpecResult;
+use Peridot\Core\TestResult;
 use Peridot\Reporter\ReporterFactory;
 use Peridot\Runner\Runner;
 use Peridot\Runner\SuiteLoader;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * The default Peridot CLI command. Responsible for loading and
- * executing specs.
+ * executing tests.
  *
  * @package Peridot\Console
  */
@@ -58,7 +58,7 @@ class Command extends ConsoleCommand
     }
 
     /**
-     * Load and run Suites and Specs
+     * Load and run Suites and Tests
      *
      * @param  InputInterface  $input
      * @param  OutputInterface $output
@@ -84,7 +84,7 @@ class Command extends ConsoleCommand
             $this->configuration->setReporter($reporter);
         }
 
-        $result = new SpecResult($this->eventEmitter);
+        $result = new TestResult($this->eventEmitter);
         $loader = new SuiteLoader($this->configuration->getGrep());
         $loader->load($this->configuration->getPath());
         $this->factory->create($this->configuration->getReporter());

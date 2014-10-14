@@ -1,24 +1,24 @@
 <?php
 use Evenement\EventEmitter;
 use Peridot\Configuration;
-use Peridot\Core\Spec;
+use Peridot\Core\Test;
 use Peridot\Core\Suite;
 use Peridot\Runner\Runner;
-use Peridot\Core\SpecResult;
+use Peridot\Core\TestResult;
 use Peridot\Runner\SuiteLoader;
 
 describe("Runner", function() {
 
     beforeEach(function() {
-        $this->result = new SpecResult(new EventEmitter());
+        $this->result = new TestResult(new EventEmitter());
         $this->loader = new SuiteLoader('*.spec.php');
     });
 
     context("running a single suite", function() {
         it("should run a given suite", function() {
             $suite = new Suite("description", function() {});
-            $suite->addSpec(new Spec("should do a thing", function() {}));
-            $suite->addSpec(new Spec("should fail a thing", function() { throw new \Exception("Fail");}));
+            $suite->addTest(new Test("should do a thing", function() {}));
+            $suite->addTest(new Test("should fail a thing", function() { throw new \Exception("Fail");}));
 
             $runner = new Runner($suite, new Configuration(), new EventEmitter());
             $runner->run($this->result);
@@ -29,13 +29,13 @@ describe("Runner", function() {
     context("running a suite with children", function() {
         it("should run a suite with children", function() {
             $parent = new Suite("description 1", function() {});
-            $parent->addSpec(new Spec("should do a thing", function() {}));
+            $parent->addTest(new Test("should do a thing", function() {}));
             $child = new Suite("description 2", function() {});
-            $child->addSpec(new Spec("should fail a thing", function() { throw new \Exception("Fail");}));
+            $child->addTest(new Test("should fail a thing", function() { throw new \Exception("Fail");}));
             $grandchild = new Suite("description 3", function() {});
-            $grandchild->addSpec(new Spec("pass a thing", function() { }));
-            $parent->addSpec($child);
-            $child->addSpec($grandchild);
+            $grandchild->addTest(new Test("pass a thing", function() { }));
+            $parent->addTest($child);
+            $child->addTest($grandchild);
 
             $runner = new Runner($parent, new Configuration(), new EventEmitter());
             $runner->run($this->result);
@@ -47,10 +47,10 @@ describe("Runner", function() {
 
         beforeEach(function() {
             $this->suite = new Suite("runner test suite", function() {});
-            $this->passingSpec = new Spec("passing spec", function() {});
-            $this->failingSpec = new Spec("failing spec", function() { throw new \Exception("fail"); });
-            $this->suite->addSpec($this->passingSpec);
-            $this->suite->addSpec($this->failingSpec);
+            $this->passingTest = new Test("passing spec", function() {});
+            $this->failingTest = new Test("failing spec", function() { throw new \Exception("fail"); });
+            $this->suite->addTest($this->passingTest);
+            $this->suite->addTest($this->failingTest);
             $this->eventEmitter = new EventEmitter();
 
             $this->runner = new Runner($this->suite, new Configuration(), $this->eventEmitter);
@@ -61,7 +61,7 @@ describe("Runner", function() {
             $this->eventEmitter->on('runner.start', function() use (&$emitted) {
                 $emitted = true;
             });
-            $this->runner->run(new SpecResult($this->eventEmitter));
+            $this->runner->run(new TestResult($this->eventEmitter));
             assert($emitted, 'start event should have been emitted');
         });
 
@@ -70,64 +70,64 @@ describe("Runner", function() {
             $this->eventEmitter->on('runner.end', function() use (&$emitted) {
                 $emitted = true;
             });
-            $result = new SpecResult(new EventEmitter());
+            $result = new TestResult(new EventEmitter());
             $this->runner->run($result);
-            assert($emitted && $result->getSpecCount() > 0, 'end event should have been emitted');
+            assert($emitted && $result->getTestCount() > 0, 'end event should have been emitted');
         });
 
         it("should emit a fail event when a spec fails", function() {
             $emitted = null;
             $exception = null;
-            $this->eventEmitter->on('spec.failed', function($spec, $e) use (&$emitted, &$exception) {
-                $emitted = $spec;
+            $this->eventEmitter->on('spec.failed', function($test, $e) use (&$emitted, &$exception) {
+                $emitted = $test;
                 $exception = $e;
             });
-            $this->runner->run(new SpecResult($this->eventEmitter));
-            assert($emitted === $this->failingSpec && !is_null($exception), 'fail event should have been emitted with spec and exception');
+            $this->runner->run(new TestResult($this->eventEmitter));
+            assert($emitted === $this->failingTest && !is_null($exception), 'fail event should have been emitted with spec and exception');
         });
 
         it("should emit a pass event when a spec passes", function() {
             $emitted = null;
-            $this->eventEmitter->on('spec.passed', function($spec) use (&$emitted) {
-                $emitted = $spec;
+            $this->eventEmitter->on('spec.passed', function($test) use (&$emitted) {
+                $emitted = $test;
             });
-            $this->runner->run(new SpecResult($this->eventEmitter));
-            assert($emitted === $this->passingSpec, 'pass event should have been emitted');
+            $this->runner->run(new TestResult($this->eventEmitter));
+            assert($emitted === $this->passingTest, 'pass event should have been emitted');
         });
 
         it("should emit a pending event when a spec is pending", function() {
             $emitted = null;
-            $this->eventEmitter->on('spec.pending', function($spec) use (&$emitted) {
-                $emitted = $spec;
+            $this->eventEmitter->on('spec.pending', function($test) use (&$emitted) {
+                $emitted = $test;
             });
-            $this->passingSpec->setPending(true);
-            $this->runner->run(new SpecResult($this->eventEmitter));
-            assert($emitted === $this->passingSpec, 'pending event should have been emitted');
+            $this->passingTest->setPending(true);
+            $this->runner->run(new TestResult($this->eventEmitter));
+            assert($emitted === $this->passingTest, 'pending event should have been emitted');
         });
 
         it("should emit a suite:start event every time a suite starts", function() {
             $child = new Suite("child suite", function() {});
             $grandchild = new Suite("grandchild suite", function() {});
-            $child->addSpec($grandchild);
-            $this->suite->addSpec($child);
+            $child->addTest($grandchild);
+            $this->suite->addTest($child);
             $count = 0;
             $this->eventEmitter->on('suite.start', function() use (&$count) {
                 $count++;
             });
-            $this->runner->run(new SpecResult($this->eventEmitter));
+            $this->runner->run(new TestResult($this->eventEmitter));
             assert(3 == $count, "expected 3 suite:start events to fire");
         });
 
         it("should emit a suite:end every time a suite ends", function() {
             $child = new Suite("child suite", function() {});
             $grandchild = new Suite("grandchild suite", function() {});
-            $child->addSpec($grandchild);
-            $this->suite->addSpec($child);
+            $child->addTest($grandchild);
+            $this->suite->addTest($child);
             $count = 0;
             $this->eventEmitter->on('suite.end', function() use (&$count) {
                 $count++;
             });
-            $this->runner->run(new SpecResult($this->eventEmitter));
+            $this->runner->run(new TestResult($this->eventEmitter));
             assert(3 == $count, "expected 3 suite:end events to fire");
         });
 
@@ -135,34 +135,34 @@ describe("Runner", function() {
 
             it("should stop running on failure", function() {
                 $suite = new Suite("suite", function() {});
-                $passing = new Spec("passing spec", function() {});
-                $suite->addSpec($passing);
+                $passing = new Test("passing spec", function() {});
+                $suite->addTest($passing);
 
                 $childSuite = new Suite("child suite", function() {});
-                $passingChild = new Spec("passing child", function() {});
-                $failingChild = new Spec("failing child", function() { throw new Exception("booo"); });
-                $passing2Child = new Spec("passing2 child", function() {});
-                $childSuite->addSpec($passingChild);
-                $childSuite->addSpec($failingChild);
-                $childSuite->addSpec($passing2Child);
-                $suite->addSpec($childSuite);
+                $passingChild = new Test("passing child", function() {});
+                $failingChild = new Test("failing child", function() { throw new Exception("booo"); });
+                $passing2Child = new Test("passing2 child", function() {});
+                $childSuite->addTest($passingChild);
+                $childSuite->addTest($failingChild);
+                $childSuite->addTest($passing2Child);
+                $suite->addTest($childSuite);
 
-                $passing2 = new Spec("passing2 spec", function() {});
-                $suite->addSpec($passing2);
+                $passing2 = new Test("passing2 spec", function() {});
+                $suite->addTest($passing2);
 
                 $configuration = new Configuration();
                 $configuration->stopOnFailure();
                 $suite->setEventEmitter($this->eventEmitter);
                 $runner = new Runner($suite, $configuration, $this->eventEmitter);
-                $result = new SpecResult($this->eventEmitter);
+                $result = new TestResult($this->eventEmitter);
                 $runner->run($result);
 
-                assert($result->getSpecCount() === 3, "spec count should be 3");
+                assert($result->getTestCount() === 3, "spec count should be 3");
             });
         });
 
         $behavesLikeErrorEmitter = function() {
-            $this->suite->addSpec(new Spec("my spec", function() {
+            $this->suite->addTest(new Test("my spec", function() {
                 trigger_error("This is a user notice", E_USER_NOTICE);
             }));
 
@@ -176,7 +176,7 @@ describe("Runner", function() {
                 );
             });
 
-            $this->runner->run(new SpecResult(new EventEmitter()));
+            $this->runner->run(new TestResult(new EventEmitter()));
             assert($error['errno'] == E_USER_NOTICE, "error event should have passed error constant");
             assert($error['errstr'] == "This is a user notice");
         };

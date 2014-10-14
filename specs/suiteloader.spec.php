@@ -8,21 +8,21 @@ describe("SuiteLoader", function() {
        $this->fixtures = __DIR__ . '/../fixtures';
     });
 
-    describe('->getSpecs()', function() {
+    describe('->getTests()', function() {
         it("should return file paths matching *.spec.php recursively", function() {
-            $specs = $this->loader->getSpecs($this->fixtures);
-            assert(count($specs) == 4, "suite loader should have loaded 4 specs");
+            $tests = $this->loader->getTests($this->fixtures);
+            assert(count($tests) == 4, "suite loader should have loaded 4 specs");
         });
 
         it("should return single file if it exists", function() {
-            $spec = $this->loader->getSpecs($this->fixtures . '/test.spec.php');
-            assert(count($spec) == 1, "suite loader should load 1 spec");
+            $test = $this->loader->getTests($this->fixtures . '/test.spec.php');
+            assert(count($test) == 1, "suite loader should load 1 spec");
         });
 
         it("should throw exception if path not found", function() {
             $exception = null;
             try {
-                $this->loader->getSpecs('nope');
+                $this->loader->getTests('nope');
             } catch (Exception $e) {
                 $exception = $e;
             }

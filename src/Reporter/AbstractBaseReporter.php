@@ -4,8 +4,7 @@ namespace Peridot\Reporter;
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Core\HasEventEmitterTrait;
-use Peridot\Core\Spec;
-use Peridot\Runner\Runner;
+use Peridot\Core\Test;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -93,8 +92,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
             $this->time = \PHP_Timer::stop();
         });
 
-        $this->eventEmitter->on('spec.failed', function (Spec $spec, \Exception $e) {
-            $this->errors[] = [$spec, $e];
+        $this->eventEmitter->on('spec.failed', function (Test $test, \Exception $e) {
+            $this->errors[] = [$test, $e];
         });
 
         $this->eventEmitter->on('spec.passed', function () {
@@ -173,8 +172,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
         }
         $this->output->writeln("");
         for ($i = 0; $i < count($this->errors); $i++) {
-            list($spec, $error) = $this->errors[$i];
-            $this->output->writeln(sprintf("  %d)%s:", $i + 1, $spec->getTitle()));
+            list($test, $error) = $this->errors[$i];
+            $this->output->writeln(sprintf("  %d)%s:", $i + 1, $test->getTitle()));
             $this->output->writeln($this->color('error', sprintf("     %s", $error->getMessage())));
             $trace = preg_replace('/^#/m', "      #", $error->getTraceAsString());
             $this->output->writeln($this->color('muted', $trace));
