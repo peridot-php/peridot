@@ -29,8 +29,14 @@ require_once PERIDOT_COMPOSER_INSTALL;
 
 use Evenement\EventEmitter;
 use Peridot\Console\Application;
+use Peridot\Console\Environment;
 use Peridot\Console\InputDefinition;
-use Symfony\Component\Console\Input\ArgvInput;
 
-$application = new Application(new EventEmitter());
-$application->run(new ArgvInput(null, new InputDefinition()));
+$environment = new Environment(
+    new InputDefinition(),
+    new EventEmitter(),
+    getopt('c:', ['configuration:'])
+);
+
+$application = new Application($environment);
+$application->run();

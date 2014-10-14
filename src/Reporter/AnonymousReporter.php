@@ -7,7 +7,8 @@ use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class AnonymousReporter
+ * The AnonymousReporter creates a reporter from a PHP callable.
+ *
  * @package Peridot\Reporter
  */
 class AnonymousReporter extends AbstractBaseReporter
@@ -18,27 +19,26 @@ class AnonymousReporter extends AbstractBaseReporter
     protected $initFn;
 
     /**
-     * Creates a reporter out of a callable
+     * Creates a reporter from a callable
      *
-     * @param callable        $init
-     * @param Configuration   $configuration
-     * @param Runner          $runner
+     * @param callable $init
+     * @param Configuration $configuration
      * @param OutputInterface $output
+     * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
         callable $init,
         Configuration $configuration,
-        Runner $runner,
         OutputInterface $output,
         EventEmitterInterface $eventEmitter
     )
     {
         $this->initFn = $init;
-        parent::__construct($configuration, $runner, $output, $eventEmitter);
+        parent::__construct($configuration, $output, $eventEmitter);
     }
 
     /**
-     * Initialize reporter. Setup and listen for runner events
+     * {@inheritdoc}
      *
      * @return void
      */

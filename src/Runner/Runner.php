@@ -3,15 +3,19 @@ namespace Peridot\Runner;
 
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
+use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\SpecResult;
 use Peridot\Core\Suite;
 
 /**
- * Class Runner
+ * The Runner is responsible for running a given Suite.
+ *
  * @package Peridot\Runner
  */
 class Runner
 {
+    use HasEventEmitterTrait;
+
     /**
      * @var \Peridot\Core\Suite
      */
@@ -23,14 +27,9 @@ class Runner
     protected $configuration;
 
     /**
-     * @var \Evenement\EventEmitterInterface
-     */
-    protected $eventEmitter;
-
-    /**
-     * Constructor
-     *
-     * @param SpecResult $result
+     * @param Suite $suite
+     * @param Configuration $configuration
+     * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(Suite $suite, Configuration $configuration, EventEmitterInterface $eventEmitter)
     {
@@ -40,6 +39,8 @@ class Runner
     }
 
     /**
+     * Run the Suite
+     *
      * @param SpecResult $result
      */
     public function run(SpecResult $result)

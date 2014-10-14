@@ -3,6 +3,7 @@ namespace Peridot\Console;
 
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
+use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\SpecResult;
 use Peridot\Reporter\ReporterFactory;
 use Peridot\Runner\Runner;
@@ -12,11 +13,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Command
+ * The default Peridot CLI command. Responsible for loading and
+ * executing specs.
+ *
  * @package Peridot\Console
  */
 class Command extends ConsoleCommand
 {
+    use HasEventEmitterTrait;
+
     /**
      * @var \Peridot\Runner\Runner
      */
@@ -33,12 +38,10 @@ class Command extends ConsoleCommand
     protected $factory;
 
     /**
-     * @var \Evenement\EventEmitterInterface
-     */
-    protected $eventEmitter;
-
-    /**
-     * Constructor
+     * @param Runner $runner
+     * @param Configuration $configuration
+     * @param ReporterFactory $factory
+     * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
         Runner $runner,
@@ -55,12 +58,22 @@ class Command extends ConsoleCommand
     }
 
     /**
+     * Load and run Suites and Specs
+     *
      * @param  InputInterface  $input
      * @param  OutputInterface $output
-     * @return int|null|void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->eventEmitter->emit('peridot.preExecute', [
+            $this->runner,
+            $this->configuration,
+            $this->factory,
+            $input,
+            $output
+        ]);
+
         if ($input->getOption('reporters')) {
             $this->listReporters($output);
 

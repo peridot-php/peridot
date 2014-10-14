@@ -11,9 +11,8 @@ describe('ReporterFactory', function() {
 
     beforeEach(function() {
         $configuration = new Configuration();
-        $runner = new Runner(new Suite("test", function() {}), $configuration, new EventEmitter());
         $output = new Symfony\Component\Console\Output\NullOutput();
-        $this->factory = new ReporterFactory($configuration, $runner, $output, new EventEmitter());
+        $this->factory = new ReporterFactory($configuration, $output, new EventEmitter());
     });
 
     describe('->create()', function() {

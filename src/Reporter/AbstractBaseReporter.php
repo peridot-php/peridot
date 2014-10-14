@@ -3,25 +3,25 @@ namespace Peridot\Reporter;
 
 use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
+use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\Spec;
 use Peridot\Runner\Runner;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class AbstractBaseReporter
+ * The base class for all Peridot reporters. Sits on top of an OutputInterface
+ * and an EventEmitter in order to report Peridot results.
+ *
  * @package Peridot\Reporter
  */
 abstract class AbstractBaseReporter implements ReporterInterface
 {
+    use HasEventEmitterTrait;
+
     /**
      * @var \Peridot\Configuration
      */
     protected $configuration;
-
-    /**
-     * @var \Peridot\Runner\Runner
-     */
-    protected $runner;
 
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
@@ -44,16 +44,13 @@ abstract class AbstractBaseReporter implements ReporterInterface
     protected $pending = 0;
 
     /**
-     * @var \Evenement\EventEmitterInterface
-     */
-    protected $eventEmitter;
-
-    /**
      * @var int
      */
     protected $time;
 
     /**
+     * Maps color names to left and right color sequences.
+     *
      * @var array
      */
     protected $colors = array(
@@ -65,6 +62,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
     );
 
     /**
+     * Maps symbol names to symbols
+     *
      * @var array
      */
     protected $symbols = array(
@@ -72,19 +71,17 @@ abstract class AbstractBaseReporter implements ReporterInterface
     );
 
     /**
-     * @param Configuration   $configuration
-     * @param Runner          $runner
+     * @param Configuration $configuration
      * @param OutputInterface $output
+     * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
         Configuration $configuration,
-        Runner $runner,
         OutputInterface $output,
         EventEmitterInterface $eventEmitter
     )
     {
         $this->configuration = $configuration;
-        $this->runner = $runner;
         $this->output = $output;
         $this->eventEmitter = $eventEmitter;
 
@@ -112,7 +109,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
-     * Helper for colors
+     * Given a color name, colorize the provided text in that
+     * color
      *
      * @param $key
      * @param $text
@@ -130,6 +128,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
+     * Fetch a symbol by name
+     *
      * @param $name
      * @return string
      */
@@ -139,6 +139,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
+     * Return the OutputInterface associated with the Reporter
+     *
      * @return \Symfony\Component\Console\Output\OutputInterface
      */
     public function getOutput()
@@ -147,6 +149,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
+     * Return the Configuration associated with the Reporter
+     *
      * @return \Peridot\Configuration
      */
     public function getConfiguration()
@@ -155,23 +159,30 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
-     * @return \Peridot\Runner\Runner
+     * Output result footer
      */
-    public function getRunner()
+    public function footer()
     {
-        return $this->runner;
+        $this->output->write($this->color('success', sprintf("\n  %d passing", $this->passing)));
+        $this->output->writeln(sprintf($this->color('muted', " (%s)"), \PHP_Timer::timeSinceStartOfRequest()));
+        if ($this->errors) {
+            $this->output->writeln($this->color('error', sprintf("  %d failing", count($this->errors))));
+        }
+        if ($this->pending) {
+            $this->output->writeln($this->color('pending', sprintf("  %d pending", $this->pending)));
+        }
+        $this->output->writeln("");
+        for ($i = 0; $i < count($this->errors); $i++) {
+            list($spec, $error) = $this->errors[$i];
+            $this->output->writeln(sprintf("  %d)%s:", $i + 1, $spec->getTitle()));
+            $this->output->writeln($this->color('error', sprintf("     %s", $error->getMessage())));
+            $trace = preg_replace('/^#/m', "      #", $error->getTraceAsString());
+            $this->output->writeln($this->color('muted', $trace));
+        }
     }
 
     /**
-     * @return EventEmitterInterface
-     */
-    public function getEventEmitter()
-    {
-        return $this->eventEmitter;
-    }
-
-    /**
-     * Initialize reporter. Setup and listen for runner events
+     * Initialize reporter. Setup and listen for events
      *
      * @return void
      */

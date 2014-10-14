@@ -6,6 +6,7 @@
     "blacklist": [
         "vendor/evenement/tests",
         "vendor/symfony/console/Symfony/Component/Console/Tests",
-        "vendor/symfony/console/Symfony/Component/Console/Tester"
+        "vendor/symfony/console/Symfony/Component/Console/Tester",
+        "vendor/phpunit/php-timer/Tests"
     ]
 }

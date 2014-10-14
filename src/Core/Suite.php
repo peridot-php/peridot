@@ -2,7 +2,8 @@
 namespace Peridot\Core;
 
 /**
- * Class Suite maps to describe() style functions as well as context() style functions
+ * Suites organize specs and other suites. Maps to describe() and context() style functions.
+ *
  * @package Peridot\Core
  */
 class Suite extends AbstractSpec

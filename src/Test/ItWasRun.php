@@ -4,7 +4,8 @@ namespace Peridot\Test;
 use Peridot\Core\Spec;
 
 /**
- * Class ItWasRun the first of the specs
+ * ItWasRun - the first of the specs. Before there was Peridot, there was ItWasRun
+ *
  * @package Peridot\Test
  */
 class ItWasRun extends Spec

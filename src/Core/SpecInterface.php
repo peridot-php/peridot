@@ -3,7 +3,8 @@ namespace Peridot\Core;
 use Evenement\EventEmitterInterface;
 
 /**
- * Interface SpecInterface
+ * Defines the contract for Peridot test fixtures like Spec and Suite
+ *
  * @package Peridot\Core
  */
 interface SpecInterface
@@ -96,7 +97,7 @@ interface SpecInterface
     public function getScope();
 
     /**
-     * @param EventEmitterInterface $emitter
+     * @param  EventEmitterInterface $emitter
      * @return mixed
      */
     public function setEventEmitter(EventEmitterInterface $emitter);

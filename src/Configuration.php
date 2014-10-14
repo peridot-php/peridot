@@ -2,7 +2,9 @@
 namespace Peridot;
 
 /**
- * Class Configuration
+ * Configuration stores configured values used through the Peridot application
+ * lifecycle.
+ *
  * @package Peridot
  */
 class Configuration
@@ -37,9 +39,6 @@ class Configuration
      */
     protected $stopOnFailure = false;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->path = getcwd();
@@ -69,6 +68,8 @@ class Configuration
     }
 
     /**
+     * Set the name of the reporter to use
+     *
      * @param string $reporter
      */
     public function setReporter($reporter)
@@ -79,6 +80,8 @@ class Configuration
     }
 
     /**
+     * Return the name of the reporter configured for use
+     *
      * @return string
      */
     public function getReporter()
@@ -87,6 +90,8 @@ class Configuration
     }
 
     /**
+     * Set the path to load specs from
+     *
      * @param string $path
      */
     public function setPath($path)
@@ -97,6 +102,8 @@ class Configuration
     }
 
     /**
+     * Return the path being searched for specs
+     *
      * @return string
      */
     public function getPath()
@@ -105,6 +112,8 @@ class Configuration
     }
 
     /**
+     * Disable output colors
+     *
      * @return $this
      */
     public function disableColors()
@@ -115,6 +124,8 @@ class Configuration
     }
 
     /**
+     * Check if output colors are disabled
+     *
      * @return boolean
      */
     public function areColorsEnabled()
@@ -123,6 +134,8 @@ class Configuration
     }
 
     /**
+     * Stop the suite runner when a failure occurs
+     *
      * @return $this
      */
     public function stopOnFailure()
@@ -133,6 +146,8 @@ class Configuration
     }
 
     /**
+     * Check if the suite runner should stop on failure
+     *
      * @return bool
      */
     public function shouldStopOnFailure()
@@ -141,6 +156,8 @@ class Configuration
     }
 
     /**
+     * Set the path to a Peridot configuration file
+     *
      * @param string $configurationFile
      */
     public function setConfigurationFile($configurationFile)
@@ -151,6 +168,9 @@ class Configuration
     }
 
     /**
+     * Return the path to the Peridot configuration file. Returns a relative
+     * path if it exists, otherwise return the provided value
+     *
      * @return string
      */
     public function getConfigurationFile()
