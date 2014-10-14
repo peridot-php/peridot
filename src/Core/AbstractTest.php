@@ -201,4 +201,16 @@ abstract class AbstractTest implements TestInterface
     {
         return $this->scope;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param Scope $scope
+     * @return $this
+     */
+    public function setScope(Scope $scope)
+    {
+        $this->scope = $scope;
+        return $this;
+    }
 }

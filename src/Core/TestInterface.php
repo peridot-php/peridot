@@ -97,6 +97,14 @@ interface TestInterface
     public function getScope();
 
     /**
+     * Set the scope object for a test
+     *
+     * @param Scope $scope
+     * @return mixed
+     */
+    public function setScope(Scope $scope);
+
+    /**
      * @param  EventEmitterInterface $emitter
      * @return mixed
      */
