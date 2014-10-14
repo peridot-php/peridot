@@ -1,6 +1,7 @@
 <?php
 namespace Peridot\Console;
 
+use Peridot\Configuration;
 use Peridot\Reporter\ReporterFactory;
 use Peridot\Runner\Context;
 use Peridot\Runner\Runner;
@@ -56,19 +57,22 @@ class Application extends ConsoleApplication
     }
 
     /**
-     * Run the peridot application
+     * Run the Peridot application
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         $configuration = ConfigurationReader::readInput($input);
 
-        if (file_exists($configuration->getDsl())) {
-            include $configuration->getDsl();
-        }
+        $this->environment->getEventEmitter()->emit('peridot.configure', [$configuration]);
 
         $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration, $this->environment->getEventEmitter());
         $factory = new ReporterFactory($configuration, $output, $this->environment->getEventEmitter());
 
+        $this->loadDsl($configuration->getDsl());
         $this->add(new Command($runner, $configuration, $factory, $this->environment->getEventEmitter()));
 
         return parent::doRun($input, $output);
@@ -92,16 +96,6 @@ class Application extends ConsoleApplication
     }
 
     /**
-     * Return the peridot input definition defined by Environment
-     *
-     * @return InputDefinition
-     */
-    protected function getDefaultInputDefinition()
-    {
-        return $this->environment->getDefinition();
-    }
-
-    /**
      * Return's peridot as the sole command used by Peridot
      *
      * @param  InputInterface $input
@@ -110,5 +104,30 @@ class Application extends ConsoleApplication
     public function getCommandName(InputInterface $input)
     {
         return 'peridot';
+    }
+
+    /**
+     * Load the configured DSL. If the configured DSL does not exist,
+     * then it will load the default spec style DSL
+     *
+     * @param $configuration
+     */
+    public function loadDsl($dslPath)
+    {
+        if (file_exists($dslPath)) {
+            include $dslPath;
+            return;
+        }
+        include dirname(__DIR__) .  DIRECTORY_SEPARATOR . 'Dsl.php';
+    }
+
+    /**
+     * Return the peridot input definition defined by Environment
+     *
+     * @return InputDefinition
+     */
+    protected function getDefaultInputDefinition()
+    {
+        return $this->environment->getDefinition();
     }
 }
