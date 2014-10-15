@@ -92,15 +92,15 @@ abstract class AbstractBaseReporter implements ReporterInterface
             $this->time = \PHP_Timer::stop();
         });
 
-        $this->eventEmitter->on('spec.failed', function (Test $test, \Exception $e) {
+        $this->eventEmitter->on('test.failed', function (Test $test, \Exception $e) {
             $this->errors[] = [$test, $e];
         });
 
-        $this->eventEmitter->on('spec.passed', function () {
+        $this->eventEmitter->on('test.passed', function () {
             $this->passing++;
         });
 
-        $this->eventEmitter->on('spec.pending', function () {
+        $this->eventEmitter->on('test.pending', function () {
             $this->pending++;
         });
 

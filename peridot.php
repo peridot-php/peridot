@@ -1,8 +1,6 @@
 <?php
 use Evenement\EventEmitterInterface;
-use Peridot\Configuration;
-use Peridot\Console\InputDefinition;
-use Peridot\Reporter\ReporterFactory;
+use Peridot\Console\Environment;
 use Peridot\Reporter\ReporterInterface;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -12,23 +10,23 @@ use Symfony\Component\Console\Input\InputOption;
 return function(EventEmitterInterface $emitter) {
     $counts = ['pass' => 0, 'fail' => 0, 'pending' => 0];
 
-    $emitter->on('spec.failed', function() use (&$counts) {
+    $emitter->on('test.failed', function() use (&$counts) {
         $counts['fail']++;
     });
 
-    $emitter->on('spec.passed', function() use (&$counts) {
+    $emitter->on('test.passed', function() use (&$counts) {
         $counts['pass']++;
     });
 
-    $emitter->on('spec.pending', function() use (&$counts) {
+    $emitter->on('test.pending', function() use (&$counts) {
         $counts['pending']++;
     });
 
-    $emitter->on('peridot.start', function(InputDefinition $definition) {
-        $definition->option("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text");
+    $emitter->on('peridot.start', function(Environment $env) {
+        $env->getDefinition()->option("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text");
     });
 
-    $emitter->on('peridot.preExecute', function($runner, $config, $reporters, $input) use (&$counts, $emitter) {
+    $emitter->on('peridot.reporters', function($input, $reporters) use (&$counts) {
         $banner = $input->getOption('banner');
         $reporters->register('basic', 'a simple summary', function(ReporterInterface $reporter) use (&$counts, $banner) {
             $output = $reporter->getOutput();
