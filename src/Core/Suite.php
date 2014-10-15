@@ -86,7 +86,7 @@ class Suite extends AbstractTest
                 $test->setPending($this->getPending());
             }
 
-            $this->bindCallables($test);
+            $this->bindTest($test);
             $test->setEventEmitter($this->eventEmitter);
             $test->run($result);
         }
@@ -94,12 +94,16 @@ class Suite extends AbstractTest
     }
 
     /**
-     * Bind the suite's callables to the provided test
+     * Bind the suite's callables and scopes to the provided test
      *
      * @param $test
      */
-    public function bindCallables(TestInterface $test)
+    public function bindTest(TestInterface $test)
     {
+        $childScopes = $this->getScope()->peridotGetChildScopes();
+        foreach ($childScopes as $scope) {
+            $test->getScope()->peridotAddChildScope($scope);
+        }
         foreach ($this->setUpFns as $fn) {
             $test->addSetupFunction($fn);
         }
