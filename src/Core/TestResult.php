@@ -91,11 +91,24 @@ class TestResult
     }
 
     /**
-     * Increment the test count
+     * Increment test count and emit start event
+     *
+     * @param TestInterface $test
      */
-    public function startTest()
+    public function startTest(TestInterface $test)
     {
         $this->testCount++;
+        $this->eventEmitter->emit('test.start', [$test]);
+    }
+
+    /**
+     * Emit end event for a test
+     *
+     * @param TestInterface $test
+     */
+    public function endTest(TestInterface $test)
+    {
+        $this->eventEmitter->emit('test.end', [$test]);
     }
 
     /**

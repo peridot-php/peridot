@@ -35,13 +35,54 @@ describe("TestResult", function() {
         assert($result->getFailureCount() === 1, "one specs should have failed");
     });
 
+    describe('->startTest()', function() {
+        beforeEach(function() {
+            $this->eventEmitter = new EventEmitter();
+            $this->result = new TestResult($this->eventEmitter);
+        });
+
+        it('should increment the test count', function() {
+            $this->result->startTest();
+            assert(1 === $this->result->getTestCount(), "test count should be 1");
+        });
+
+        it('should fire a test.start event', function() {
+            $emitted = null;
+            $this->eventEmitter->on('test.start', function($test) use (&$emitted) {
+                $emitted = $test;
+            });
+            $test = new Test('some test', function() {});
+            $this->result->startTest($test);
+            assert($emitted == $test, 'test.start should have emitted a test');
+        });
+
+    });
+
+    describe('->endTest()', function() {
+        beforeEach(function() {
+            $this->eventEmitter = new EventEmitter();
+            $this->result = new TestResult($this->eventEmitter);
+        });
+
+        it('should fire a test.end event', function() {
+            $emitted = null;
+            $this->eventEmitter->on('test.end', function($test) use (&$emitted) {
+                $emitted = $test;
+            });
+            $test = new Test('some test', function() {});
+            $this->result->endTest($test);
+            assert($emitted == $test, 'test.end should have emitted a test');
+        });
+
+    });
+
     describe("->failTest()", function() {
         beforeEach(function() {
             $this->eventEmitter = new EventEmitter();
             $this->result = new TestResult($this->eventEmitter);
         });
 
-        it('should emit a spec:failed event', function() {
+        it('should emit a test.failed event', function() {
             $emitted = null;
             $exception = null;
             $this->eventEmitter->on('test.failed', function ($test, $e) use (&$emitted, &$exception){
@@ -52,7 +93,7 @@ describe("TestResult", function() {
             $test = new Test('spec', function() {});
             $e = new \Exception("failure");
             $this->result->failTest($test, $e);
-            assert($emitted === $test && $exception != null, 'should have emitted spec:failed event with a spec and exception');
+            assert($emitted === $test && $exception != null, 'should have emitted test.failed event with a spec and exception');
        });
     });
 
@@ -62,7 +103,7 @@ describe("TestResult", function() {
             $this->result = new TestResult($this->emitter);
         });
 
-        it('should emit a spec:passed event', function() {
+        it('should emit a test.passed event', function() {
             $emitted = null;
             $this->emitter->on('test.passed', function ($test) use (&$emitted){
                 $emitted = $test;
@@ -70,7 +111,7 @@ describe("TestResult", function() {
 
             $test = new Test('spec', function() {});
             $this->result->passTest($test);
-            assert($emitted === $test, 'should have emitted spec:passed event');
+            assert($emitted === $test, 'should have emitted test.passed event');
         });
     });
 
@@ -80,7 +121,7 @@ describe("TestResult", function() {
             $this->result = new TestResult($this->emitter);
         });
 
-        it('should emit a spec:pending event', function() {
+        it('should emit a test.pending event', function() {
             $emitted = null;
             $this->emitter->on('test.pending', function ($test) use (&$emitted){
                 $emitted = $test;
@@ -89,7 +130,7 @@ describe("TestResult", function() {
             $test = new Test('spec', function() {});
             $test->setPending(true);
             $this->result->pendTest($test);
-            assert($emitted === $test, 'should have emitted spec:pending event');
+            assert($emitted === $test, 'should have emitted test.pending event');
         });
     });
 });

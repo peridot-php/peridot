@@ -20,7 +20,7 @@ class Test extends AbstractTest
      */
     public function run(TestResult $result)
     {
-        $result->startTest();
+        $result->startTest($this);
 
         if ($this->getPending()) {
             $result->pendTest($this);
@@ -48,6 +48,7 @@ class Test extends AbstractTest
         }
 
         $this->runTearDown();
+        $result->endTest($this);
     }
 
     /**
