@@ -45,7 +45,7 @@ describe('Scope', function() {
     });
 });
 
-class TestScope
+class TestScope extends Scope
 {
     public $name = "brian";
 

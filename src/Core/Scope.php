@@ -23,6 +23,14 @@ class Scope
     }
 
     /**
+     * @return array
+     */
+    public function peridotGetChildScopes()
+    {
+        return $this->peridotChildScopes;
+    }
+
+    /**
      * @param $name
      * @param $arguments
      * @return mixed
