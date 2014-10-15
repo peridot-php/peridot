@@ -1,5 +1,6 @@
 <?php
 use Evenement\EventEmitter;
+use Peridot\Core\Scope;
 use Peridot\Core\Test;
 use Peridot\Core\TestResult;
 use Peridot\Core\Suite;
@@ -12,7 +13,7 @@ describe("Suite", function() {
     });
 
     describe('->run()', function() {
-        it("should run multiple specs", function () {
+        it("should run multiple tests", function () {
             $suite = new Suite("Suite", function() {});
             $suite->addTest(new ItWasRun("should pass", function () {}));
             $suite->addTest(new ItWasRun('should fail', function () {
@@ -25,7 +26,7 @@ describe("Suite", function() {
             assert('2 run, 1 failed' == $result->getSummary(), "result summary should show 2/1");
         });
 
-        it("should pass setup functions to specs", function() {
+        it("should pass setup functions to tests", function() {
             $suite = new Suite("Suite", function() {});
             $suite->addSetupFunction(function() {
                 $this->log = "setup";
@@ -44,7 +45,20 @@ describe("Suite", function() {
             assert('2 run, 0 failed' == $result->getSummary(), "result summary should show 2/0");
         });
 
-        it("should pass teardown functions to specs", function() {
+        it('should pass child scopes to tests', function() {
+            $suite = new Suite("Suite", function() {});
+            $suite->getScope()->peridotAddChildScope(new SuiteScope());
+            $test = new Test("this is a test", function() {
+                assert($this->getNumber() == 5, "parent scope should be set on test");
+            });
+            $suite->addTest($test);
+            $result = new TestResult($this->eventEmitter);
+            $suite->setEventEmitter($this->eventEmitter);
+            $suite->run($result);
+            assert('1 run, 0 failed' == $result->getSummary(), "result summary should show 1/0");
+        });
+
+        it("should pass teardown functions to tests", function() {
             $suite = new Suite("Suite", function() {});
             $suite->addTearDownFunction(function() {
                 $this->log = "torn";
@@ -61,10 +75,10 @@ describe("Suite", function() {
             $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
 
-            assert('torntorn' == $test1->log() . $test2->log(), "tear down should have run for both specs");
+            assert('torntorn' == $test1->log() . $test2->log(), "tear down should have run for both tests");
         });
 
-        it("should set pending status on specs if not null", function() {
+        it("should set pending status on tests if not null", function() {
             $suite = new Suite("Suite", function() {});
             $suite->setPending(true);
             $fn = function() {};
@@ -76,10 +90,10 @@ describe("Suite", function() {
             $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
 
-            assert($test1->getPending(), "spec should be pending");
+            assert($test1->getPending(), "test should be pending");
         });
 
-        it("should emit a suite:start event", function() {
+        it("should emit a suite.start event", function() {
             $suite = new Suite("Suite", function() {});
             $emitted = null;
             $this->eventEmitter->on('suite.start', function($s) use (&$emitted) {
@@ -91,7 +105,7 @@ describe("Suite", function() {
             assert($suite === $emitted, 'suite start event should have been emitted');
         });
 
-        it("should emit a suite:end event", function() {
+        it("should emit a suite.end event", function() {
             $suite = new Suite("Suite", function() {});
             $emitted = null;
             $this->eventEmitter->on('suite.end', function($s) use (&$emitted) {
@@ -120,18 +134,26 @@ describe("Suite", function() {
             $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
 
-            assert($result->getTestCount() == 2, "spec count should be 2");
+            assert($result->getTestCount() == 2, "test count should be 2");
         });
     });
 
     describe("->addTest()", function() {
 
-        it("should set parent property on child spec", function() {
+        it("should set parent property on child test", function() {
             $suite = new Suite("test suite", function() {});
             $test = new Test("test spec", function() {});
             $suite->addTest($test);
-            assert($test->getParent() === $suite, "added spec should have parent property set");
+            assert($test->getParent() === $suite, "added test should have parent property set");
         });
 
     });
 });
+
+class SuiteScope extends Scope
+{
+    public function getNumber()
+    {
+        return 5;
+    }
+}

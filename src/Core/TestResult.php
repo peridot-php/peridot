@@ -66,7 +66,7 @@ class TestResult
     public function failTest(TestInterface $test, \Exception $e)
     {
         $this->failureCount++;
-        $this->eventEmitter->emit('spec.failed', [$test, $e]);
+        $this->eventEmitter->emit('test.failed', [$test, $e]);
     }
 
     /**
@@ -77,7 +77,7 @@ class TestResult
     public function pendTest(TestInterface $test)
     {
         $this->pendingCount++;
-        $this->eventEmitter->emit('spec.pending', [$test]);
+        $this->eventEmitter->emit('test.pending', [$test]);
     }
 
     /**
@@ -87,15 +87,28 @@ class TestResult
      */
     public function passTest(TestInterface $test)
     {
-        $this->eventEmitter->emit('spec.passed', [$test]);
+        $this->eventEmitter->emit('test.passed', [$test]);
     }
 
     /**
-     * Increment the test count
+     * Increment test count and emit start event
+     *
+     * @param TestInterface $test
      */
-    public function startTest()
+    public function startTest(TestInterface $test)
     {
         $this->testCount++;
+        $this->eventEmitter->emit('test.start', [$test]);
+    }
+
+    /**
+     * Emit end event for a test
+     *
+     * @param TestInterface $test
+     */
+    public function endTest(TestInterface $test)
+    {
+        $this->eventEmitter->emit('test.end', [$test]);
     }
 
     /**

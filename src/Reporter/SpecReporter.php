@@ -45,7 +45,7 @@ class SpecReporter extends AbstractBaseReporter
             }
         });
 
-        $this->eventEmitter->on('spec.passed', function (Test $test) {
+        $this->eventEmitter->on('test.passed', function (Test $test) {
             $this->output->writeln(sprintf(
                 "  %s%s %s",
                 $this->indent(),
@@ -54,7 +54,7 @@ class SpecReporter extends AbstractBaseReporter
             ));
         });
 
-        $this->eventEmitter->on('spec.failed', function (Test $test, \Exception $e) {
+        $this->eventEmitter->on('test.failed', function (Test $test, \Exception $e) {
             $this->output->writeln(sprintf(
                 "  %s%s",
                 $this->indent(),
@@ -62,7 +62,7 @@ class SpecReporter extends AbstractBaseReporter
             ));
         });
 
-        $this->eventEmitter->on('spec.pending', function (Test $test) {
+        $this->eventEmitter->on('test.pending', function (Test $test) {
             $this->output->writeln(sprintf(
                 $this->color('pending', "  %s- %s"),
                 $this->indent(),

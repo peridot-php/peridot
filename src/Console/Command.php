@@ -8,6 +8,7 @@ use Peridot\Core\TestResult;
 use Peridot\Reporter\ReporterFactory;
 use Peridot\Runner\Runner;
 use Peridot\Runner\SuiteLoader;
+use Peridot\Runner\SuiteLoaderInterface;
 use Symfony\Component\Console\Command\Command as ConsoleCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,6 +39,11 @@ class Command extends ConsoleCommand
     protected $factory;
 
     /**
+     * @var \Peridot\Runner\SuiteLoaderInterface
+     */
+    protected $loader;
+
+    /**
      * @param Runner $runner
      * @param Configuration $configuration
      * @param ReporterFactory $factory
@@ -58,6 +64,32 @@ class Command extends ConsoleCommand
     }
 
     /**
+     * Set the loader used by the Peridot command
+     *
+     * @param SuiteLoaderInterface $loader
+     * @return $this
+     */
+    public function setLoader(SuiteLoaderInterface $loader)
+    {
+        $this->loader = $loader;
+        return $this;
+    }
+
+    /**
+     * Fetch the loader used by the Peridot command. Defaults to
+     * a glob based loader
+     *
+     * @return SuiteLoaderInterface
+     */
+    public function getLoader()
+    {
+        if (is_null($this->loader)) {
+            return new SuiteLoader($this->configuration->getGrep());
+        }
+        return $this->loader;
+    }
+
+    /**
      * Load and run Suites and Tests
      *
      * @param  InputInterface  $input
@@ -66,13 +98,8 @@ class Command extends ConsoleCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventEmitter->emit('peridot.preExecute', [
-            $this->runner,
-            $this->configuration,
-            $this->factory,
-            $input,
-            $output
-        ]);
+        $this->eventEmitter->emit('peridot.execute', [$input, $output]);
+        $this->eventEmitter->emit('peridot.reporters', [$input, $this->factory]);
 
         if ($input->getOption('reporters')) {
             $this->listReporters($output);
@@ -85,8 +112,9 @@ class Command extends ConsoleCommand
         }
 
         $result = new TestResult($this->eventEmitter);
-        $loader = new SuiteLoader($this->configuration->getGrep());
-        $loader->load($this->configuration->getPath());
+
+        $this->eventEmitter->emit('peridot.load', [$this, $this->configuration]);
+        $this->getLoader()->load($this->configuration->getPath());
         $this->factory->create($this->configuration->getReporter());
         $this->runner->run($result);
 
