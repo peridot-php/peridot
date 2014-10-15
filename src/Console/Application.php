@@ -53,11 +53,7 @@ class Application extends ConsoleApplication
             $in = $this->getInput();
         }
 
-        $exitCode = parent::run($in, $output);
-
-        $this->environment->getEventEmitter()->emit('peridot.end', [$exitCode, $in, $output]);
-
-        return $exitCode;
+        return parent::run($in, $output);
     }
 
     /**
@@ -78,7 +74,11 @@ class Application extends ConsoleApplication
         $this->loadDsl($configuration->getDsl());
         $this->add(new Command($runner, $configuration, $factory, $this->environment->getEventEmitter()));
 
-        return parent::doRun($input, $output);
+        $exitCode = parent::doRun($input, $output);
+
+        $this->environment->getEventEmitter()->emit('peridot.end', [$exitCode, $input, $output]);
+
+        return $exitCode;
     }
 
     /**

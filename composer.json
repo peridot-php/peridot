@@ -17,6 +17,9 @@
         "symfony/console": "~2.0",
         "phpunit/php-timer": "~1.0"
     },
+    "require-dev": {
+        "phpunit/php-code-coverage": "2.0.*"
+    },
     "autoload": {
         "psr-4": {
             "Peridot\\": "src/"

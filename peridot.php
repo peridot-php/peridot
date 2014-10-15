@@ -22,8 +22,16 @@ return function(EventEmitterInterface $emitter) {
         $counts['pending']++;
     });
 
-    $emitter->on('peridot.start', function(Environment $env) {
+    $coverage = new PHP_CodeCoverage();
+    $emitter->on('peridot.start', function(Environment $env) use (&$coverage) {
+        $coverage->start('peridot');
         $env->getDefinition()->option("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text");
+    });
+
+    $emitter->on('peridot.end', function() use (&$coverage) {
+        $coverage->stop();
+        $writer = new PHP_CodeCoverage_Report_HTML();
+        $writer->process($coverage, __DIR__ . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'report');
     });
 
     $emitter->on('peridot.reporters', function($input, $reporters) use (&$counts) {
