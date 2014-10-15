@@ -8,11 +8,10 @@ use Symfony\Component\Console\Output\BufferedOutput;
 describe('SpecReporter', function() {
 
     beforeEach(function() {
-        $config = new Configuration();
-
+        $this->configuration = new Configuration();
         $this->output = new BufferedOutput();
         $this->emitter = new EventEmitter();
-        $this->reporter = new SpecReporter($config, $this->output, $this->emitter);
+        $this->reporter = new SpecReporter($this->configuration, $this->output, $this->emitter);
     });
 
     context('when test.failed is emitted', function() {
@@ -30,6 +29,16 @@ describe('SpecReporter', function() {
             $this->emitter->emit('test.pending', [$test]);
             $contents = $this->output->fetch();
             assert(strstr($contents, '- test') !== false, "dash and test description should be present");
+        });
+    });
+
+    describe('->color()', function() {
+        context('when colors are disabled', function() {
+            it('should return plain text', function() {
+                $this->configuration->disableColors();
+                $text = $this->reporter->color('color', 'hello world');
+                assert($text == "hello world", "disabled colors should contain color sequences");
+            });
         });
     });
 
