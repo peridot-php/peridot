@@ -78,7 +78,7 @@ describe("Runner", function() {
         it("should emit a fail event when a spec fails", function() {
             $emitted = null;
             $exception = null;
-            $this->eventEmitter->on('spec.failed', function($test, $e) use (&$emitted, &$exception) {
+            $this->eventEmitter->on('test.failed', function($test, $e) use (&$emitted, &$exception) {
                 $emitted = $test;
                 $exception = $e;
             });
@@ -88,7 +88,7 @@ describe("Runner", function() {
 
         it("should emit a pass event when a spec passes", function() {
             $emitted = null;
-            $this->eventEmitter->on('spec.passed', function($test) use (&$emitted) {
+            $this->eventEmitter->on('test.passed', function($test) use (&$emitted) {
                 $emitted = $test;
             });
             $this->runner->run(new TestResult($this->eventEmitter));
@@ -97,7 +97,7 @@ describe("Runner", function() {
 
         it("should emit a pending event when a spec is pending", function() {
             $emitted = null;
-            $this->eventEmitter->on('spec.pending', function($test) use (&$emitted) {
+            $this->eventEmitter->on('test.pending', function($test) use (&$emitted) {
                 $emitted = $test;
             });
             $this->passingTest->setPending(true);
