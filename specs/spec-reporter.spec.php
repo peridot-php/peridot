@@ -42,4 +42,47 @@ describe('SpecReporter', function() {
         });
     });
 
+    describe('->footer()', function() {
+        beforeEach(function(){
+            $this->configuration->disableColors();
+
+            $exception = null;
+            try {
+                throw new Exception("ooops");
+            } catch (Exception $e) {
+                $exception = $e;
+            }
+            $this->exception = $exception;
+
+            $this->emitter->emit('test.passed', [new Test('passing test', function() {})]);
+            $this->emitter->emit('test.failed', [new Test('failing test', function() {}), $this->exception]);
+            $this->emitter->emit('test.pending', [new Test('pending test', function(){})]);
+            $this->footer = $this->reporter->footer();
+            $this->contents = $this->output->fetch();
+        });
+
+        it('should output success text', function() {
+            assert(strstr($this->contents, '1 passing') !== false, 'should contain passing text');
+        });
+
+        it('should output time', function() {
+            $time = PHP_Timer::secondsToTimeString($this->reporter->getTime());
+            assert(strstr($this->contents, $time) !== false, 'should contain time text');
+        });
+
+        it('should output failure text', function() {
+            assert(strstr($this->contents, '1 failing') !== false, 'should contain failure text');
+        });
+
+        it('should output pending count', function() {
+            assert(strstr($this->contents, '1 pending') !== false, 'should contain pending text');
+        });
+
+        it('should display exception stacks and messages', function() {
+            assert(strstr($this->contents, $this->exception->getMessage()) !== false, "should include exception message");
+            $trace = preg_replace('/^#/m', "      #", $this->exception->getTraceAsString());
+            assert(strstr($this->contents, $trace) !== false, "should include exception stack");
+        });
+    });
+
 });
