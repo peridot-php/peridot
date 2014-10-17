@@ -30,4 +30,13 @@ describe("SuiteLoader", function() {
         });
     });
 
+    describe('->load()', function() {
+        it('should include files matching the pattern', function() {
+            $loader = new SuiteLoader('notaspec.php');
+            $loader->load($this->fixtures);
+            $exists = function_exists('notaspec');
+            assert($exists, 'loader should have included file matching glob pattern');
+        });
+    });
+
 });

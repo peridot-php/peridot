@@ -5,3 +5,4 @@ composer.lock
 peridot.phar
 .DS_Store
 docs/
+tmp/

@@ -42,7 +42,7 @@ function it($description, callable $fn)
  */
 function xdescribe($description, callable $fn)
 {
-    Context::getInstance()->describe($description, $fn, true);
+    Context::getInstance()->addSuite($description, $fn, true);
 }
 
 /**
@@ -64,7 +64,7 @@ function xcontext($description, callable $fn)
  */
 function xit($description, callable $fn)
 {
-    Context::getInstance()->it($description, $fn, true);
+    Context::getInstance()->addTest($description, $fn, true);
 }
 
 /**
