@@ -1,7 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: brian
- * Date: 9/16/14
- * Time: 9:14 AM
- */ 
+describe('Truth', function() {
+    it('should be true', function() {
+        assert(false, 'should be true');
+    });
+});
