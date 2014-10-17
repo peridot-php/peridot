@@ -7,7 +7,7 @@ describe('Environment', function() {
     beforeEach(function() {
         $this->definition = new InputDefinition();
         $this->emitter = new EventEmitter();
-        $configPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'config.php';
+        $configPath = __DIR__  .'/../fixtures/config.php';
         $this->environment = new Environment($this->definition, $this->emitter, array(
             'c' => $configPath,
             'configuration' => $configPath
