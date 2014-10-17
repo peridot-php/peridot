@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 beforeEach(function() {
     $this->configuration = new Configuration();
     $this->configuration->setGrep('*.stub.php');
+    $this->configuration->setPath(__FILE__);
 
     $this->emitter = new EventEmitter();
     $suite = new Suite("suite", function() {});
@@ -21,9 +22,9 @@ beforeEach(function() {
     $this->factory = new ReporterFactory($this->configuration, $this->output, $this->emitter);
     $this->definition = new InputDefinition();
 
-    $path = __DIR__  . '/../../fixtures/notaspec.php';
-    $environment = new Environment($this->definition, $this->emitter, ['c' => $path]);
-    $this->application = new Application($environment);
+    $this->configPath = __DIR__  . '/../../fixtures/samplespec.php';
+    $this->environment = new Environment($this->definition, $this->emitter, ['c' => $this->configPath]);
+    $this->application = new Application($this->environment);
 
     $this->command = new Command($this->runner, $this->configuration, $this->factory, $this->emitter);
     $this->command->setApplication($this->application);

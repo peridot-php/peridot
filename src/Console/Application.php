@@ -110,8 +110,7 @@ class Application extends ConsoleApplication
     }
 
     /**
-     * Load the configured DSL. If the configured DSL does not exist,
-     * then it will load the default spec style DSL
+     * Load the configured DSL.
      *
      * @param $configuration
      */
@@ -119,9 +118,7 @@ class Application extends ConsoleApplication
     {
         if (file_exists($dslPath)) {
             include $dslPath;
-            return;
         }
-        include dirname(__DIR__) .  DIRECTORY_SEPARATOR . 'Dsl.php';
     }
 
     /**
