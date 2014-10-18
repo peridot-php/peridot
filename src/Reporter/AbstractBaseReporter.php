@@ -84,6 +84,11 @@ abstract class AbstractBaseReporter implements ReporterInterface
         $this->output = $output;
         $this->eventEmitter = $eventEmitter;
 
+        //update symbols for windows
+        if (DIRECTORY_SEPARATOR == '\\') {
+            $this->symbols['check'] = chr(251);
+        }
+
         $this->eventEmitter->on('runner.start', function () {
             \PHP_Timer::start();
         });

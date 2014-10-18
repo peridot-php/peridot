@@ -26,7 +26,7 @@ describe('Configuration', function() {
             $path = $this->configuration->getConfigurationFile($file);
             chdir($cwd);
 
-            assert($path == "$root/$file", "paths should be equal");
+            assert(realpath($path) == realpath("$root/$file"), "paths should be equal");
         });
 
         it('should return supplied value if relative file does not exist', function() {
