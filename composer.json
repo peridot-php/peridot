@@ -1,0 +1,29 @@
+{
+    "name": "peridot-php/peridot",
+    "description": "Real BDD testing framework for PHP 5.4+",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Brian Scaturro",
+            "email": "scaturrob@gmail.com"
+        },
+        {
+            "name": "Austin Morris",
+            "email": "austin.morris@gmail.com"
+        }
+    ],
+    "require": {
+        "evenement/evenement": "2.0.*",
+        "symfony/console": "~2.0",
+        "phpunit/php-timer": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/php-code-coverage": "2.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Peridot\\": "src/"
+        }
+    },
+    "bin": ["bin/peridot"]
+}
