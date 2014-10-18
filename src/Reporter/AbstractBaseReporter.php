@@ -84,6 +84,11 @@ abstract class AbstractBaseReporter implements ReporterInterface
         $this->output = $output;
         $this->eventEmitter = $eventEmitter;
 
+        //update symbols for windows
+        if (DIRECTORY_SEPARATOR == '\\') {
+            $this->symbols['check'] = chr(251);
+        }
+
         $this->eventEmitter->on('runner.start', function () {
             \PHP_Timer::start();
         });
@@ -117,7 +122,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
      */
     public function color($key, $text)
     {
-        if (!$this->configuration->areColorsEnabled()) {
+        if (!$this->configuration->areColorsEnabled() || !$this->hasColorSupport()) {
             return $text;
         }
 
@@ -186,6 +191,26 @@ abstract class AbstractBaseReporter implements ReporterInterface
             $trace = preg_replace('/^#/m', "      #", $error->getTraceAsString());
             $this->output->writeln($this->color('muted', $trace));
         }
+    }
+
+    /**
+     * Determine if colorized output is supported by the reporters output.
+     * Taken from Symfony's console output with some slight modifications
+     * to use the reporter's output stream
+     *
+     * @return bool
+     */
+    protected function hasColorSupport()
+    {
+        if (DIRECTORY_SEPARATOR == '\\') {
+            return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI');
+        }
+
+        if (method_exists($this->output, 'getStream')) {
+            return function_exists('posix_isatty') && @posix_isatty($this->output->getStream());
+        }
+
+        return false;
     }
 
     /**
