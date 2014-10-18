@@ -22,6 +22,14 @@ describe('Command', function() {
         });
     });
 
+    describe('->getSynopsis()', function() {
+        it('should return a simplified synopsis', function() {
+            $synopsis = $this->command->getSynopsis();
+            $expected = $this->command->getName()  . ' [options] [files]';
+            assert($synopsis == $expected);
+        });
+    });
+
     describe('->run()', function() {
         it('should emit an execute event', function() {
             $input = null;
