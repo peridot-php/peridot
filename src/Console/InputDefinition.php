@@ -27,6 +27,7 @@ class InputDefinition extends Definition
         $this->addOption(new InputOption('bail', 'b', InputOption::VALUE_NONE, 'Stop on failure'));
         $this->addOption(new InputOption('configuration', 'c', InputOption::VALUE_REQUIRED, 'A php file containing peridot configuration'));
         $this->addOption(new InputOption('reporters', null, InputOption::VALUE_NONE, 'List all available reporters'));
+        $this->addOption(new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display the Peridot version number'));
         $this->addOption(new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'));
     }
 
