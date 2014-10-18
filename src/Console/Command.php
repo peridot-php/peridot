@@ -90,6 +90,16 @@ class Command extends ConsoleCommand
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getSynopsis()
+    {
+        return $this->getName() . ' [options] [files]';
+    }
+
+    /**
      * Load and run Suites and Tests
      *
      * @param  InputInterface  $input
