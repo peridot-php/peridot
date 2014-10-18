@@ -21,9 +21,9 @@ class InputDefinition extends Definition
         parent::__construct([]);
         $this->addArgument(new InputArgument('path', InputArgument::OPTIONAL, 'The path to a directory or file containing specs'));
 
-        $this->addOption(new InputOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern>'));
+        $this->addOption(new InputOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern> <comment>(default: *.spec.php)</comment>'));
         $this->addOption(new InputOption('no-colors', 'C', InputOption::VALUE_NONE, 'Disable output colors'));
-        $this->addOption(new InputOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select reporter to use as listed by --reporters'));
+        $this->addOption(new InputOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select which reporter to use <comment>(default: spec)</comment>'));
         $this->addOption(new InputOption('bail', 'b', InputOption::VALUE_NONE, 'Stop on failure'));
         $this->addOption(new InputOption('configuration', 'c', InputOption::VALUE_REQUIRED, 'A php file containing peridot configuration'));
         $this->addOption(new InputOption('reporters', null, InputOption::VALUE_NONE, 'List all available reporters'));
