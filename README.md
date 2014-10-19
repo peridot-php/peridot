@@ -2,6 +2,8 @@
 
 The highly extensible, highly enjoyable, PHP testing framework.
 
+Read more at [peridot-php.github.io](http://peridot-php.github.io/).
+
 ##Building PHAR
 
 Peridot's phar is built using [Box](http://box-project.org/). Once box is installed, the phar can be built using
