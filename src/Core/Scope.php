@@ -10,16 +10,16 @@ namespace Peridot\Core;
 class Scope
 {
     /**
-     * @var array
+     * @var \SplObjectStorage
      */
-    protected $peridotChildScopes = [];
+    protected $peridotChildScopes;
 
     /**
      * @param Scope $scope
      */
     public function peridotAddChildScope(Scope $scope)
     {
-        $this->peridotChildScopes[] = $scope;
+        $this->peridotGetChildScopes()->attach($scope);
     }
 
     /**
@@ -27,6 +27,9 @@ class Scope
      */
     public function peridotGetChildScopes()
     {
+        if (!isset($this->peridotChildScopes)) {
+            $this->peridotChildScopes = new \SplObjectStorage();
+        }
         return $this->peridotChildScopes;
     }
 
