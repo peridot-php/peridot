@@ -1,6 +1,7 @@
 {
     "name": "peridot-php/peridot",
-    "description": "Real BDD testing framework for PHP 5.4+",
+    "description": "Event driven testing framework for PHP 5.4+",
+    "keywords": ["BDD", "TDD", "testing"],
     "license": "MIT",
     "authors": [
         {
@@ -13,6 +14,7 @@
         }
     ],
     "require": {
+        "php": ">=5.4.0",
         "evenement/evenement": "2.0.*",
         "symfony/console": "~2.0",
         "phpunit/php-timer": "~1.0"
