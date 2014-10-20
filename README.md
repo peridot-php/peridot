@@ -1,4 +1,7 @@
-#peridot [![Build Status](https://travis-ci.org/peridot-php/peridot.png?branch=develop)](https://travis-ci.org/peridot-php/peridot?branch=develop)
+Peridot 
+========
+
+[![Build Status](https://travis-ci.org/peridot-php/peridot.png?branch=develop)](https://travis-ci.org/peridot-php/peridot?branch=develop) [![HHVM Status](http://hhvm.h4cc.de/badge/peridot-php/peridot.svg)](http://hhvm.h4cc.de/package/peridot-php/peridot)
 
 The highly extensible, highly enjoyable, PHP testing framework.
 
