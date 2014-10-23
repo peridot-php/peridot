@@ -40,6 +40,14 @@ describe('Context', function() {
             $suite = $this->context->addSuite("desc", function() {});
             assert(is_null($suite->getPending()), "pending status should be null");
         });
+
+        it("should execute a suites bound definition", function() {
+            $suite = $this->context->addSuite("desc", function() {
+                $this->value = "hello";
+            });
+            $scope = $suite->getScope();
+            assert($scope->value == "hello", "value should be bound to suites scope");
+        });
     });
 
     describe("->addTest()", function() {
