@@ -39,9 +39,8 @@ class Test extends AbstractTest
             }
         }
 
-        $boundTest = $this->getBoundDefinition();
         try {
-            call_user_func($boundTest);
+            call_user_func($this->getDefinition());
             $result->passTest($this);
         } catch (\Exception $e) {
             $result->failTest($this, $e);
@@ -63,20 +62,5 @@ class Test extends AbstractTest
                 continue;
             }
         }
-    }
-
-    /**
-     * Returns the test's definition bound to
-     * the test's scope
-     *
-     * @return Closure
-     */
-    protected function getBoundDefinition()
-    {
-        return Closure::bind(
-            $this->definition,
-            $this->scope,
-            $this->scope
-        );
     }
 }

@@ -111,7 +111,12 @@ abstract class AbstractTest implements TestInterface
      */
     public function getDefinition()
     {
-        return $this->definition;
+        $boundDefinition = Closure::bind(
+            $this->definition,
+            $this->scope,
+            $this->scope
+        );
+        return $boundDefinition;
     }
 
     /**
