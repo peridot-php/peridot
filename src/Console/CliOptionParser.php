@@ -36,7 +36,7 @@ class CliOptionParser
 
     /**
      * Parse arguments to find any options specified
-     * in the search string.
+     * in the search array
      *
      * @return array $parsed
      */
