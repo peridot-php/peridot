@@ -32,5 +32,9 @@ This will output documentation to the docs/ directory.
 Peridot's test suite can be run using Peridot:
 
 ```
-bin/peridot specs/
+$ bin/peridot specs/
 ```
+
+And a sample of output:
+
+![Peridot output sample](https://raw.github.com/peridot-php/peridot/master/output-sample.png "Peridot output sample")
