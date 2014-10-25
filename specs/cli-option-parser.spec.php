@@ -16,5 +16,12 @@ describe('CliOptionParser', function() {
             assert($c == 'peridot.php', "expected c to equal peridot.php");
             assert($configuration == "file.php", "expected configuration to equal file.php");
         });
+
+        it('should return an empty array if no matches', function() {
+            $args = ['test.php', 'ham', 'sandwich'];
+            $parser = new CliOptionParser($this->search, $args);
+            $parsed = $parser->parse();
+            assert(empty($parsed), "empty array should be returned");
+        });
     });
 });
