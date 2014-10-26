@@ -39,6 +39,36 @@ describe('Scope', function() {
                 $evenNumber = $this->scope->getEvenNumber();
                 assert($evenNumber === 4, "expected scope to look up child scope's child method");
             });
+
+            context("when mixing in multiple scopes, one of which has a child", function() {
+                it ("should look up the child scope on the sibling", function() {
+                    $testScope = new TestScope();
+                    $testSibling = new TestSiblingScope();
+                    $testChild = new TestChildScope();
+                    $testSibling->peridotAddChildScope($testChild);
+                    $this->scope->peridotAddChildScope($testScope);
+                    $this->scope->peridotAddChildScope($testSibling);
+
+                    $number = $this->scope->getNumber();
+                    $evenNumber = $this->scope->getEvenNumber();
+                    $oddNumber = $this->scope->getOddNumber();
+
+                    assert($number === 5, "expected result of TestScope::getNumber()");
+                    assert($evenNumber === 4, "expected result of TestChildScope::getEvenNumber()");
+                    assert($oddNumber === 3, "expected result of TestSiblingScope::getOddNumber()");
+                });
+            });
+        });
+
+        context("when mixing in multiple scopes", function() {
+            it ("should look up methods for sibling scopes", function() {
+                $this->scope->peridotAddChildScope(new TestScope());
+                $this->scope->peridotAddChildScope(new TestChildScope());
+                $evenNumber = $this->scope->getEvenNumber();
+                $number = $this->scope->getNumber();
+                assert($evenNumber === 4, "expected scope to look up child method getEvenNumber()");
+                assert($number === 5, "expected scope to look up child method getNumber()");
+            });
         });
     });
 
@@ -82,5 +112,15 @@ class TestChildScope extends Scope
     public function getEvenNumber()
     {
         return 4;
+    }
+}
+
+class TestSiblingScope extends Scope
+{
+    public $middleName = "zooooom";
+
+    public function getOddNumber()
+    {
+        return 3;
     }
 }

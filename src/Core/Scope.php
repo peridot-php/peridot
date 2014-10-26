@@ -40,7 +40,11 @@ class Scope
      */
     public function __call($name, $arguments)
     {
-        return $this->peridotLookupScopeMethod($this, $name, $arguments);
+        list($result, $found) = $this->peridotLookupScopeMethod($this, $name, $arguments);
+        if ($found) {
+            return $result;
+        }
+        throw new \BadMethodCallException("Scope method $name not found");
     }
 
     /**
@@ -58,19 +62,19 @@ class Scope
      * @param Scope $scope
      * @param $methodName
      * @param $arguments
+     * @param $accumulator
      * @return mixed
-     * @throws \BadMethodCallException
      */
-    protected function peridotLookupScopeMethod(Scope $scope, $methodName, $arguments)
+    protected function peridotLookupScopeMethod(Scope $scope, $methodName, $arguments, &$accumulator = [])
     {
         $children = $scope->peridotGetChildScopes();
         foreach ($children as $childScope) {
             if (method_exists($childScope, $methodName)) {
-                return call_user_func_array([$childScope, $methodName], $arguments);
+                return [call_user_func_array([$childScope, $methodName], $arguments), true];
             }
-            return $this->peridotLookupScopeMethod($childScope, $methodName, $arguments);
+            $accumulator = $this->peridotLookupScopeMethod($childScope, $methodName, $arguments);
         }
-        throw new \BadMethodCallException("Scope method $methodName not found");
+        return $accumulator;
     }
 
     /**
