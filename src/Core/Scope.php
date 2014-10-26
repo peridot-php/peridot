@@ -71,12 +71,16 @@ class Scope
      */
     protected function peridotLookupScopeMethod(Scope $scope, $methodName, $arguments, &$accumulator = [])
     {
+        if (! empty($accumulator)) {
+            return $accumulator;
+        }
+
         $children = $scope->peridotGetChildScopes();
         foreach ($children as $childScope) {
             if (method_exists($childScope, $methodName)) {
-                return [call_user_func_array([$childScope, $methodName], $arguments), true];
+                $accumulator = [call_user_func_array([$childScope, $methodName], $arguments), true];
             }
-            $accumulator = $this->peridotLookupScopeMethod($childScope, $methodName, $arguments);
+            $this->peridotLookupScopeMethod($childScope, $methodName, $arguments, $accumulator);
         }
         return $accumulator;
     }
@@ -91,12 +95,16 @@ class Scope
      */
     protected function peridotLookupScopeProperty(Scope $scope, $propertyName, &$accumulator = [])
     {
+        if (! empty($accumulator)) {
+            return $accumulator;
+        }
+
         $children = $scope->peridotGetChildScopes();
         foreach ($children as $childScope) {
             if (property_exists($childScope, $propertyName)) {
-                return [$childScope->$propertyName, true];
+                $accumulator = [$childScope->$propertyName, true];
             }
-            $accumulator = $this->peridotLookupScopeProperty($childScope, $propertyName);
+            $this->peridotLookupScopeProperty($childScope, $propertyName, $accumulator);
         }
         return $accumulator;
     }
