@@ -40,12 +40,7 @@ class Scope
      */
     public function __call($name, $arguments)
     {
-        foreach ($this->peridotChildScopes as $scope) {
-            if (method_exists($scope, $name)) {
-                return call_user_func_array([$scope, $name], $arguments);
-            }
-        }
-        throw new \BadMethodCallException("Scope method $name not found");
+        return $this->peridotLookupScopeMethod($this, $name, $arguments);
     }
 
     /**
@@ -61,5 +56,23 @@ class Scope
         throw new \DomainException("Scope property $name not found");
     }
 
-
+    /**
+     * Return a method result or null
+     *
+     * @param Scope $scope
+     * @param $methodName
+     * @param $arguments
+     * @return mixed|null
+     */
+    protected function peridotLookupScopeMethod(Scope $scope, $methodName, $arguments)
+    {
+        $children = $scope->peridotGetChildScopes();
+        foreach ($children as $childScope) {
+            if (method_exists($childScope, $methodName)) {
+                return call_user_func_array([$childScope, $methodName], $arguments);
+            }
+            return $this->peridotLookupScopeMethod($childScope, $methodName, $arguments);
+        }
+        throw new \BadMethodCallException("Scope method $methodName not found");
+    }
 }

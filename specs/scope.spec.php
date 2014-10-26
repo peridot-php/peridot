@@ -30,6 +30,16 @@ describe('Scope', function() {
             }
             assert(!is_null($exception), 'exception should not be null');
         });
+
+        context("and the desired method is on a child scope's child", function() {
+            it ("should look up method on the child scope's child", function() {
+                $testScope = new TestScope();
+                $testScope->peridotAddChildScope(new TestChildScope());
+                $this->scope->peridotAddChildScope($testScope);
+                $evenNumber = $this->scope->getEvenNumber();
+                assert($evenNumber === 4, "expected scope to look up child scope's child");
+            });
+        });
     });
 
     context('when calling a mixed in property', function() {
@@ -52,5 +62,13 @@ class TestScope extends Scope
     public function getNumber()
     {
         return 5;
+    }
+}
+
+class TestChildScope extends Scope
+{
+    public function getEvenNumber()
+    {
+        return 4;
     }
 }
