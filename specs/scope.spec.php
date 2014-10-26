@@ -37,7 +37,7 @@ describe('Scope', function() {
                 $testScope->peridotAddChildScope(new TestChildScope());
                 $this->scope->peridotAddChildScope($testScope);
                 $evenNumber = $this->scope->getEvenNumber();
-                assert($evenNumber === 4, "expected scope to look up child scope's child");
+                assert($evenNumber === 4, "expected scope to look up child scope's child method");
             });
         });
     });
@@ -51,6 +51,16 @@ describe('Scope', function() {
                 $exception = $e;
             }
             assert(!is_null($exception), 'exception should not be null');
+        });
+
+        context("and the desired property is on a child scope's child", function() {
+            it ("should look up property on the child scope's child", function() {
+                $testScope = new TestScope();
+                $testScope->peridotAddChildScope(new TestChildScope());
+                $this->scope->peridotAddChildScope($testScope);
+                $surname = $this->scope->surname;
+                assert($surname === "scaturro", "expected scope to look up child scope's child property");
+            });
         });
     });
 });
@@ -67,6 +77,8 @@ class TestScope extends Scope
 
 class TestChildScope extends Scope
 {
+    public $surname = "scaturro";
+
     public function getEvenNumber()
     {
         return 4;

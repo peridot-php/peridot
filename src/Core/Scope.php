@@ -23,7 +23,7 @@ class Scope
     }
 
     /**
-     * @return array
+     * @return \SplObjectStorage
      */
     public function peridotGetChildScopes()
     {
@@ -48,21 +48,18 @@ class Scope
      */
     public function __get($name)
     {
-        foreach ($this->peridotChildScopes as $scope) {
-            if (property_exists($scope, $name)) {
-                return $scope->$name;
-            }
-        }
-        throw new \DomainException("Scope property $name not found");
+        return $this->peridotLookupScopeProperty($this, $name);
     }
 
     /**
-     * Return a method result or null
+     * Return a method result by searching against a scope and
+     * all of its children
      *
      * @param Scope $scope
      * @param $methodName
      * @param $arguments
-     * @return mixed|null
+     * @return mixed
+     * @throws \BadMethodCallException
      */
     protected function peridotLookupScopeMethod(Scope $scope, $methodName, $arguments)
     {
@@ -74,5 +71,26 @@ class Scope
             return $this->peridotLookupScopeMethod($childScope, $methodName, $arguments);
         }
         throw new \BadMethodCallException("Scope method $methodName not found");
+    }
+
+    /**
+     * Return a property by searching against a scope and
+     * all of its children
+     *
+     * @param Scope $scope
+     * @param $propertyName
+     * @return mixed
+     * @throws \DomainException
+     */
+    protected function peridotLookupScopeProperty(Scope $scope, $propertyName)
+    {
+        $children = $scope->peridotGetChildScopes();
+        foreach ($children as $childScope) {
+            if (property_exists($childScope, $propertyName)) {
+                return $childScope->$propertyName;
+            }
+            return $this->peridotLookupScopeProperty($childScope, $propertyName);
+        }
+        throw new \DomainException("Scope property $propertyName not found");
     }
 }
