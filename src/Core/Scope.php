@@ -52,7 +52,11 @@ class Scope
      */
     public function __get($name)
     {
-        return $this->peridotLookupScopeProperty($this, $name);
+        list($result, $found) = $this->peridotLookupScopeProperty($this, $name);
+        if ($found) {
+            return $result;
+        }
+        throw new \DomainException("Scope property $name not found");
     }
 
     /**
@@ -63,7 +67,7 @@ class Scope
      * @param $methodName
      * @param $arguments
      * @param $accumulator
-     * @return mixed
+     * @return array index 0 is the result and index 1 is whether the method was found
      */
     protected function peridotLookupScopeMethod(Scope $scope, $methodName, $arguments, &$accumulator = [])
     {
@@ -83,18 +87,17 @@ class Scope
      *
      * @param Scope $scope
      * @param $propertyName
-     * @return mixed
-     * @throws \DomainException
+     * @return array index 0 is the result and index 1 is whether the property was found
      */
-    protected function peridotLookupScopeProperty(Scope $scope, $propertyName)
+    protected function peridotLookupScopeProperty(Scope $scope, $propertyName, &$accumulator = [])
     {
         $children = $scope->peridotGetChildScopes();
         foreach ($children as $childScope) {
             if (property_exists($childScope, $propertyName)) {
-                return $childScope->$propertyName;
+                return [$childScope->$propertyName, true];
             }
-            return $this->peridotLookupScopeProperty($childScope, $propertyName);
+            $accumulator = $this->peridotLookupScopeProperty($childScope, $propertyName);
         }
-        throw new \DomainException("Scope property $propertyName not found");
+        return $accumulator;
     }
 }

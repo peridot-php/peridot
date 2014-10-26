@@ -91,6 +91,36 @@ describe('Scope', function() {
                 $surname = $this->scope->surname;
                 assert($surname === "scaturro", "expected scope to look up child scope's child property");
             });
+
+            context("when mixing in multiple scopes, one of which has a child", function() {
+                it ("should look up the child scope on the sibling", function() {
+                    $testScope = new TestScope();
+                    $testSibling = new TestSiblingScope();
+                    $testChild = new TestChildScope();
+                    $testSibling->peridotAddChildScope($testChild);
+                    $this->scope->peridotAddChildScope($testScope);
+                    $this->scope->peridotAddChildScope($testSibling);
+
+                    $name = $this->scope->name;
+                    $middle = $this->scope->middleName;
+                    $surname = $this->scope->surname;
+
+                    assert($name === "brian", "expected result of TestScope::name");
+                    assert($middle == "zooooom", "expected result of TestSiblingScope::middleName");
+                    assert($surname === "scaturro", "expected result of TestChildScope::surname");
+                });
+            });
+        });
+
+        context("when mixing in multiple scopes", function() {
+            it ("should look up properties for sibling scopes", function() {
+                $this->scope->peridotAddChildScope(new TestScope());
+                $this->scope->peridotAddChildScope(new TestChildScope());
+                $name = $this->scope->name;
+                $surname = $this->scope->surname;
+                assert($name === "brian", "expected result of TestScope::name");
+                assert($surname === "scaturro", "expected result of TestChildScope::surname");
+            });
         });
     });
 });
