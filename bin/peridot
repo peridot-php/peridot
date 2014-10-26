@@ -29,13 +29,15 @@ require_once PERIDOT_COMPOSER_INSTALL;
 
 use Evenement\EventEmitter;
 use Peridot\Console\Application;
+use Peridot\Console\CliOptionParser;
 use Peridot\Console\Environment;
 use Peridot\Console\InputDefinition;
 
+$parser = new CliOptionParser(['-c', '--configuration'], $argv);
 $environment = new Environment(
     new InputDefinition(),
     new EventEmitter(),
-    getopt('c:', ['configuration:'])
+    $parser->parse()
 );
 
 $application = new Application($environment);
