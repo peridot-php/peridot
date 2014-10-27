@@ -23,7 +23,7 @@ class Scope
     }
 
     /**
-     * @return array
+     * @return \SplObjectStorage
      */
     public function peridotGetChildScopes()
     {
@@ -40,10 +40,9 @@ class Scope
      */
     public function __call($name, $arguments)
     {
-        foreach ($this->peridotChildScopes as $scope) {
-            if (method_exists($scope, $name)) {
-                return call_user_func_array([$scope, $name], $arguments);
-            }
+        list($result, $found) = $this->peridotLookupScopeMethod($this, $name, $arguments);
+        if ($found) {
+            return $result;
         }
         throw new \BadMethodCallException("Scope method $name not found");
     }
@@ -53,13 +52,60 @@ class Scope
      */
     public function __get($name)
     {
-        foreach ($this->peridotChildScopes as $scope) {
-            if (property_exists($scope, $name)) {
-                return $scope->$name;
-            }
+        list($result, $found) = $this->peridotLookupScopeProperty($this, $name);
+        if ($found) {
+            return $result;
         }
         throw new \DomainException("Scope property $name not found");
     }
 
+    /**
+     * Return a method result by searching against a scope and
+     * all of its children
+     *
+     * @param Scope $scope
+     * @param $methodName
+     * @param $arguments
+     * @param $accumulator
+     * @return array index 0 is the result and index 1 is whether the method was found
+     */
+    protected function peridotLookupScopeMethod(Scope $scope, $methodName, $arguments, &$accumulator = [])
+    {
+        if (! empty($accumulator)) {
+            return $accumulator;
+        }
 
+        $children = $scope->peridotGetChildScopes();
+        foreach ($children as $childScope) {
+            if (method_exists($childScope, $methodName)) {
+                $accumulator = [call_user_func_array([$childScope, $methodName], $arguments), true];
+            }
+            $this->peridotLookupScopeMethod($childScope, $methodName, $arguments, $accumulator);
+        }
+        return $accumulator;
+    }
+
+    /**
+     * Return a property by searching against a scope and
+     * all of its children
+     *
+     * @param Scope $scope
+     * @param $propertyName
+     * @return array index 0 is the result and index 1 is whether the property was found
+     */
+    protected function peridotLookupScopeProperty(Scope $scope, $propertyName, &$accumulator = [])
+    {
+        if (! empty($accumulator)) {
+            return $accumulator;
+        }
+
+        $children = $scope->peridotGetChildScopes();
+        foreach ($children as $childScope) {
+            if (property_exists($childScope, $propertyName)) {
+                $accumulator = [$childScope->$propertyName, true];
+            }
+            $this->peridotLookupScopeProperty($childScope, $propertyName, $accumulator);
+        }
+        return $accumulator;
+    }
 }
