@@ -7,6 +7,13 @@ use Peridot\Test\ItWasRun;
 
 describe("Test", function() {
 
+    context("when constructed with null definition", function() {
+        it("it should default to a pending state", function() {
+            $test = new Test("it should be pending");
+            assert($test->getPending(), "test should be pending if definition is null");
+        });
+    });
+
     describe('->run()', function() {
         it("should run", function() {
             $test = new ItWasRun("this should run", function() {
