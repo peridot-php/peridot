@@ -61,7 +61,7 @@ describe('Context', function() {
             assert(is_null($test->getPending()), "pending status should be null");
         });
 
-        it("sould set pending to true if definition is null", function() {
+        it("should set pending to true if definition is null", function() {
             $test = $this->context->addTest("is a spec");
             assert($test->getPending(), "pending status should be true");
         });
