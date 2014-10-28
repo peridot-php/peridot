@@ -64,7 +64,7 @@ class Context
      * @param $description
      * @param $fn
      */
-    public function addTest($description, callable $fn, $pending = null)
+    public function addTest($description, callable $fn = null, $pending = null)
     {
         $test = new Test($description, $fn);
         if (!is_null($pending)) {

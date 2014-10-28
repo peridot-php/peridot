@@ -6,4 +6,6 @@ describe("Spec", function() {
     it("should have a failing spec", function() {
         throw new Exception("failure");
     });
+
+    it("should be pending");
 });

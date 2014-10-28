@@ -29,7 +29,7 @@ function context($description, callable $fn)
  * @param $description
  * @param $fn
  */
-function it($description, callable $fn)
+function it($description, callable $fn = null)
 {
     Context::getInstance()->addTest($description, $fn);
 }
