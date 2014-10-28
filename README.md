@@ -38,3 +38,11 @@ $ bin/peridot specs/
 And a sample of output:
 
 ![Peridot output sample](https://raw.github.com/peridot-php/peridot/master/output-sample.png "Peridot output sample")
+
+##Release
+
+We use [Robo](https://github.com/Codegyre/Robo) for releases.
+
+```
+robo release [version] [site-path]
+```
