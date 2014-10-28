@@ -20,7 +20,8 @@
         "phpunit/php-timer": "~1.0"
     },
     "require-dev": {
-        "phpunit/php-code-coverage": "2.0.*"
+        "phpunit/php-code-coverage": "2.0.*",
+        "codegyre/robo": "~0.4"
     },
     "autoload": {
         "psr-4": {

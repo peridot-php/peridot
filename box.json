@@ -12,6 +12,13 @@
     "vendor/phpunit/php-file-iterator",
     "vendor/phpunit/php-text-template",
     "vendor/phpunit/php-token-stream",
-    "vendor/sebastian"
+    "vendor/sebastian",
+    "vendor/codegyre",
+    "vendor/henrikbjorn",
+    "vendor/symfony/config",
+    "vendor/symfony/event-dispatcher",
+    "vendor/symfony/filesystem",
+    "vendor/symfony/finder",
+    "vendor/symfony/process"
   ]
 }
