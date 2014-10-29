@@ -84,30 +84,9 @@ abstract class AbstractBaseReporter implements ReporterInterface
         $this->output = $output;
         $this->eventEmitter = $eventEmitter;
 
-        //update symbols for windows
-        if (DIRECTORY_SEPARATOR == '\\') {
-            $this->symbols['check'] = chr(251);
-        }
+        $this->registerSymbols();
 
-        $this->eventEmitter->on('runner.start', function () {
-            \PHP_Timer::start();
-        });
-
-        $this->eventEmitter->on('runner.end', function () {
-            $this->time = \PHP_Timer::stop();
-        });
-
-        $this->eventEmitter->on('test.failed', function (Test $test, \Exception $e) {
-            $this->errors[] = [$test, $e];
-        });
-
-        $this->eventEmitter->on('test.passed', function () {
-            $this->passing++;
-        });
-
-        $this->eventEmitter->on('test.pending', function () {
-            $this->pending++;
-        });
+        $this->registerEvents();
 
         $this->init();
     }
@@ -203,15 +182,80 @@ abstract class AbstractBaseReporter implements ReporterInterface
      */
     protected function hasColorSupport()
     {
-        if (DIRECTORY_SEPARATOR == '\\') {
-            return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI');
+        if ($this->isOnWindows()) {
+            return $this->hasAnsiSupport();
         }
 
         if (method_exists($this->output, 'getStream')) {
-            return function_exists('posix_isatty') && @posix_isatty($this->output->getStream());
+            return $this->hasTty();
         }
 
         return false;
+    }
+
+    /**
+     * Register reporter symbols, additionally checking OS compatibility.
+     */
+    protected function registerSymbols()
+    {
+        //update symbols for windows
+        if ($this->isOnWindows()) {
+            $this->symbols['check'] = chr(251);
+        }
+    }
+
+    /**
+     * Register events tracking state relevant to all reporters.
+     */
+    private function registerEvents()
+    {
+        $this->eventEmitter->on('runner.start', ['\PHP_Timer', 'start']);
+
+        $this->eventEmitter->on('runner.end', function () {
+            $this->time = \PHP_Timer::stop();
+        });
+
+        $this->eventEmitter->on('test.failed', function (Test $test, \Exception $e) {
+            $this->errors[] = [$test, $e];
+        });
+
+        $this->eventEmitter->on('test.passed', function () {
+            $this->passing++;
+        });
+
+        $this->eventEmitter->on('test.pending', function () {
+            $this->pending++;
+        });
+    }
+
+    /**
+     * Return true if reporter is being used on windows
+     *
+     * @return bool
+     */
+    private function isOnWindows()
+    {
+        return DIRECTORY_SEPARATOR == '\\';
+    }
+
+    /**
+     * Determine if the terminal has ansicon support
+     *
+     * @return bool
+     */
+    private function hasAnsiSupport()
+    {
+        return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI');
+    }
+
+    /**
+     * Determine if reporter is reporting to a tty terminal
+     *
+     * @return bool
+     */
+    private function hasTty()
+    {
+        return function_exists('posix_isatty') && @posix_isatty($this->output->getStream());
     }
 
     /**
