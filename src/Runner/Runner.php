@@ -49,7 +49,7 @@ class Runner
            $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
         });
 
-        $this->eventEmitter->on('test.failed', function ($test, $e) {
+        $this->eventEmitter->on('test.failed', function () {
             if ($this->configuration->shouldStopOnFailure()) {
                 $this->eventEmitter->emit('suite.halt');
             }
