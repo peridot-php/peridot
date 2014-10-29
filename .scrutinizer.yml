@@ -4,7 +4,11 @@ filter:
 tools:
   php_sim: true
   php_changetracking: true
-  php_mess_detector: true
+  php_mess_detector:
+    enabled: true
+    config:
+      design_rules:
+        exit_expression: false
   php_pdepend: true
   php_analyzer:
     enabled: true

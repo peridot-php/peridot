@@ -43,11 +43,11 @@ class ConfigurationReader
             $configuration->setGrep($grep);
         }
 
-        if ($noColors = $this->input->getOption('no-colors')) {
+        if ($this->input->getOption('no-colors')) {
             $configuration->disableColors();
         }
 
-        if ($bail = $this->input->getOption('bail')) {
+        if ($this->input->getOption('bail')) {
             $configuration->stopOnFailure();
         }
 
