@@ -22,9 +22,12 @@ class RoboFile extends \Robo\Tasks
     {
         $this->yell("Releasing Peridot");
 
+        $this->taskExec("git pull origin master")->run();
+
         $bump = $this->version($version);
         $this->phar($site);
         $this->docs($site);
+
 
         $this->taskExec('git commit -am "Build for release ' . $bump . '"')->run();
         $this->taskExec('git tag -a ' . $bump . ' -m "release ' . $bump . '"')->run();
