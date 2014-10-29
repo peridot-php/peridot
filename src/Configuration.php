@@ -47,7 +47,7 @@ class Configuration
     public function __construct()
     {
         $this->path = getcwd();
-        $this->configurationFile = $this->path . DIRECTORY_SEPARATOR . 'peridot.php';
+        $this->configurationFile = getcwd() . DIRECTORY_SEPARATOR . 'peridot.php';
         $this->dsl = __DIR__ . DIRECTORY_SEPARATOR . 'Dsl.php';
     }
 
@@ -168,7 +168,14 @@ class Configuration
      */
     public function setConfigurationFile($configurationFile)
     {
-        $this->configurationFile = $configurationFile;
+        $search = [$configurationFile, getcwd() . DIRECTORY_SEPARATOR . $configurationFile];
+        $found = array_filter($search, 'file_exists');
+
+        if (count($found) == 0) {
+            throw new \RuntimeException("Configuration file specified but does not exist");
+        }
+
+        $this->configurationFile = $found[0];
 
         return $this;
     }
@@ -181,13 +188,7 @@ class Configuration
      */
     public function getConfigurationFile()
     {
-        $file = $this->configurationFile;
-        $relative = getcwd() . DIRECTORY_SEPARATOR . $file;
-        if (file_exists($relative)) {
-            return $relative;
-        }
-
-        return $file;
+        return $this->configurationFile;
     }
 
     /**

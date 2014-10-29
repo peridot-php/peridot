@@ -15,7 +15,8 @@ describe('Configuration', function() {
         });
     });
 
-    describe('->getConfigurationFile()', function() {
+    describe('->setConfigurationFile()', function() {
+
         it('should check current working directory with file name', function() {
             $file = 'peridot.php';
             $cwd = getcwd();
@@ -29,10 +30,15 @@ describe('Configuration', function() {
             assert(realpath($path) == realpath("$root/$file"), "paths should be equal");
         });
 
-        it('should return supplied value if relative file does not exist', function() {
-            $file = 'nope.php';
-            $this->configuration->setConfigurationFile($file);
-            assert($file == $this->configuration->getConfigurationFile(), "path should be value given");
+        it('it should throw an exception if the file does not exist', function() {
+            $file = 'nope';
+            $exception = null;
+            try {
+                $this->configuration->setConfigurationFile($file);
+            } catch (RuntimeException $e) {
+                $exception = $e;
+            }
+            assert(!is_null($exception), "expected exception to be thrown");
         });
     });
 
