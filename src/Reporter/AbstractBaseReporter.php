@@ -43,7 +43,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
     protected $pending = 0;
 
     /**
-     * @var int
+     * @var double
      */
     protected $time;
 
@@ -163,7 +163,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
-     * @return float|int
+     * @return double
      */
     public function getTime()
     {
@@ -184,7 +184,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
             $this->output->writeln($this->color('pending', sprintf("  %d pending", $this->pending)));
         }
         $this->output->writeln("");
-        for ($i = 0; $i < count($this->errors); $i++) {
+        $errorCount = count($this->errors);
+        for ($i = 0; $i < $errorCount; $i++) {
             list($test, $error) = $this->errors[$i];
             $this->output->writeln(sprintf("  %d)%s:", $i + 1, $test->getTitle()));
             $this->output->writeln($this->color('error', sprintf("     %s", $error->getMessage())));
