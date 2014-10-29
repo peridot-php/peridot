@@ -75,21 +75,33 @@ class Environment
      */
     protected function loadConfiguration($configuration)
     {
-        if (isset($this->options['c']) || isset($this->options['configuration'])) {
-            $keys = ['c', 'configuration'];
-            $options = $this->options;
-            $file = array_reduce($keys, function ($result, $key) use ($options) {
-                return (array_key_exists($key, $options) && is_file($options[$key])) ? $options[$key] : $result;
-            }, null);
-
-            if (is_null($file)) {
-                return false;
-            }
-
-            $configuration = $file;
+        if (! $this->wasGivenAConfigurationPath()) {
+            return $this->includeConfiguration($configuration);
         }
 
-        return $this->includeConfiguration($configuration);
+        $files = array_filter(['c', 'configuration'], [$this, 'optionIsFile']);
+        $file = array_pop($files);
+
+        if (is_null($file)) {
+            return false;
+        }
+
+        return $this->includeConfiguration($file);
+    }
+
+    /**
+     * Determine if the environment option identified by $key
+     * is a file.
+     *
+     * @param $key
+     */
+    protected function optionIsFile($key)
+    {
+        if (! array_key_exists($key, $this->options)) {
+            return false;
+        }
+
+        return is_file($this->options[$key]);
     }
 
     /**
@@ -109,5 +121,15 @@ class Environment
         }
 
         return true;
+    }
+
+    /**
+     * Returns true if the Environment was given a configuration path.
+     *
+     * @return bool
+     */
+    protected function wasGivenAConfigurationPath()
+    {
+        return isset($this->options['c']) || isset($this->options['configuration']);
     }
 }
