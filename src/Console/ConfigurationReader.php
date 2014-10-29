@@ -35,27 +35,19 @@ class ConfigurationReader
     {
         $configuration = new Configuration();
 
+        $options = [
+            'grep' => [$configuration, 'setGrep'],
+            'no-colors' => [$configuration, 'disableColors'],
+            'bail' => [$configuration, 'stopOnFailure'],
+            'configuration' => [$configuration, 'setConfigurationFile']
+        ];
+
         if ($path = $this->input->getArgument('path')) {
             $configuration->setPath($path);
         }
 
-        if ($grep = $this->input->getOption('grep')) {
-            $configuration->setGrep($grep);
-        }
-
-        if ($this->input->getOption('no-colors')) {
-            $configuration->disableColors();
-        }
-
-        if ($this->input->getOption('bail')) {
-            $configuration->stopOnFailure();
-        }
-
-        if ($config = $this->input->getOption('configuration')) {
-            $configuration->setConfigurationFile($config);
-            if (! file_exists($configuration->getConfigurationFile())) {
-                throw new \RuntimeException("Configuration file specified but does not exist");
-            }
+        foreach ($options as $option => $callable) {
+            $this->callForOption($option, $callable);
         }
 
         return $configuration;
@@ -72,5 +64,18 @@ class ConfigurationReader
         $reader = new static($input);
 
         return $reader->read();
+    }
+
+    /**
+     * @param Configuration $config
+     * @param string $optionName
+     * @param string $method
+     */
+    protected function callForOption($optionName, callable $callable)
+    {
+        $value = $this->input->getOption($optionName);
+        if ($value) {
+            call_user_func_array($callable, [$value]);
+        }
     }
 }
