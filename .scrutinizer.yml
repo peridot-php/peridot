@@ -1,6 +1,6 @@
 filter:
   paths: [src/*]
-  excluded_paths: [vendor/*, specs/*]
+  excluded_paths: [vendor/*, specs/*, src/Test/*]
 tools:
   php_sim: true
   php_changetracking: true
