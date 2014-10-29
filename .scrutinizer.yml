@@ -11,5 +11,7 @@ tools:
     config:
       doc_comment_fixes:
         enabled: false
+      verify_php_doc_comments
+        enabled: false
   sensiolabs_security_checker: true
   php_code_sniffer: true
