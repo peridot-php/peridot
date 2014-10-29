@@ -42,7 +42,8 @@ class InputDefinition extends Definition
      */
     public function argument($name, $mode = null, $description = '', $default = null)
     {
-        $this->addArgument(new InputArgument($name, $mode, $description, $default));
+        $argument = new InputArgument($name, $mode, $description, $default);
+        $this->addArgument($argument);
 
         return $this;
     }
@@ -59,7 +60,8 @@ class InputDefinition extends Definition
      */
     public function option($name, $shortcut = null, $mode = null, $description = '', $default = null)
     {
-        $this->addOption(new InputOption($name, $shortcut, $mode, $description, $default));
+        $option = new InputOption($name, $shortcut, $mode, $description, $default);
+        $this->addOption($option);
 
         return $this;
     }
