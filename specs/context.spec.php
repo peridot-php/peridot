@@ -1,5 +1,7 @@
 <?php
 
+use Peridot\Runner\Context;
+
 describe('Context', function() {
 
     beforeEach(function() {
@@ -81,5 +83,12 @@ describe('Context', function() {
            $this->context->addTearDownFunction($after);
            assert($this->context->getCurrentSuite()->getTearDownFunctions()[0] === $after, "expected addSetupFunction to register tear down function");
        });
+    });
+
+    describe('::getInstance()', function() {
+        it("should return a singleton instance of Context", function() {
+            $context = Context::getInstance();
+            assert($context instanceof Context, "getInstance should return a Context");
+        });
     });
 });

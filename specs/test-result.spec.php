@@ -133,4 +133,14 @@ describe("TestResult", function() {
             assert($emitted === $test, 'should have emitted test.pending event');
         });
     });
+
+    describe("->getPendingCount()", function() {
+        it("should return the pending count tracked by the result", function() {
+            $result = new TestResult($this->emitter);
+            $pending = new Test("pending");
+            $result->pendTest($pending);
+            $count = $result->getPendingCount();
+            assert($count == 1, "pending count should be 1");
+        });
+    });
 });

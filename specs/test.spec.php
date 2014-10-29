@@ -1,5 +1,6 @@
 <?php
 use Evenement\EventEmitter;
+use Peridot\Core\Scope;
 use Peridot\Core\Test;
 use Peridot\Core\TestResult;
 use Peridot\Core\Suite;
@@ -144,5 +145,14 @@ describe("Test", function() {
            $test->setPending(true);
            assert($test->getPending(), "spec should be pending");
        });
+    });
+
+    describe('->setScope()', function() {
+        it('should set the scope of the test', function() {
+            $scope = new Scope();
+            $test = new Test("spec", function() {});
+            $test->setScope($scope);
+            assert($scope === $test->getScope(), "setScope should have set scope");
+        });
     });
 });
