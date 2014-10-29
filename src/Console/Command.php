@@ -121,18 +121,10 @@ class Command extends ConsoleCommand
             $this->configuration->setReporter($reporter);
         }
 
-        $result = new TestResult($this->eventEmitter);
-
         $this->eventEmitter->emit('peridot.load', [$this, $this->configuration]);
-        $this->getLoader()->load($this->configuration->getPath());
-        $this->factory->create($this->configuration->getReporter());
-        $this->runner->run($result);
 
-        if ($result->getFailureCount() > 0) {
-            return 1;
-        }
 
-        return 0;
+        return $this->getResult();
     }
 
     /**
@@ -147,5 +139,24 @@ class Command extends ConsoleCommand
             $output->writeln(sprintf("    %s - %s", $name, $info['description']));
         }
         $output->writeln("");
+    }
+
+    /**
+     * Return the result as an integer.
+     *
+     * @return int
+     */
+    protected function getResult()
+    {
+        $result = new TestResult($this->eventEmitter);
+        $this->getLoader()->load($this->configuration->getPath());
+        $this->factory->create($this->configuration->getReporter());
+        $this->runner->run($result);
+
+        if ($result->getFailureCount() > 0) {
+            return 1;
+        }
+
+        return 0;
     }
 }
