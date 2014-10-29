@@ -26,17 +26,9 @@ class RoboFile extends \Robo\Tasks
         $this->phar($site);
         $this->docs($site);
 
-        $this->taskGitStack()
-            ->add('-A')
-            ->commit("Build for release $bump")
-            ->pull()
-            ->push()
-            ->run();
-
-        $this->taskGitHubRelease($bump)
-            ->uri('peridot-php/peridot')
-            ->askDescription()
-            ->run();
+        $this->taskExec('git commit -am Build for release ' . $bump)->run();
+        $this->taskExec('git tag -a ' . $bump . ' -m "release ' . $bump . '"')->run();
+        $this->taskExec("git push origin $bump")->run();
 
         $this->publish($site);
     }
