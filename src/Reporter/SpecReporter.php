@@ -56,10 +56,7 @@ class SpecReporter extends AbstractBaseReporter
         }
     }
 
-    /**
-     * @param Suite $suite
-     */
-    public function onSuiteEnd(Suite $suite)
+    public function onSuiteEnd()
     {
         --$this->column;
         if ($this->column == 0) {
@@ -82,9 +79,8 @@ class SpecReporter extends AbstractBaseReporter
 
     /**
      * @param Test $test
-     * @param \Exception $e
      */
-    public function onTestFailed(Test $test, \Exception $e)
+    public function onTestFailed(Test $test)
     {
         $this->output->writeln(sprintf(
             "  %s%s",

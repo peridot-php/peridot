@@ -43,7 +43,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
     protected $pending = 0;
 
     /**
-     * @var double
+     * @var double|integer
      */
     protected $time;
 
@@ -163,7 +163,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
-     * @return double
+     * @return double|integer
      */
     public function getTime()
     {
