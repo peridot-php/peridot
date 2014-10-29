@@ -63,20 +63,49 @@ class ReporterFactory
      */
     public function create($name)
     {
-        $reporter = isset($this->reporters[$name]) ? $this->reporters[$name] : null;
-        $factory = isset($reporter['factory']) ? $reporter['factory'] : null;
-        $instance = null;
-        if (is_string($factory) && class_exists($factory)) {
-            $instance = new $factory($this->configuration, $this->output, $this->eventEmitter);
-        }
-        if (is_callable($factory)) {
-            $instance = new AnonymousReporter($factory, $this->configuration, $this->output, $this->eventEmitter);
-        }
-        if (is_null($instance)) {
-            throw new \RuntimeException("Reporter class could not be created");
+        $factory = $this->getReporterFactory($name);
+
+        $isClass = is_string($factory) && class_exists($factory);
+        
+        if ($isClass) {
+            return new $factory($this->configuration, $this->output, $this->eventEmitter);
         }
 
-        return $instance;
+        if (is_callable($factory)) {
+            return new AnonymousReporter($factory, $this->configuration, $this->output, $this->eventEmitter);
+        }
+
+        throw new \RuntimeException("Reporter class could not be created");
+    }
+
+    /**
+     * Return the factory defined for the named reporter
+     *
+     * @param string $name
+     * @return null|string|callable
+     */
+    public function getReporterFactory($name)
+    {
+        $definition = $this->getReporterDefinition($name);
+        if (! isset($definition['factory'])) {
+            $definition['factory'] = null;
+        }
+        return $definition['factory'];
+    }
+
+    /**
+     * Return the definition of the named reporter
+     *
+     * @param string $name
+     * @return array
+     */
+    public function getReporterDefinition($name)
+    {
+        $definition = [];
+        if (isset($this->reporters[$name])) {
+            $definition = $this->reporters[$name];
+        }
+        return $definition;
     }
 
     /**
