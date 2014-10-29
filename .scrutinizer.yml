@@ -1,6 +1,9 @@
 filter:
   paths: [src/*]
   excluded_paths: [vendor/*, specs/*, src/Test/*]
+checks:
+  php:
+    parameter_doc_comments: true
 tools:
   php_sim: true
   php_changetracking: true
