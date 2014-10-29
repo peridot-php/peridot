@@ -29,7 +29,7 @@ class RoboFile extends \Robo\Tasks
         $this->docs($site);
 
 
-        $this->taskExec('git commit -am "Build for release ' . $bump . '"')->run();
+        $this->taskExec('git commit -am "release ' . $bump . '"')->run();
         $this->taskExec('git tag -a ' . $bump . ' -m "release ' . $bump . '"')->run();
         $this->taskExec("git push origin $bump")->run();
         $this->taskExec("git push origin master")->run();
