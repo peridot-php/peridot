@@ -46,7 +46,6 @@ class Application extends ConsoleApplication
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        $in = null;
         if (!is_null($input)) {
             $in = $input;
         } else {
