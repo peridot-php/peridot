@@ -8,3 +8,4 @@ tools:
   php_pdepend: true
   php_analyzer: true
   sensiolabs_security_checker: true
+  php_code_sniffer: true
