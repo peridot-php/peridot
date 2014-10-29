@@ -2,7 +2,6 @@
 
 namespace Peridot\Core;
 
-use Closure;
 use Exception;
 
 /**
@@ -37,27 +36,10 @@ class Test extends AbstractTest
 
         if ($this->getPending()) {
             $result->pendTest($this);
-
             return;
         }
 
-        foreach ($this->setUpFns as $setUp) {
-            try {
-                $setUp();
-            } catch (Exception $e) {
-                $result->failTest($this, $e);
-                $this->runTearDown();
-
-                return;
-            }
-        }
-
-        try {
-            call_user_func($this->getDefinition());
-            $result->passTest($this);
-        } catch (\Exception $e) {
-            $result->failTest($this, $e);
-        }
+        $this->executeTest($result);
 
         $this->runTearDown();
         $result->endTest($this);
@@ -74,6 +56,24 @@ class Test extends AbstractTest
             } catch (Exception $e) {
                 continue;
             }
+        }
+    }
+
+    /**
+     * Attempt to execute setup functions and run the test definition
+     *
+     * @param TestResult $result
+     */
+    protected function executeTest(TestResult $result)
+    {
+        try {
+            foreach ($this->setUpFns as $setUp) {
+                $setUp();
+            }
+            call_user_func($this->getDefinition());
+            $result->passTest($this);
+        } catch (Exception $e) {
+            $result->failTest($this, $e);
         }
     }
 }
