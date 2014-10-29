@@ -6,6 +6,10 @@ tools:
   php_changetracking: true
   php_mess_detector: true
   php_pdepend: true
-  php_analyzer: true
+  php_analyzer:
+    enabled: true
+    config:
+      doc_comment_fixes:
+        enabled: false
   sensiolabs_security_checker: true
   php_code_sniffer: true
