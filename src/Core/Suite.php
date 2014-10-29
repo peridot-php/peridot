@@ -72,9 +72,7 @@ class Suite extends AbstractTest
     {
         $this->eventEmitter->emit('suite.start', [$this]);
 
-        $this->eventEmitter->on('suite.halt', function () {
-            $this->halted = true;
-        });
+        $this->eventEmitter->on('suite.halt', [$this, 'halt']);
 
         foreach ($this->tests as $test) {
 
@@ -82,15 +80,20 @@ class Suite extends AbstractTest
                 break;
             }
 
-            if (!is_null($this->getPending())) {
-                $test->setPending($this->getPending());
-            }
-
-            $this->bindTest($test);
-            $test->setEventEmitter($this->eventEmitter);
-            $test->run($result);
+            $this->runTest($test, $result);
         }
         $this->eventEmitter->emit('suite.end', [$this]);
+    }
+
+    /**
+     * Put the Suite in a halted state. A halted Suite will not run or will
+     * stop running if currently running.
+     *
+     * @return void
+     */
+    public function halt()
+    {
+        $this->halted = true;
     }
 
     /**
@@ -110,5 +113,22 @@ class Suite extends AbstractTest
         foreach ($this->tearDownFns as $fn) {
             $test->addTearDownFunction($fn);
         }
+    }
+
+    /**
+     * Run a test and track its results.
+     *
+     * @param TestResult $result
+     * @param $test
+     */
+    protected function runTest(AbstractTest $test, TestResult $result)
+    {
+        if (!is_null($this->getPending())) {
+            $test->setPending($this->getPending());
+        }
+
+        $this->bindTest($test);
+        $test->setEventEmitter($this->eventEmitter);
+        $test->run($result);
     }
 }
