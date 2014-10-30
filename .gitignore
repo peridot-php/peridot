@@ -1,3 +1,4 @@
+build/
 code-coverage-report/
 vendor/
 .idea/

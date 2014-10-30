@@ -1,4 +1,5 @@
 <?php
+
 use Evenement\EventEmitterInterface;
 use Peridot\Console\Environment;
 use Peridot\Reporter\ReporterInterface;
@@ -22,8 +23,8 @@ return function(EventEmitterInterface $emitter) {
         $counts['pending']++;
     });
 
-    $shouldCover = getenv('COVER');
-    if ($shouldCover) {
+    $codeCoverage = getenv('CODE_COVERAGE');
+    if ($codeCoverage == 'html') {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
             $coverage->start('peridot');
@@ -33,6 +34,21 @@ return function(EventEmitterInterface $emitter) {
             $coverage->stop();
             $writer = new PHP_CodeCoverage_Report_HTML();
             $writer->process($coverage, __DIR__ . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'report');
+        });
+    }
+
+    if ($codeCoverage == 'clover') {
+        $coverage = new PHP_CodeCoverage();
+        $emitter->on('runner.start', function() use ($coverage) {
+            $coverage->start('peridot');
+        });
+
+        $emitter->on('runner.end', function() use ($coverage) {
+            $coverage->stop();
+            $writer = new PHP_CodeCoverage_Report_Clover();
+            $writer->process(
+                $coverage, __DIR__ . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR
+                . 'logs' . DIRECTORY_SEPARATOR . 'clover.xml');
         });
     }
 

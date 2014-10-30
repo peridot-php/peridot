@@ -1,32 +1,33 @@
 {
-    "name": "peridot-php/peridot",
-    "description": "Event driven testing framework for PHP 5.4+",
-    "keywords": ["BDD", "TDD", "testing"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Brian Scaturro",
-            "email": "scaturrob@gmail.com"
-        },
-        {
-            "name": "Austin Morris",
-            "email": "austin.morris@gmail.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.4.0",
-        "evenement/evenement": "2.0.*",
-        "symfony/console": "~2.0",
-        "phpunit/php-timer": "~1.0"
+  "name": "peridot-php/peridot",
+  "description": "Event driven testing framework for PHP 5.4+",
+  "keywords": ["BDD", "TDD", "testing", "PHP"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Brian Scaturro",
+      "email": "scaturrob@gmail.com"
     },
-    "require-dev": {
-        "phpunit/php-code-coverage": "2.0.*",
-        "codegyre/robo": "~0.4"
-    },
-    "autoload": {
-        "psr-4": {
-            "Peridot\\": "src/"
-        }
-    },
-    "bin": ["bin/peridot"]
+    {
+      "name": "Austin Morris",
+      "email": "austin.morris@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "evenement/evenement": "2.0.*",
+    "symfony/console": "~2.0",
+    "phpunit/php-timer": "~1.0"
+  },
+  "require-dev": {
+    "codegyre/robo": "~0.4",
+    "phpunit/php-code-coverage": "~2.0",
+    "satooshi/php-coveralls": "~0.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Peridot\\": "src/"
+    }
+  },
+  "bin": ["bin/peridot"]
 }
