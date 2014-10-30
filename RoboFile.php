@@ -38,6 +38,17 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
+     * @param $change
+     */
+    public function changed($change)
+    {
+        $this->taskChangelog()
+            ->version(\Peridot\Console\Version::NUMBER)
+            ->change($change)
+            ->run();
+    }
+
+    /**
      * Bump the version of Peridot. Defaults to a minor release.
      *
      * @param null $version
