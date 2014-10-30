@@ -17,7 +17,7 @@ describe('Application', function() {
 
     describe('->getInput()', function() {
         it('should return an input', function() {
-            $input = $this->application->getInput();
+            $input = $this->application->getInput(['foo.php', 'bar']);
             assert(!is_null($input), "getInput should return an input");
         });
     });

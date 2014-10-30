@@ -85,12 +85,13 @@ class Application extends ConsoleApplication
      * a mismatch between the option or argument requested and the input definition, the
      * exception will be rendered and Peridot will exit with an error code
      *
+     * @param array $argv An array of parameters from the CLI in the argv format.
      * @return ArgvInput
      */
-    public function getInput()
+    public function getInput(array $argv = null)
     {
         try {
-            return new ArgvInput(null, $this->environment->getDefinition());
+            return new ArgvInput($argv, $this->environment->getDefinition());
         } catch (\Exception $e) {
             $this->renderException($e, new ConsoleOutput());
             exit(1);
