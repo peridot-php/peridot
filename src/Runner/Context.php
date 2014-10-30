@@ -1,5 +1,6 @@
 <?php
 namespace Peridot\Runner;
+
 use Peridot\Core\Test;
 use Peridot\Core\Suite;
 
@@ -26,7 +27,9 @@ class Context
      */
     private function __construct()
     {
-        $this->suites = [new Suite("", function () {})];
+        $this->suites = [new Suite("", function () {
+            //noop
+        })];
     }
 
     /**

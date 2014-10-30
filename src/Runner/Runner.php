@@ -46,7 +46,7 @@ class Runner
     public function run(TestResult $result)
     {
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-           $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
+            $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
         });
 
         $this->eventEmitter->on('test.failed', function () {

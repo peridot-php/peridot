@@ -19,7 +19,9 @@ class Test extends AbstractTest
     {
         if (is_null($definition)) {
             $this->pending = true;
-            $definition = function() { }; //noop
+            $definition = function () {
+                //noop
+            };
         }
         parent::__construct($description, $definition);
     }

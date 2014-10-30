@@ -48,8 +48,8 @@ class CliOptionParser
             $previous = $this->arguments[$i - 1];
             $arg = $this->arguments[$i];
 
-            $needle = array_reduce($this->search, function($result, $search) use ($previous) {
-                return ($previous == $search) ? $search : $result; 
+            $needle = array_reduce($this->search, function ($result, $search) use ($previous) {
+                return ($previous == $search) ? $search : $result;
             });
 
             if (!$needle) {

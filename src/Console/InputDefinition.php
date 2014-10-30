@@ -65,5 +65,4 @@ class InputDefinition extends Definition
 
         return $this;
     }
-
 }

@@ -49,7 +49,8 @@ class SpecReporter extends AbstractBaseReporter
     /**
      * @param Suite $suite
      */
-    public function onSuiteStart(Suite $suite)  {
+    public function onSuiteStart(Suite $suite)
+    {
         if ($suite != $this->root) {
             ++$this->column;
             $this->output->writeln(sprintf('%s%s', $this->indent(), $suite->getDescription()));
