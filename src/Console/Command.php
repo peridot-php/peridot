@@ -54,8 +54,7 @@ class Command extends ConsoleCommand
         Configuration $configuration,
         ReporterFactory $factory,
         EventEmitterInterface $eventEmitter
-    )
-    {
+    ) {
         parent::__construct('peridot');
         $this->runner = $runner;
         $this->configuration = $configuration;

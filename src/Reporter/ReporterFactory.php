@@ -48,8 +48,7 @@ class ReporterFactory
         Configuration $configuration,
         OutputInterface $output,
         EventEmitterInterface $eventEmitter
-    )
-    {
+    ) {
         $this->configuration = $configuration;
         $this->output = $output;
         $this->eventEmitter = $eventEmitter;

@@ -154,7 +154,7 @@ abstract class AbstractTest implements TestInterface
             $node = $node->getParent();
         }
 
-        return implode(' ' ,$parts);
+        return implode(' ', $parts);
     }
 
     /**

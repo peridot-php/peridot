@@ -1,5 +1,6 @@
 <?php
 namespace Peridot\Core;
+
 use Evenement\EventEmitterInterface;
 
 /**

@@ -30,8 +30,7 @@ class AnonymousReporter extends AbstractBaseReporter
         Configuration $configuration,
         OutputInterface $output,
         EventEmitterInterface $eventEmitter
-    )
-    {
+    ) {
         $this->initFn = $init;
         parent::__construct($configuration, $output, $eventEmitter);
     }

@@ -36,8 +36,7 @@ class Environment
         InputDefinition $definition,
         EventEmitterInterface $emitter,
         array $options
-    )
-    {
+    ) {
         $this->definition = $definition;
         $this->eventEmitter = $emitter;
         $this->options = $options;
