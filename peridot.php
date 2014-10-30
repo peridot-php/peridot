@@ -2,7 +2,6 @@
 
 use Evenement\EventEmitterInterface;
 use Peridot\Console\Environment;
-use Peridot\Reporter\CodeCoverageReporters;
 use Peridot\Reporter\ReporterInterface;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -10,8 +9,6 @@ use Symfony\Component\Console\Input\InputOption;
  * Demonstrate registering a runner via peridot config
  */
 return function(EventEmitterInterface $emitter) {
-    (new CodeCoverageReporters($emitter))->register();
-
     $counts = ['pass' => 0, 'fail' => 0, 'pending' => 0];
 
     $emitter->on('test.failed', function() use (&$counts) {
@@ -26,8 +23,8 @@ return function(EventEmitterInterface $emitter) {
         $counts['pending']++;
     });
 
-    $shouldCover = getenv('COVER');
-    if ($shouldCover) {
+    $codeCoverage = getenv('CODE_COVERAGE');
+    if ($codeCoverage == 'html') {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
             $coverage->start('peridot');
@@ -37,6 +34,21 @@ return function(EventEmitterInterface $emitter) {
             $coverage->stop();
             $writer = new PHP_CodeCoverage_Report_HTML();
             $writer->process($coverage, __DIR__ . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'report');
+        });
+    }
+
+    if ($codeCoverage == 'clover') {
+        $coverage = new PHP_CodeCoverage();
+        $emitter->on('runner.start', function() use ($coverage) {
+            $coverage->start('peridot');
+        });
+
+        $emitter->on('runner.end', function() use ($coverage) {
+            $coverage->stop();
+            $writer = new PHP_CodeCoverage_Report_Clover();
+            $writer->process(
+                $coverage, __DIR__ . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR
+                . 'logs' . DIRECTORY_SEPARATOR . 'clover.xml');
         });
     }
 

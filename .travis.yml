@@ -17,8 +17,7 @@ install:
   - composer install --prefer-source
 
 script:
-  - bin/peridot specs/
-  - bin/peridot specs/ -r clover-code-coverage --code-coverage-path build/logs/clover.xml
+  - CODE_COVERAGE=clover bin/peridot specs/
 
 after_script:
   - php vendor/bin/coveralls
