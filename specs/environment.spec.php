@@ -26,6 +26,13 @@ describe('Environment', function() {
             assert($this->environment->load('somedefault.php'), "load should return true on success");
         });
 
+        it('should return true when it includes the default config file', function() {
+            $environment = new Environment($this->definition, $this->emitter, []);
+            $path = __DIR__ . '/../fixtures/config2.php';
+            $result = $environment->load($path);
+            assert($result, "default config should have loaded");
+        });
+
         it('should return false when it cant include the config file', function() {
             $environment = new Environment($this->definition, $this->emitter, ['c' => 'nope.php']);
             assert($environment->load('somedefault.php') == false, "load should return false on failure");
