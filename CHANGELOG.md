@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.2.3
+
+* psr2 compliance use psr2 config in code sniffer *2014-10-30*
+
+
 #### 1.2.2
 
 * Added coveralls.io support *2014-10-30*
