@@ -1,6 +1,8 @@
 <?php
+
 use Evenement\EventEmitterInterface;
 use Peridot\Console\Environment;
+use Peridot\Reporter\CodeCoverageReporters;
 use Peridot\Reporter\ReporterInterface;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -8,6 +10,8 @@ use Symfony\Component\Console\Input\InputOption;
  * Demonstrate registering a runner via peridot config
  */
 return function(EventEmitterInterface $emitter) {
+    (new CodeCoverageReporters($emitter))->register();
+
     $counts = ['pass' => 0, 'fail' => 0, 'pending' => 0];
 
     $emitter->on('test.failed', function() use (&$counts) {

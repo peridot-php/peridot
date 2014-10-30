@@ -7,13 +7,18 @@ php:
   - hhvm
   - hhvm-nightly
 
-install:
-    - composer install --prefer-source
-
-script: bin/peridot specs/
-
 matrix:
   fast_finish: true
   allow_failures:
     - php: hhvm
     - php: hhvm-nightly
+
+install:
+  - composer install --prefer-source
+
+script:
+  - bin/peridot specs/
+  - bin/peridot specs/ -r clover-code-coverage --code-coverage-path build/logs/clover.xml
+
+after_script:
+  - php vendor/bin/coveralls
