@@ -5,9 +5,9 @@ use Peridot\Runner\Context;
 describe('Context', function() {
 
     beforeEach(function() {
-        $reflection = new ReflectionClass('Peridot\Runner\Context');
-        $context = $reflection->newInstanceWithoutConstructor();
-        $construct = $reflection->getConstructor();
+        $this->reflection = new ReflectionClass('Peridot\Runner\Context');
+        $context = $this->reflection->newInstanceWithoutConstructor();
+        $construct = $this->reflection->getConstructor();
         $construct->setAccessible(true);
         $construct->invoke($context);
         $this->context = $context;
@@ -86,6 +86,18 @@ describe('Context', function() {
     });
 
     describe('::getInstance()', function() {
+
+        beforeEach(function() {
+            $this->property = $this->reflection->getProperty('instance');
+            $this->property->setAccessible(true);
+            $this->previous = $this->property->getValue();
+            $this->property->setValue(null);
+        });
+
+        afterEach(function() {
+            $this->property->setValue($this->previous);
+        });
+
         it("should return a singleton instance of Context", function() {
             $context = Context::getInstance();
             assert($context instanceof Context, "getInstance should return a Context");
