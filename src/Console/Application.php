@@ -33,7 +33,7 @@ class Application extends ConsoleApplication
             fwrite(STDERR, "Configuration file specified but does not exist" . PHP_EOL);
             exit(1);
         }
-        $this->environment->getEventEmitter()->emit('peridot.start', [$this->environment]);
+        $this->environment->getEventEmitter()->emit('peridot.start', [$this->environment, $this]);
         parent::__construct(Version::NAME, Version::NUMBER);
     }
 
