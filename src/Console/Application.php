@@ -112,12 +112,12 @@ class Application extends ConsoleApplication
     /**
      * Load the configured DSL.
      *
-     * @param $configuration
+     * @param $dsl
      */
     public function loadDsl($dslPath)
     {
         if (file_exists($dslPath)) {
-            include $dslPath;
+            include_once $dslPath;
         }
     }
 
