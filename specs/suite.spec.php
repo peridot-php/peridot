@@ -148,6 +148,20 @@ describe("Suite", function() {
         });
 
     });
+
+    describe('->setTests()', function() {
+        beforeEach(function() {
+            $this->suite = new Suite("test suite", function() {});
+            $test = new Test("test", function() {});
+            $this->suite->addTest($test);
+        });
+
+        it('should set the tests to the passed in value', function() {
+            $this->suite->setTests([]);
+            $tests = $this->suite->getTests();
+            assert(empty($tests), "tests should be empty");
+        });
+    });
 });
 
 class SuiteScope extends Scope
