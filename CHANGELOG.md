@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.3.0
+
+* peridot.start event includes application as second argument *2014-10-30*
+
+
 #### 1.2.3
 
 * psr2 compliance use psr2 config in code sniffer *2014-10-30*
