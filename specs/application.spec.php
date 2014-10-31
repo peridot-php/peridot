@@ -1,6 +1,22 @@
 <?php
+use Peridot\Console\Application;
+
 describe('Application', function() {
     include __DIR__ . '/shared/application-tester.php';
+
+    context('during construction', function() {
+        it('should emit peridot.start with environment and self', function() {
+            $ref = null;
+            $environment = null;
+            $this->emitter->on('peridot.start', function($env, $r) use (&$ref, &$environment) {
+                $ref = $r;
+                $environment = $env;
+            });
+            $application = new Application($this->environment);
+            assert($ref === $application, "application reference should be emitted");
+            assert($environment === $this->environment, "environment reference should be emitted");
+        });
+    });
 
     describe('->loadDsl()', function() {
         it('should include a file if it exists', function() {
