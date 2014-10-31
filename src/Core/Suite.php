@@ -44,6 +44,16 @@ class Suite extends AbstractTest
     }
 
     /**
+     * Set suite tests
+     *
+     * @param array $tests
+     */
+    public function setTests(array $tests)
+    {
+        $this->tests = $tests;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @param callable $setupFn
