@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.3.1
+
+* Include DSLs only once *2014-10-31*
+
+
 #### 1.3.0
 
 * peridot.start event includes application as second argument *2014-10-30*
