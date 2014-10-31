@@ -1,11 +1,11 @@
 <?php
 namespace Peridot\Console;
 
-use Peridot\Configuration;
 use Peridot\Reporter\ReporterFactory;
 use Peridot\Runner\Context;
 use Peridot\Runner\Runner;
 use Symfony\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Command\Command as ConsoleCommand;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -79,6 +79,25 @@ class Application extends ConsoleApplication
 
         return $exitCode;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * This implementation of run will not over write commands
+     * in the internal collection if one of the same name already
+     * exists
+     *
+     * @param \Symfony\Component\Console\Command\Command $command
+     * @return \Symfony\Component\Console\Command\Command
+     */
+    public function add(ConsoleCommand $command)
+    {
+        if ($this->has($command->getName())) {
+            return $this->get($command->getName());
+        }
+        return parent::add($command);
+    }
+
 
     /**
      * Fetch the ArgvInput used by Peridot. If any exceptions are thrown due to

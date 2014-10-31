@@ -42,4 +42,21 @@ describe('Application', function() {
             assert(!is_null($input), "getInput should return an input");
         });
     });
+
+    describe('->add()', function() {
+        it('should not overwrite a command of the same name', function() {
+            $tester = new TestCommand();
+            $this->application->add($tester);
+            $again = $this->application->add($tester);
+            assert($tester === $again, "expected first command instance");
+        });
+    });
 });
+
+class TestCommand extends \Symfony\Component\Console\Command\Command
+{
+    public function __construct()
+    {
+        parent::__construct('tester');
+    }
+}
