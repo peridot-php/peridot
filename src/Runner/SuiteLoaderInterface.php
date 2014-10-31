@@ -25,4 +25,11 @@ interface SuiteLoaderInterface
      * @param $path
      */
     public function load($path);
+
+    /**
+     * Should return true if the suite loader has already loaded a path
+     *
+     * @return bool
+     */
+    public function hasLoaded($path);
 }

@@ -37,6 +37,23 @@ describe("SuiteLoader", function() {
             $exists = function_exists('notaspec');
             assert($exists, 'loader should have included file matching glob pattern');
         });
+
+        context('when it has already loaded a path', function() {
+            it('should not load twice', function() {
+                $loader = new SuiteLoader('loadme2.php');
+                $loader->load($this->fixtures);
+                $loader->load($this->fixtures);
+            });
+        });
+    });
+
+    describe('->hasLoaded()', function() {
+        it('should return true after a load has happend', function() {
+            $loader = new SuiteLoader('loadme.php');
+            assert(!$loader->hasLoaded($this->fixtures), "hasLoaded() should default to false");
+            $loader->load($this->fixtures);
+            assert($loader->hasLoaded($this->fixtures), "hasLoaded() should be true");
+        });
     });
 
 });

@@ -15,6 +15,11 @@ class SuiteLoader implements SuiteLoaderInterface
     protected $pattern;
 
     /**
+     * @var array
+     */
+    protected $loadedPaths = [];
+
+    /**
      * @param string $pattern
      */
     public function __construct($pattern)
@@ -29,10 +34,25 @@ class SuiteLoader implements SuiteLoaderInterface
      */
     public function load($path)
     {
+        if ($this->hasLoaded($path)) {
+            return;
+        }
+
         $tests = $this->getTests($path);
+        $this->loadedPaths[$path] = true;
         foreach ($tests as $test) {
             include $test;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function hasLoaded($path)
+    {
+        return array_key_exists($path, $this->loadedPaths);
     }
 
     /**
@@ -54,6 +74,8 @@ class SuiteLoader implements SuiteLoaderInterface
 
         return $this->globRecursive($pattern);
     }
+
+
 
     /**
      * Simple recursive glob
