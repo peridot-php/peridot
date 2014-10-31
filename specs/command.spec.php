@@ -17,8 +17,16 @@ describe('Command', function() {
             assert($loader === $this->command->getLoader(), 'loader should be accessible from command');
         });
 
-        it('should allow getting a default loader', function() {
-            assert(!is_null($this->command->getLoader()), "command should have default loader");
+        context('when getting a default loader', function() {
+            it('should allow getting a default loader', function() {
+                assert(!is_null($this->command->getLoader()), "command should have default loader");
+            });
+
+            it('should store the default reference', function() {
+                $loader = $this->command->getLoader();
+                $loader2 = $this->command->getLoader();
+                assert($loader2 === $loader, "getLoader should return same loader");
+            });
         });
     });
 
