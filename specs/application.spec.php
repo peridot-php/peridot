@@ -23,6 +23,11 @@ describe('Application', function() {
             $this->application->loadDsl(__DIR__ . '/../fixtures/rad.dsl.php');
             assert(function_exists('peridotRadDescribe'), 'dsl should have been included');
         });
+
+        it('should not include the same dsl twice', function() {
+            $this->application->loadDsl(__DIR__ . '/../fixtures/rad.dsl2.php');
+            $this->application->loadDsl(__DIR__ . '/../fixtures/rad.dsl2.php');
+        });
     });
 
     describe('->getCommandName()', function() {
