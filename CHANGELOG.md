@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.4.0
+
+* Added Suite::setTests method *2014-10-31*
+
+
 #### 1.3.1
 
 * Include DSLs only once *2014-10-31*
