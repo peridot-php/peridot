@@ -204,6 +204,16 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
+     * Return true if reporter is being used on windows
+     *
+     * @return bool
+     */
+    protected function isOnWindows()
+    {
+        return DIRECTORY_SEPARATOR == '\\';
+    }
+
+    /**
      * Register events tracking state relevant to all reporters.
      */
     private function registerEvents()
@@ -225,16 +235,6 @@ abstract class AbstractBaseReporter implements ReporterInterface
         $this->eventEmitter->on('test.pending', function () {
             $this->pending++;
         });
-    }
-
-    /**
-     * Return true if reporter is being used on windows
-     *
-     * @return bool
-     */
-    private function isOnWindows()
-    {
-        return DIRECTORY_SEPARATOR == '\\';
     }
 
     /**

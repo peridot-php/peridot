@@ -107,7 +107,7 @@ class Context
     public static function getInstance()
     {
         if (is_null(self::$instance)) {
-            self::$instance = new static();
+            self::$instance = new Context();
         }
 
         return self::$instance;
