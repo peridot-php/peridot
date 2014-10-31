@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.3.2
+
+* suite loader will not load same path twice *2014-10-31*
+
+
 #### 1.3.1
 
 * Include DSLs only once *2014-10-31*
