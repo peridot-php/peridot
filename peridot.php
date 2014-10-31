@@ -27,6 +27,7 @@ return function(EventEmitterInterface $emitter) {
     if ($codeCoverage == 'html') {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
+            $coverage->filter()->addFileToBlacklist(__DIR__. '/src/Dsl.php');
             $coverage->start('peridot');
         });
 
@@ -40,6 +41,7 @@ return function(EventEmitterInterface $emitter) {
     if ($codeCoverage == 'clover') {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
+            $coverage->filter()->addFileToBlacklist(__DIR__. '/src/Dsl.php');
             $coverage->start('peridot');
         });
 
