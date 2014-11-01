@@ -10,6 +10,18 @@ namespace Peridot\Core;
 class Scope
 {
     /**
+     * The "bind" behavior indicates that a scope should
+     * bind to a callable.
+     */
+    const BEHAVIOR_BIND = 1;
+
+    /**
+     * The "ignore" behavior indicates that a scope should
+     * not bind to a callable
+     */
+    const BEHAVIOR_IGNORE = 2;
+
+    /**
      * @var \SplObjectStorage
      */
     protected $peridotChildScopes;
@@ -48,15 +60,28 @@ class Scope
     }
 
     /**
+     * Lookup properties on child scopes. Since arrays cannot
+     * be returned as references in this way, they are returned
+     * as ArrayObjects and set on their original scope as an ArrayObject.
+     *
      * @param $name
      */
-    public function __get($name)
+    public function &__get($name)
     {
-        list($result, $found) = $this->peridotLookupScopeProperty($this, $name);
+        list($result, $found, $scope) = $this->peridotLookupScopeProperty($this, $name);
         if ($found) {
+            if (is_array($result)) {
+                $result = new \ArrayObject($result);
+                $scope->$name = $result;
+            }
             return $result;
         }
         throw new \DomainException("Scope property $name not found");
+    }
+
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
     }
 
     /**
@@ -102,7 +127,7 @@ class Scope
         $children = $scope->peridotGetChildScopes();
         foreach ($children as $childScope) {
             if (property_exists($childScope, $propertyName)) {
-                $accumulator = [$childScope->$propertyName, true];
+                $accumulator = [$childScope->$propertyName, true, $childScope];
             }
             $this->peridotLookupScopeProperty($childScope, $propertyName, $accumulator);
         }

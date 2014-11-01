@@ -20,8 +20,9 @@ interface TestInterface
      * Add a function to execute before the test runs
      *
      * @param callable $setupFn
+     * @param int $behavior - a Scope behavior constant
      */
-    public function addSetupFunction(callable $setupFn);
+    public function addSetupFunction(callable $setupFn, $behavior);
 
     /**
      * Return all registered setup functions
@@ -34,8 +35,9 @@ interface TestInterface
      * Add a function to execute after the test runs
      *
      * @param callable $tearDownFn
+     * @param int $behavior - a Scope behavior constant
      */
-    public function addTearDownFunction(callable $tearDownFn);
+    public function addTearDownFunction(callable $tearDownFn, $behavior);
 
     /**
      * Return all registered tear down functions

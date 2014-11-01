@@ -71,17 +71,23 @@ describe('Context', function() {
 
     describe('->addSetupFunction()', function() {
         it('should register an beforeEach callback on the current suite', function() {
-            $before = function() {};
+            $before = function() {
+                return "result";
+            };
             $this->context->addSetupFunction($before);
-            assert($this->context->getCurrentSuite()->getSetupFunctions()[0] === $before, "expected addSetupFunction to register setup function");
+            $result = call_user_func($this->context->getCurrentSuite()->getSetupFunctions()[0]);
+            assert("result" === $result, "expected addSetupFunction to register setup function");
         });
     });
 
     describe('->addTearDownFunction()', function() {
        it('should register an afterEach callback on the current suite', function() {
-           $after = function() {};
+           $after = function() {
+               return "result";
+           };
            $this->context->addTearDownFunction($after);
-           assert($this->context->getCurrentSuite()->getTearDownFunctions()[0] === $after, "expected addSetupFunction to register tear down function");
+           $result = call_user_func($this->context->getCurrentSuite()->getTearDownFunctions()[0]);
+           assert("result" === $result, "expected addSetupFunction to register tear down function");
        });
     });
 

@@ -124,6 +124,20 @@ describe("Test", function() {
                assert($neverRan, 'pending spec should not have run');
            });
         });
+
+        it('should run setup functions in order', function() {
+            $test = new Test("test", function() {});
+            $log = '';
+            $test->addSetupFunction(function() use (&$log) {
+                $log = "thing";
+            });
+            $test->addSetupFunction(function() use (&$log) {
+                $log = "thing2";
+            });
+            $test->run(new TestResult(new EventEmitter()));
+            $expected = "thing2";
+            assert($expected == $log, "expected $expected, got $log");
+        });
     });
 
     describe("->getTitle()", function() {
