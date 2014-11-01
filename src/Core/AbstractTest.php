@@ -74,10 +74,7 @@ abstract class AbstractTest implements TestInterface
      */
     public function addSetupFunction(callable $setupFn, $behavior = Scope::BEHAVIOR_BIND)
     {
-        $fn = $setupFn;
-        if ($behavior == Scope::BEHAVIOR_BIND) {
-            $fn = Closure::bind($setupFn, $this->scope, $this->scope);
-        }
+        $fn = $this->scope->peridotBindTo($setupFn, $behavior);
         array_push($this->setUpFns, $fn);
     }
 
@@ -88,10 +85,7 @@ abstract class AbstractTest implements TestInterface
      */
     public function addTearDownFunction(callable $tearDownFn, $behavior = Scope::BEHAVIOR_BIND)
     {
-        $fn = $tearDownFn;
-        if ($behavior == Scope::BEHAVIOR_BIND) {
-            $fn = Closure::bind($tearDownFn, $this->scope, $this->scope);
-        }
+        $fn = $this->scope->peridotBindTo($tearDownFn, $behavior);
         array_push($this->tearDownFns, $fn);
     }
 

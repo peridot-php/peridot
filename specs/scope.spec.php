@@ -20,6 +20,30 @@ describe('Scope', function() {
         });
     });
 
+    describe('->peridotBindTo()', function() {
+        it('should bind a callable to the scope', function() {
+            $callable = function() {
+                return $this->name;
+            };
+            $scope = new TestScope();
+            $bound = $scope->peridotBindTo($callable);
+            $result = $bound();
+            assert($result == "brian", "scope should have been bound to callable");
+        });
+
+        context('when scope behavior is Scope::BEHAVIOR_IGNORE', function() {
+            it("it should ignore binding", function() {
+                $callable = function() {
+                    return isset($this->name);
+                };
+                $scope = new TestScope();
+                $bound = $scope->peridotBindTo($callable, Scope::BEHAVIOR_IGNORE);
+                $result = $bound();
+                assert(! $result, "name property should not exist on callable");
+            });
+        });
+    });
+
     context("when calling a mixed in method", function() {
         it('should throw an exception when method not found', function() {
             $exception = null;

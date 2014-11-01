@@ -1,6 +1,8 @@
 <?php
 namespace Peridot\Core;
 
+use Closure;
+
 /**
  * Property bag for scoping tests "instance variables". This exists to
  * prevent tests from creating instance variable collisions.
@@ -17,7 +19,7 @@ class Scope
 
     /**
      * The "ignore" behavior indicates that a scope should
-     * not bind to a callable
+     * not bind to a callable.
      */
     const BEHAVIOR_IGNORE = 2;
 
@@ -46,13 +48,32 @@ class Scope
     }
 
     /**
+     * Bind a callable to the scope.
+     *
+     * @param callable $callable
+     * @return callable
+     */
+    public function peridotBindTo(callable $callable, $behavior = self::BEHAVIOR_BIND)
+    {
+        if ($behavior == self::BEHAVIOR_IGNORE) {
+            return $callable;
+        }
+
+        return Closure::bind($callable, $this, $this);
+    }
+
+    /**
      * @param $name
      * @param $arguments
      * @return mixed
      */
     public function __call($name, $arguments)
     {
-        list($result, $found) = $this->peridotLookupScopeMethod($this, $name, $arguments);
+        list($result, $found) = $this->peridotScanChildren($this, function ($childScope, &$accumulator) use ($name, $arguments) {
+            if (method_exists($childScope, $name)) {
+                $accumulator = [call_user_func_array([$childScope, $name], $arguments), true];
+            }
+        });
         if ($found) {
             return $result;
         }
@@ -68,7 +89,11 @@ class Scope
      */
     public function &__get($name)
     {
-        list($result, $found, $scope) = $this->peridotLookupScopeProperty($this, $name);
+        list($result, $found, $scope) = $this->peridotScanChildren($this, function ($childScope, &$accumulator) use ($name) {
+            if (property_exists($childScope, $name)) {
+                $accumulator = [$childScope->$name, true, $childScope];
+            }
+        });
         if ($found) {
             if (is_array($result)) {
                 $result = new \ArrayObject($result);
@@ -79,22 +104,16 @@ class Scope
         throw new \DomainException("Scope property $name not found");
     }
 
-    public function __set($name, $value)
-    {
-        $this->$name = $value;
-    }
-
     /**
-     * Return a method result by searching against a scope and
-     * all of its children
+     * Scan child scopes and execute a function against each one passing an
+     * accumulator reference along.
      *
      * @param Scope $scope
-     * @param $methodName
-     * @param $arguments
-     * @param $accumulator
-     * @return array index 0 is the result and index 1 is whether the method was found
+     * @param callable $fn
+     * @param array $accumulator
+     * @return array
      */
-    protected function peridotLookupScopeMethod(Scope $scope, $methodName, $arguments, &$accumulator = [])
+    protected function peridotScanChildren(Scope $scope, callable $fn, &$accumulator = [])
     {
         if (! empty($accumulator)) {
             return $accumulator;
@@ -102,34 +121,8 @@ class Scope
 
         $children = $scope->peridotGetChildScopes();
         foreach ($children as $childScope) {
-            if (method_exists($childScope, $methodName)) {
-                $accumulator = [call_user_func_array([$childScope, $methodName], $arguments), true];
-            }
-            $this->peridotLookupScopeMethod($childScope, $methodName, $arguments, $accumulator);
-        }
-        return $accumulator;
-    }
-
-    /**
-     * Return a property by searching against a scope and
-     * all of its children
-     *
-     * @param Scope $scope
-     * @param $propertyName
-     * @return array index 0 is the result and index 1 is whether the property was found
-     */
-    protected function peridotLookupScopeProperty(Scope $scope, $propertyName, &$accumulator = [])
-    {
-        if (! empty($accumulator)) {
-            return $accumulator;
-        }
-
-        $children = $scope->peridotGetChildScopes();
-        foreach ($children as $childScope) {
-            if (property_exists($childScope, $propertyName)) {
-                $accumulator = [$childScope->$propertyName, true, $childScope];
-            }
-            $this->peridotLookupScopeProperty($childScope, $propertyName, $accumulator);
+            $fn($childScope, $accumulator);
+            $this->peridotScanChildren($childScope, $fn, $accumulator);
         }
         return $accumulator;
     }
