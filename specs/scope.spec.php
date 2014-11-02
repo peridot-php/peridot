@@ -20,6 +20,30 @@ describe('Scope', function() {
         });
     });
 
+    describe('->peridotBindTo()', function() {
+        it('should bind a callable to the scope', function() {
+            $callable = function() {
+                return $this->name;
+            };
+            $scope = new TestScope();
+            $bound = $scope->peridotBindTo($callable);
+            $result = $bound();
+            assert($result == "brian", "scope should have been bound to callable");
+        });
+
+        context('when scope behavior is Scope::BEHAVIOR_IGNORE', function() {
+            it("it should ignore binding", function() {
+                $callable = function() {
+                    return isset($this->name);
+                };
+                $scope = new TestScope();
+                $bound = $scope->peridotBindTo($callable, Scope::BEHAVIOR_IGNORE);
+                $result = $bound();
+                assert(! $result, "name property should not exist on callable");
+            });
+        });
+    });
+
     context("when calling a mixed in method", function() {
         it('should throw an exception when method not found', function() {
             $exception = null;
@@ -83,6 +107,13 @@ describe('Scope', function() {
             assert(!is_null($exception), 'exception should not be null');
         });
 
+        it('should return an ArrayObject for an array', function() {
+            $this->scope->peridotAddChildScope(new TestScope());
+            $data = $this->scope->data;
+            assert($data instanceof ArrayObject, "data should be array object");
+            assert($data['one'] == 1, "should be able to access as array");
+        });
+
         context("and the desired property is on a child scope's child", function() {
             it ("should look up property on the child scope's child", function() {
                 $testScope = new TestScope();
@@ -128,6 +159,13 @@ describe('Scope', function() {
 class TestScope extends Scope
 {
     public $name = "brian";
+
+    public $data;
+
+    public function __construct()
+    {
+        $this->data = ['one' => 1, 'two' => 2];
+    }
 
     public function getNumber()
     {

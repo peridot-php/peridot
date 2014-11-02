@@ -48,20 +48,6 @@ class Test extends AbstractTest
     }
 
     /**
-     * Execute this test's tear down functions.
-     */
-    protected function runTearDown()
-    {
-        foreach ($this->tearDownFns as $tearDown) {
-            try {
-                $tearDown();
-            } catch (Exception $e) {
-                continue;
-            }
-        }
-    }
-
-    /**
      * Attempt to execute setup functions and run the test definition
      *
      * @param TestResult $result
@@ -76,6 +62,20 @@ class Test extends AbstractTest
             $result->passTest($this);
         } catch (Exception $e) {
             $result->failTest($this, $e);
+        }
+    }
+
+    /**
+     * Execute this test's tear down functions.
+     */
+    protected function runTearDown()
+    {
+        foreach ($this->tearDownFns as $tearDown) {
+            try {
+                $tearDown();
+            } catch (Exception $e) {
+                continue;
+            }
         }
     }
 }

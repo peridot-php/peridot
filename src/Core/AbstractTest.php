@@ -3,6 +3,7 @@
 namespace Peridot\Core;
 
 use Closure;
+use Exception;
 
 /**
  * Base class for Peridot Suites and Tests
@@ -71,13 +72,10 @@ abstract class AbstractTest implements TestInterface
      *
      * @param callable $setupFn
      */
-    public function addSetupFunction(callable $setupFn)
+    public function addSetupFunction(callable $setupFn, $behavior = Scope::BEHAVIOR_BIND)
     {
-        array_unshift($this->setUpFns, Closure::bind(
-            $setupFn,
-            $this->scope,
-            $this->scope
-        ));
+        $fn = $this->scope->peridotBindTo($setupFn, $behavior);
+        array_push($this->setUpFns, $fn);
     }
 
     /**
@@ -85,13 +83,10 @@ abstract class AbstractTest implements TestInterface
      *
      * @param callable $tearDownFn
      */
-    public function addTearDownFunction(callable $tearDownFn)
+    public function addTearDownFunction(callable $tearDownFn, $behavior = Scope::BEHAVIOR_BIND)
     {
-        array_unshift($this->tearDownFns, Closure::bind(
-            $tearDownFn,
-            $this->scope,
-            $this->scope
-        ));
+        $fn = $this->scope->peridotBindTo($tearDownFn, $behavior);
+        array_push($this->tearDownFns, $fn);
     }
 
     /**

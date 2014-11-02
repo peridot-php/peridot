@@ -54,26 +54,6 @@ class Suite extends AbstractTest
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param callable $setupFn
-     */
-    public function addSetupFunction(callable $setupFn)
-    {
-        $this->setUpFns[] = $setupFn;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param callable $tearDownFn
-     */
-    public function addTearDownFunction(callable $tearDownFn)
-    {
-        $this->tearDownFns[] = $tearDownFn;
-    }
-
-    /**
      * Run all the specs belonging to the suite
      *
      * @param TestResult $result
@@ -113,15 +93,12 @@ class Suite extends AbstractTest
      */
     public function bindTest(TestInterface $test)
     {
-        $childScopes = $this->getScope()->peridotGetChildScopes();
-        foreach ($childScopes as $scope) {
-            $test->getScope()->peridotAddChildScope($scope);
-        }
+        $test->getScope()->peridotAddChildScope($this->scope);
         foreach ($this->setUpFns as $fn) {
-            $test->addSetupFunction($fn);
+            $test->addSetupFunction($fn, Scope::BEHAVIOR_IGNORE);
         }
         foreach ($this->tearDownFns as $fn) {
-            $test->addTearDownFunction($fn);
+            $test->addTearDownFunction($fn, Scope::BEHAVIOR_IGNORE);
         }
     }
 

@@ -36,13 +36,15 @@ describe("Suite", function() {
                 assert($this->log == "setup", "should have setup in log");
             };
 
-            $suite->addTest(new ItWasRun("should have log", $fn));
-            $suite->addTest(new ItWasRun("should also have log", $fn));
+            $suite->addTest(new Test("should have log", $fn));
+            $suite->addTest(new Test("should also have log", $fn));
 
             $result = new TestResult($this->eventEmitter);
             $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
-            assert('2 run, 0 failed' == $result->getSummary(), "result summary should show 2/0");
+            $expected = "2 run, 0 failed";
+            $actual = $result->getSummary();
+            assert($expected == $actual, "expected $expected, got $actual");
         });
 
         it('should pass child scopes to tests', function() {
@@ -66,8 +68,8 @@ describe("Suite", function() {
 
             $fn = function() {};
 
-            $test1 = new ItWasRun("should have log", $fn);
-            $test2 = new ItWasRun("should have log too", $fn);
+            $test1 = new Test("should have log", $fn);
+            $test2 = new Test("should have log too", $fn);
             $suite->addTest($test1);
             $suite->addTest($test2);
 
@@ -75,7 +77,7 @@ describe("Suite", function() {
             $suite->setEventEmitter($this->eventEmitter);
             $suite->run($result);
 
-            assert('torntorn' == $test1->log() . $test2->log(), "tear down should have run for both tests");
+            assert('torntorn' == $test1->getScope()->log . $test2->getScope()->log, "tear down should have run for both tests");
         });
 
         it("should set pending status on tests if not null", function() {
