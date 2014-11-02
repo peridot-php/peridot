@@ -22,7 +22,7 @@ class RoboFile extends \Robo\Tasks
     {
         $this->yell("Releasing Peridot");
 
-        $this->taskExec("git pull origin master")->run();
+        $this->taskExec("git pull upstream master")->run();
 
         $bump = $this->version($version);
         $this->phar($site);
@@ -31,8 +31,8 @@ class RoboFile extends \Robo\Tasks
 
         $this->taskExec('git commit -am "release ' . $bump . '"')->run();
         $this->taskExec('git tag -a ' . $bump . ' -m "release ' . $bump . '"')->run();
-        $this->taskExec("git push origin $bump")->run();
-        $this->taskExec("git push origin master")->run();
+        $this->taskExec("git push upstream $bump")->run();
+        $this->taskExec("git push upstream master")->run();
 
         $this->publish($site);
     }
