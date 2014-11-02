@@ -1,5 +1,11 @@
 # Changelog
 
+#### 1.5.0
+
+* Introduce scope behaviors *2014-11-02*
+* Fix order of execution for setup and teardown functions *2014-11-02*
+
+
 #### 1.4.0
 
 * Added Suite::setTests method *2014-10-31*
