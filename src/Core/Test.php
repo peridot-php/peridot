@@ -55,9 +55,7 @@ class Test extends AbstractTest
     protected function executeTest(TestResult $result)
     {
         try {
-            foreach ($this->setUpFns as $setUp) {
-                $setUp();
-            }
+            $this->runSetup();
             call_user_func($this->getDefinition());
             $result->passTest($this);
         } catch (Exception $e) {
@@ -66,16 +64,66 @@ class Test extends AbstractTest
     }
 
     /**
+     * Excecute the test's setup functions
+     */
+    protected function runSetup()
+    {
+        $this->forEachNodeTopToBottom(function (TestInterface $node) {
+            $setups = $node->getSetupFunctions();
+            foreach ($setups as $setup) {
+                $setup();
+            }
+        });
+    }
+
+    /**
      * Execute this test's tear down functions.
      */
     protected function runTearDown()
     {
-        foreach ($this->tearDownFns as $tearDown) {
-            try {
-                $tearDown();
-            } catch (Exception $e) {
-                continue;
+        $this->forEachNodeBottomToTop(function (TestInterface $test) {
+            $tearDowns = $test->getTearDownFunctions();
+            foreach ($tearDowns as $tearDown) {
+                try {
+                    $tearDown();
+                } catch (Exception $e) {
+                    continue;
+                }
             }
+        });
+    }
+
+    /**
+     * Execute a callback for each node in this test, starting
+     * at the bottom of the tree.
+     *
+     * @param callable $fn
+     */
+    protected function forEachNodeBottomToTop(callable $fn)
+    {
+        $node = $this;
+        while (!is_null($node)) {
+            $fn($node);
+            $node = $node->getParent();
+        }
+    }
+
+    /**
+     * Execute a callback for each node in this test, starting
+     * at the top of the tree.
+     *
+     * @param callable $fn
+     */
+    protected function forEachNodeTopToBottom(callable $fn)
+    {
+        $node = $this;
+        $nodes = [];
+        while (!is_null($node)) {
+            array_unshift($nodes, $node);
+            $node = $node->getParent();
+        }
+        foreach ($nodes as $node) {
+            $fn($node);
         }
     }
 }

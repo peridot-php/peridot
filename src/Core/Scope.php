@@ -12,18 +12,6 @@ use Closure;
 class Scope
 {
     /**
-     * The "bind" behavior indicates that a scope should
-     * bind to a callable.
-     */
-    const BEHAVIOR_BIND = 1;
-
-    /**
-     * The "ignore" behavior indicates that a scope should
-     * not bind to a callable.
-     */
-    const BEHAVIOR_IGNORE = 2;
-
-    /**
      * @var \SplObjectStorage
      */
     protected $peridotChildScopes;
@@ -53,12 +41,8 @@ class Scope
      * @param callable $callable
      * @return callable
      */
-    public function peridotBindTo(callable $callable, $behavior = self::BEHAVIOR_BIND)
+    public function peridotBindTo(callable $callable)
     {
-        if ($behavior == self::BEHAVIOR_IGNORE) {
-            return $callable;
-        }
-
         return Closure::bind($callable, $this, $this);
     }
 
@@ -81,9 +65,7 @@ class Scope
     }
 
     /**
-     * Lookup properties on child scopes. Since arrays cannot
-     * be returned as references in this way, they are returned
-     * as ArrayObjects and set on their original scope as an ArrayObject.
+     * Lookup properties on child scopes.
      *
      * @param $name
      */
@@ -95,10 +77,6 @@ class Scope
             }
         });
         if ($found) {
-            if (is_array($result)) {
-                $result = new \ArrayObject($result);
-                $scope->$name = $result;
-            }
             return $result;
         }
         throw new \DomainException("Scope property $name not found");
