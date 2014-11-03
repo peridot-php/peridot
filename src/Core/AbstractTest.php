@@ -72,9 +72,9 @@ abstract class AbstractTest implements TestInterface
      *
      * @param callable $setupFn
      */
-    public function addSetupFunction(callable $setupFn, $behavior = Scope::BEHAVIOR_BIND)
+    public function addSetupFunction(callable $setupFn)
     {
-        $fn = $this->scope->peridotBindTo($setupFn, $behavior);
+        $fn = $this->scope->peridotBindTo($setupFn);
         array_push($this->setUpFns, $fn);
     }
 
@@ -83,9 +83,9 @@ abstract class AbstractTest implements TestInterface
      *
      * @param callable $tearDownFn
      */
-    public function addTearDownFunction(callable $tearDownFn, $behavior = Scope::BEHAVIOR_BIND)
+    public function addTearDownFunction(callable $tearDownFn)
     {
-        $fn = $this->scope->peridotBindTo($tearDownFn, $behavior);
+        $fn = $this->scope->peridotBindTo($tearDownFn);
         array_push($this->tearDownFns, $fn);
     }
 
@@ -106,12 +106,7 @@ abstract class AbstractTest implements TestInterface
      */
     public function getDefinition()
     {
-        $boundDefinition = Closure::bind(
-            $this->definition,
-            $this->scope,
-            $this->scope
-        );
-        return $boundDefinition;
+        return $this->scope->peridotBindTo($this->definition);
     }
 
     /**

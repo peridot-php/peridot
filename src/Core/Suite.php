@@ -95,10 +95,10 @@ class Suite extends AbstractTest
     {
         $test->getScope()->peridotAddChildScope($this->scope);
         foreach ($this->setUpFns as $fn) {
-            $test->addSetupFunction($fn, Scope::BEHAVIOR_IGNORE);
+            $test->addSetupFunction($fn);
         }
         foreach ($this->tearDownFns as $fn) {
-            $test->addTearDownFunction($fn, Scope::BEHAVIOR_IGNORE);
+            $test->addTearDownFunction($fn);
         }
     }
 

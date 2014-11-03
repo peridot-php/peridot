@@ -12,18 +12,6 @@ use Closure;
 class Scope
 {
     /**
-     * The "bind" behavior indicates that a scope should
-     * bind to a callable.
-     */
-    const BEHAVIOR_BIND = 1;
-
-    /**
-     * The "ignore" behavior indicates that a scope should
-     * not bind to a callable.
-     */
-    const BEHAVIOR_IGNORE = 2;
-
-    /**
      * @var \SplObjectStorage
      */
     protected $peridotChildScopes;
@@ -53,12 +41,8 @@ class Scope
      * @param callable $callable
      * @return callable
      */
-    public function peridotBindTo(callable $callable, $behavior = self::BEHAVIOR_BIND)
+    public function peridotBindTo(callable $callable)
     {
-        if ($behavior == self::BEHAVIOR_IGNORE) {
-            return $callable;
-        }
-
         return Closure::bind($callable, $this, $this);
     }
 
