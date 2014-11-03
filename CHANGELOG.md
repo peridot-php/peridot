@@ -1,5 +1,13 @@
 # Changelog
 
+#### 1.6.0
+
+* silly dependency on ArrayObject removed *2014-11-03*
+* parent scope now correctly passed to children *2014-11-03*
+* setup and tear own functions execute in proper order *2014-11-03*
+* Removed scope behaviors because they were bad *2014-11-03*
+
+
 #### 1.5.0
 
 * Introduce scope behaviors *2014-11-02*
