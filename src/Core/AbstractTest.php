@@ -118,6 +118,7 @@ abstract class AbstractTest implements TestInterface
     public function setParent(TestInterface $parent)
     {
         $this->parent = $parent;
+        $this->scope = $parent->getScope();
     }
 
     /**

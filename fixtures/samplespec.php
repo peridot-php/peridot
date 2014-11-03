@@ -26,9 +26,13 @@ describe("Spec", function() {
             $this->thing->append('hello');
         });
 
+        beforeEach(function() {
+            $this->thing->append('goodbye');
+        });
+
         it('should have access to thing', function() {
-            assert($this->thing instanceof ArrayObject, "should be array object");
             assert($this->thing[0] == "hello", 'hello should be a thing');
+            assert($this->thing[1] == "goodbye", "goodbye should be a thing");
         });
     });
 });

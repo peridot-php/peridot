@@ -125,18 +125,66 @@ describe("Test", function() {
            });
         });
 
-        it('should run setup functions in order', function() {
-            $test = new Test("test", function() {});
-            $log = '';
-            $test->addSetupFunction(function() use (&$log) {
-                $log = "thing";
+        context('when running setup functions', function() {
+            it('should run setup functions in order', function() {
+                $test = new Test("test", function() {});
+                $log = '';
+                $test->addSetupFunction(function() use (&$log) {
+                    $log = "thing";
+                });
+                $test->addSetupFunction(function() use (&$log) {
+                    $log = "thing2";
+                });
+                $test->run(new TestResult(new EventEmitter()));
+                $expected = "thing2";
+                assert($expected == $log, "expected $expected, got $log");
             });
-            $test->addSetupFunction(function() use (&$log) {
-                $log = "thing2";
+
+            it('should run parent setup functions first', function() {
+                $parent = new Suite("parent", function() {});
+                $log = '';
+                $parent->addSetupFunction(function() use (&$log) {
+                    $log .= "parent ";
+                });
+                $child = new Suite("child", function() {});
+                $child->addSetupFunction(function() use (&$log) {
+                    $log .= "child ";
+                });
+                $grandchild = new Test("grandchild", function() {});
+                $grandchild->addSetupFunction(function() use (&$log) {
+                    $log .= "grandchild";
+                });
+                $parent->addTest($child);
+                $child->addTest($grandchild);
+
+                $grandchild->run(new TestResult(new EventEmitter()));
+
+                assert("parent child grandchild" == $log, "setup functions should be run in order");
             });
-            $test->run(new TestResult(new EventEmitter()));
-            $expected = "thing2";
-            assert($expected == $log, "expected $expected, got $log");
+        });
+
+        context("when running tear down functions", function() {
+            it('should run child tear down functions first', function() {
+                $parent = new Suite("parent", function() {});
+                $log = '';
+                $parent->addTearDownFunction(function() use (&$log) {
+                    $log .= "parent";
+                });
+                $child = new Suite("child", function() {});
+                $child->addTearDownFunction(function() use (&$log) {
+                    $log .= "child ";
+                });
+                $grandchild = new Test("grandchild", function() {});
+                $grandchild->addTearDownFunction(function() use (&$log) {
+                    $log .= "grandchild ";
+                });
+                $parent->addTest($child);
+                $child->addTest($grandchild);
+
+                $grandchild->run(new TestResult(new EventEmitter()));
+
+                assert("grandchild child parent" == $log, "tear down functions should be run in order");
+            });
         });
     });
 
@@ -167,6 +215,17 @@ describe("Test", function() {
             $test = new Test("spec", function() {});
             $test->setScope($scope);
             assert($scope === $test->getScope(), "setScope should have set scope");
+        });
+    });
+
+    describe('->setParent()', function() {
+        it('should bind the parent scope to the child', function() {
+            $scope = new Scope();
+            $parent = new Suite("parent", function() {});
+            $parent->setScope($scope);
+            $test = new Test("child", function() {});
+            $test->setParent($parent);
+            assert($scope === $test->getScope(), "scope should be parent scope");
         });
     });
 });

@@ -65,9 +65,7 @@ class Scope
     }
 
     /**
-     * Lookup properties on child scopes. Since arrays cannot
-     * be returned as references in this way, they are returned
-     * as ArrayObjects and set on their original scope as an ArrayObject.
+     * Lookup properties on child scopes.
      *
      * @param $name
      */
@@ -79,10 +77,6 @@ class Scope
             }
         });
         if ($found) {
-            if (is_array($result)) {
-                $result = new \ArrayObject($result);
-                $scope->$name = $result;
-            }
             return $result;
         }
         throw new \DomainException("Scope property $name not found");
