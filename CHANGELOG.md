@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.6.1
+
+* Fixed bug where manually specified config file was not being included *2014-11-03*
+
+
 #### 1.6.0
 
 * Silly dependency on ArrayObject removed *2014-11-03*
