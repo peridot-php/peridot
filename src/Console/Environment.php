@@ -79,13 +79,12 @@ class Environment
         }
 
         $files = array_filter(['c', 'configuration'], [$this, 'optionIsFile']);
-        $file = array_pop($files);
 
-        if (is_null($file)) {
+        if (empty($files)) {
             return false;
         }
 
-        return $this->includeConfiguration($file);
+        return $this->includeConfiguration($this->options[array_pop($files)]);
     }
 
     /**
