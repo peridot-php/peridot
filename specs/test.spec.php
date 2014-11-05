@@ -187,6 +187,23 @@ describe("Test", function() {
                 $actual = $result->getSummary();
                 assert($expected == $actual, "expected $expected, got $actual");
             });
+
+            it('should not result in a pass and fail if tear down fails', function() {
+                $test = new Test("passing", function() {});
+                $test->addTearDownFunction(function() {
+                    throw new Exception("failure");
+                });
+                $emitter = new EventEmitter();
+                $count = 0;
+                $emitter->on('test.passed', function() use (&$count) {
+                    $count++;
+                });
+                $emitter->on('test.failed', function() use (&$count) {
+                    $count++;
+                });
+                $test->run(new TestResult($emitter));
+                assert($count == 1, "should not have emitted a pass and fail event");
+            });
         });
     });
 

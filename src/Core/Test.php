@@ -51,14 +51,14 @@ class Test extends AbstractTest
      */
     protected function executeTest(TestResult $result)
     {
+        $action = ['passTest', $this];
         try {
             $this->runSetup();
             call_user_func($this->getDefinition());
-            $result->passTest($this);
         } catch (Exception $e) {
-            $result->failTest($this, $e);
+            $action = ['failTest', $this, $e];
         }
-        $this->runTearDown($result);
+        $this->runTearDown($result, $action);
     }
 
     /**
@@ -75,20 +75,25 @@ class Test extends AbstractTest
     }
 
     /**
-     * Execute this test's tear down functions.
+     * Run the tests tear down methods and have the result
+     * perform the method indicated by $action
+     *
+     * @param TestResult $result
+     * @param array $action
      */
-    protected function runTearDown(TestResult $result)
+    protected function runTearDown(TestResult $result, $action)
     {
-        $this->forEachNodeBottomToTop(function (TestInterface $test) use ($result) {
+        $this->forEachNodeBottomToTop(function (TestInterface $test) use ($result, &$action) {
             $tearDowns = $test->getTearDownFunctions();
             foreach ($tearDowns as $tearDown) {
                 try {
                     $tearDown();
                 } catch (Exception $e) {
-                    $result->failTest($this, $e);
+                    $action = ['failTest', $this, $e];
                 }
             }
         });
+        call_user_func_array([$result, $action[0]], array_slice($action, 1));
     }
 
     /**
