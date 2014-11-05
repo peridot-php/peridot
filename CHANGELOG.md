@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.7.0
+
+* Fail tests if exceptions thrown in tear downs *2014-11-05*
+
+
 #### 1.6.1
 
 * Fixed bug where manually specified config file was not being included *2014-11-03*
