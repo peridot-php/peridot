@@ -40,10 +40,7 @@ class Test extends AbstractTest
             $result->pendTest($this);
             return;
         }
-
         $this->executeTest($result);
-
-        $this->runTearDown();
         $result->endTest($this);
     }
 
@@ -61,6 +58,7 @@ class Test extends AbstractTest
         } catch (Exception $e) {
             $result->failTest($this, $e);
         }
+        $this->runTearDown($result);
     }
 
     /**
@@ -79,15 +77,15 @@ class Test extends AbstractTest
     /**
      * Execute this test's tear down functions.
      */
-    protected function runTearDown()
+    protected function runTearDown(TestResult $result)
     {
-        $this->forEachNodeBottomToTop(function (TestInterface $test) {
+        $this->forEachNodeBottomToTop(function (TestInterface $test) use ($result) {
             $tearDowns = $test->getTearDownFunctions();
             foreach ($tearDowns as $tearDown) {
                 try {
                     $tearDown();
                 } catch (Exception $e) {
-                    continue;
+                    $result->failTest($this, $e);
                 }
             }
         });
