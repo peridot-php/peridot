@@ -66,40 +66,6 @@ describe("Test", function() {
             assert("1 run, 0 failed, 1 pending" == $result->getSummary(), "result summary should have shown 1 pending");
         });
 
-        it('should run tear down functions even if spec fails', function () {
-            $test = new Test('failing spec with tear downs', function() {
-                throw new Exception('fail');
-            });
-            $test->addTearDownFunction(function() {
-                $this->log = 'tearing down';
-            });
-            $test->run(new TestResult(new EventEmitter()));;
-            assert($test->getScope()->log == 'tearing down', 'spec should have been torn down after failure');
-        });
-
-        it('should run tear down functions even if setup fails', function () {
-            $test = new Test('spec', function() {});
-            $test->addSetupFunction(function() {
-                throw new Exception('set up failure');
-            });
-            $test->addTearDownFunction(function() {
-                $this->log = 'tearing down';
-            });
-            $test->run(new TestResult(new EventEmitter()));
-            assert($test->getScope()->log == 'tearing down', 'spec should have been torn down after failure');
-        });
-
-        it('should continue if tear down fails', function () {
-            $test = new Test('spec', function() {});
-            $test->addTearDownFunction(function() {
-                throw new Exception('tear down failure');
-            });
-
-            $result = new TestResult(new EventEmitter());
-            $test->run($result);;
-            assert("1 run, 0 failed" == $result->getSummary(), "result summary should have shown 1 run");
-        });
-
         it('should skip test if set up fails', function () {
             $test = new Test('spec is skipped', function() {
                 $this->log = 'testing';
@@ -184,6 +150,42 @@ describe("Test", function() {
                 $grandchild->run(new TestResult(new EventEmitter()));
 
                 assert("grandchild child parent" == $log, "tear down functions should be run in order");
+            });
+
+            it('should run tear down functions even if spec fails', function () {
+                $test = new Test('failing spec with tear downs', function() {
+                    throw new Exception('fail');
+                });
+                $test->addTearDownFunction(function() {
+                    $this->log = 'tearing down';
+                });
+                $test->run(new TestResult(new EventEmitter()));;
+                assert($test->getScope()->log == 'tearing down', 'spec should have been torn down after failure');
+            });
+
+            it('should run tear down functions even if setup fails', function () {
+                $test = new Test('spec', function() {});
+                $test->addSetupFunction(function() {
+                    throw new Exception('set up failure');
+                });
+                $test->addTearDownFunction(function() {
+                    $this->log = 'tearing down';
+                });
+                $test->run(new TestResult(new EventEmitter()));
+                assert($test->getScope()->log == 'tearing down', 'spec should have been torn down after failure');
+            });
+
+            it('should continue if tear down fails', function () {
+                $test = new Test('spec', function() {});
+                $test->addTearDownFunction(function() {
+                    throw new Exception('tear down failure');
+                });
+
+                $result = new TestResult(new EventEmitter());
+                $test->run($result);
+                $expected = "1 run, 1 failed";
+                $actual = $result->getSummary();
+                assert($expected == $actual, "expected $expected, got $actual");
             });
         });
     });
