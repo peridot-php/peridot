@@ -53,11 +53,11 @@ abstract class AbstractBaseReporter implements ReporterInterface
      * @var array
      */
     protected $colors = array(
-        'white' => ['left' => '<fg=white>', 'right' => '</fg=white>'],
-        'success' => ['left' => '<fg=green>', 'right' => '</fg=green>'],
-        'error' => ['left' => '<fg=red>', 'right' => '</fg=red>'],
+        'white' => ['left' => "\033[37m", 'right' => "\033[39m"],
+        'success' => ['left' => "\033[32m", 'right' => "\033[39m"],
+        'error' => ['left' => "\033[31m", 'right' => "\033[39m"],
         'muted' => ['left' => "\033[90m", 'right' => "\033[0m"],
-        'pending' => ['left' => '<fg=cyan>', 'right' => '</fg=cyan>'],
+        'pending' => ['left' => "\033[36m", 'right' => "\033[39m"],
     );
 
     /**
@@ -254,7 +254,15 @@ abstract class AbstractBaseReporter implements ReporterInterface
      */
     private function hasTty()
     {
-        return function_exists('posix_isatty') && @posix_isatty($this->output->getStream());
+        if (getenv("PERIDOT_TTY")) {
+            return true;
+        }
+
+        $tty = function_exists('posix_isatty') && @posix_isatty($this->output->getStream());
+        if ($tty) {
+            putenv("PERIDOT_TTY=1");
+        }
+        return $tty;
     }
 
     /**
