@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.7.1
+
+* ANSI sequences are now sub process friendly *2014-11-06*
+
+
 #### 1.7.0
 
 * Fail tests if exceptions thrown in tear downs *2014-11-05*
