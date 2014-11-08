@@ -66,7 +66,7 @@ class Test extends AbstractTest
      */
     protected function runSetup()
     {
-        $this->forEachNodeTopToBottom(function (TestInterface $node) {
+        $this->forEachNodeTopDown(function (TestInterface $node) {
             $setups = $node->getSetupFunctions();
             foreach ($setups as $setup) {
                 $setup();
@@ -83,7 +83,7 @@ class Test extends AbstractTest
      */
     protected function runTearDown(TestResult $result, $action)
     {
-        $this->forEachNodeBottomToTop(function (TestInterface $test) use ($result, &$action) {
+        $this->forEachNodeBottomUp(function (TestInterface $test) use ($result, &$action) {
             $tearDowns = $test->getTearDownFunctions();
             foreach ($tearDowns as $tearDown) {
                 try {
@@ -94,39 +94,5 @@ class Test extends AbstractTest
             }
         });
         call_user_func_array([$result, $action[0]], array_slice($action, 1));
-    }
-
-    /**
-     * Execute a callback for each node in this test, starting
-     * at the bottom of the tree.
-     *
-     * @param callable $fn
-     */
-    protected function forEachNodeBottomToTop(callable $fn)
-    {
-        $node = $this;
-        while (!is_null($node)) {
-            $fn($node);
-            $node = $node->getParent();
-        }
-    }
-
-    /**
-     * Execute a callback for each node in this test, starting
-     * at the top of the tree.
-     *
-     * @param callable $fn
-     */
-    protected function forEachNodeTopToBottom(callable $fn)
-    {
-        $node = $this;
-        $nodes = [];
-        while (!is_null($node)) {
-            array_unshift($nodes, $node);
-            $node = $node->getParent();
-        }
-        foreach ($nodes as $node) {
-            $fn($node);
-        }
     }
 }

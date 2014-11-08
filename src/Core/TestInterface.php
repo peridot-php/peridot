@@ -115,4 +115,20 @@ interface TestInterface
      * @return EventEmitterInterface
      */
     public function getEventEmitter();
+
+    /**
+     * Execute a callback for each node in this test, starting
+     * at the bottom of the tree.
+     *
+     * @param callable $fn
+     */
+    public function forEachNodeBottomUp(callable $fn);
+
+    /**
+     * Execute a callback for each node in this test, starting
+     * at the top of the tree.
+     *
+     * @param callable $fn
+     */
+    public function forEachNodeTopDown(callable $fn);
 }
