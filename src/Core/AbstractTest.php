@@ -209,4 +209,36 @@ abstract class AbstractTest implements TestInterface
         $this->scope = $scope;
         return $this;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param callable $fn
+     */
+    public function forEachNodeBottomUp(callable $fn)
+    {
+        $node = $this;
+        while (!is_null($node)) {
+            $fn($node);
+            $node = $node->getParent();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param callable $fn
+     */
+    public function forEachNodeTopDown(callable $fn)
+    {
+        $node = $this;
+        $nodes = [];
+        while (!is_null($node)) {
+            array_unshift($nodes, $node);
+            $node = $node->getParent();
+        }
+        foreach ($nodes as $node) {
+            $fn($node);
+        }
+    }
 }
