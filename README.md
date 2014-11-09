@@ -6,7 +6,7 @@ Peridot
 
 The highly extensible, highly enjoyable, PHP testing framework.
 
-Read more at [peridot-php.github.io](http://peridot-php.github.io/).
+Read more at [peridot-php.github.io](http://peridot-php.github.io/) or head over to the [wiki](https://github.com/peridot-php/peridot/wiki).
 
 ##Building PHAR
 
