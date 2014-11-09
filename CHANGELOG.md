@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.8.0
+
+* AbstractTest::forEachNodeBottomUp and forEachNodeTopDown traversal methods added to public API *2014-11-09*
+
+
 #### 1.7.1
 
 * ANSI sequences are now sub process friendly *2014-11-06*
