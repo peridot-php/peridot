@@ -42,3 +42,19 @@ You can then run the tests like so:
 ```
 $ bin/peridot specs/
 ```
+
+You can generate a code coverage report by passing the `CODE_COVERAGE` environment variable when running tests. You can generate an HTML or clover style coverage report.
+
+To output an HTML report to `tmp/report`:
+
+```
+$ CODE_COVERAGE=html bin/peridot specs/
+```
+
+or to output a clover report to `build/logs/clover.xml`:
+
+```
+$ CODE_COVERAGE=clover bin/peridot specs/
+```
+
+Our coverage target is 90%+
