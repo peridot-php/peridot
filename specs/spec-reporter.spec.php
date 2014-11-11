@@ -48,7 +48,7 @@ describe('SpecReporter', function() {
 
             $exception = null;
             try {
-                throw new Exception("ooops");
+                throw new Exception("ooops" . PHP_EOL . "nextline");
             } catch (Exception $e) {
                 $exception = $e;
             }
@@ -79,7 +79,8 @@ describe('SpecReporter', function() {
         });
 
         it('should display exception stacks and messages', function() {
-            assert(strstr($this->contents, $this->exception->getMessage()) !== false, "should include exception message");
+            $expectedExceptionMessage = "     ooops" . PHP_EOL . "     nextline";
+            assert(strstr($this->contents, $expectedExceptionMessage) !== false, "should include exception message");
             $trace = preg_replace('/^#/m', "      #", $this->exception->getTraceAsString());
             assert(strstr($this->contents, $trace) !== false, "should include exception stack");
         });
