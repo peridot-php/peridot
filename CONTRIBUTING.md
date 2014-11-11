@@ -16,8 +16,8 @@ We will consider code merge worthy if it keeps the Scrutinizer score at a 10.0.
 
 ###Steps for contributing
 1. Fork the [repository](https://github.com/peridot-php/peridot) on GitHub
-2. Add the code for your feature or bug
-3. Add tests for your feature or bug
+2. Add tests for your feature or bug
+3. Add the code for your feature or bug
 4. Include documentation for things being added to the public API of Peridot (in the form of doc block comments)
 5. Send a [pull request](https://help.github.com/articles/creating-a-pull-request)
 
