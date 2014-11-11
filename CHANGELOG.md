@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.8.1
+
+* multiline exception messages indent each line *2014-11-11*
+
+
 #### 1.8.0
 
 * AbstractTest::forEachNodeBottomUp and forEachNodeTopDown traversal methods added to public API *2014-11-09*
