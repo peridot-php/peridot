@@ -5,6 +5,7 @@ use Evenement\EventEmitterInterface;
 use Peridot\Configuration;
 use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\Test;
+use Peridot\Core\TestInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -165,11 +166,26 @@ abstract class AbstractBaseReporter implements ReporterInterface
         $errorCount = count($this->errors);
         for ($i = 0; $i < $errorCount; $i++) {
             list($test, $error) = $this->errors[$i];
-            $this->output->writeln(sprintf("  %d)%s:", $i + 1, $test->getTitle()));
-            $this->output->writeln($this->color('error', sprintf("     %s", $error->getMessage())));
-            $trace = preg_replace('/^#/m', "      #", $error->getTraceAsString());
-            $this->output->writeln($this->color('muted', $trace));
+            $this->outputError($i + 1, $test, $error);
         }
+    }
+
+    /**
+     * Output a test failure.
+     *
+     * @param int $errorIndex
+     * @param Test $test
+     * @param \Exception $exception
+     */
+    protected function outputError($errorNumber, TestInterface $test, \Exception $exception)
+    {
+        $this->output->writeln(sprintf("  %d)%s:", $errorNumber, $test->getTitle()));
+
+        $message = sprintf("     %s", str_replace(PHP_EOL, PHP_EOL . "     ", $exception->getMessage()));
+        $this->output->writeln($this->color('error', $message));
+
+        $trace = preg_replace('/^#/m', "      #", $exception->getTraceAsString());
+        $this->output->writeln($this->color('muted', $trace));
     }
 
     /**
