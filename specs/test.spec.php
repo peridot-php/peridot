@@ -1,9 +1,9 @@
 <?php
 use Evenement\EventEmitter;
-use Peridot\Core\Scope;
 use Peridot\Core\Test;
 use Peridot\Core\TestResult;
 use Peridot\Core\Suite;
+use Peridot\Scope\Scope;
 use Peridot\Test\ItWasRun;
 
 describe("Test", function() {

@@ -1,24 +1,15 @@
 {
-  "directories": ["src/", "vendor/"],
   "main": "bin/peridot",
   "output": "peridot.phar",
   "stub": true,
-  "blacklist": [
-    "vendor/evenement/tests",
-    "vendor/symfony/console/Symfony/Component/Console/Tests",
-    "vendor/symfony/console/Symfony/Component/Console/Tester",
-    "vendor/phpunit/php-timer/Tests",
-    "vendor/phpunit/php-code-coverage",
-    "vendor/phpunit/php-file-iterator",
-    "vendor/phpunit/php-text-template",
-    "vendor/phpunit/php-token-stream",
-    "vendor/sebastian",
-    "vendor/codegyre",
-    "vendor/henrikbjorn",
-    "vendor/symfony/config",
-    "vendor/symfony/event-dispatcher",
-    "vendor/symfony/filesystem",
-    "vendor/symfony/finder",
-    "vendor/symfony/process"
-  ]
+  "directories": [
+    "src/",
+    "vendor/evenement/evenement/src/",
+    "vendor/symfony/console/",
+    "vendor/phpunit/php-timer",
+    "vendor/peridot-php",
+    "vendor/composer"
+  ],
+  "files": ["vendor/autoload.php"],
+  "files-bin": ["vendor/phpunit/php-timer/LICENSE"]
 }

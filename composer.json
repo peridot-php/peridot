@@ -17,7 +17,8 @@
     "php": ">=5.4.0",
     "evenement/evenement": "2.0.*",
     "symfony/console": "~2.0",
-    "phpunit/php-timer": "~1.0"
+    "phpunit/php-timer": "~1.0",
+    "peridot-php/peridot-scope": "~1.0"
   },
   "require-dev": {
     "codegyre/robo": "~0.4",

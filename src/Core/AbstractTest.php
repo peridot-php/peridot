@@ -2,8 +2,7 @@
 
 namespace Peridot\Core;
 
-use Closure;
-use Exception;
+use Peridot\Scope\ScopeTrait;
 
 /**
  * Base class for Peridot Suites and Tests
@@ -13,6 +12,7 @@ use Exception;
 abstract class AbstractTest implements TestInterface
 {
     use HasEventEmitterTrait;
+    use ScopeTrait;
 
     /**
      * The test definition as a callable.
@@ -51,12 +51,6 @@ abstract class AbstractTest implements TestInterface
     protected $pending = null;
 
     /**
-     *
-     * @var Scope
-     */
-    protected $scope;
-
-    /**
      * @param string   $description
      * @param callable $definition
      */
@@ -64,7 +58,6 @@ abstract class AbstractTest implements TestInterface
     {
         $this->definition = $definition;
         $this->description = $description;
-        $this->scope = new Scope();
     }
 
     /**
@@ -74,7 +67,7 @@ abstract class AbstractTest implements TestInterface
      */
     public function addSetupFunction(callable $setupFn)
     {
-        $fn = $this->scope->peridotBindTo($setupFn);
+        $fn = $this->getScope()->peridotBindTo($setupFn);
         array_push($this->setUpFns, $fn);
     }
 
@@ -85,7 +78,7 @@ abstract class AbstractTest implements TestInterface
      */
     public function addTearDownFunction(callable $tearDownFn)
     {
-        $fn = $this->scope->peridotBindTo($tearDownFn);
+        $fn = $this->getScope()->peridotBindTo($tearDownFn);
         array_push($this->tearDownFns, $fn);
     }
 
@@ -118,7 +111,7 @@ abstract class AbstractTest implements TestInterface
     public function setParent(TestInterface $parent)
     {
         $this->parent = $parent;
-        $this->scope = $parent->getScope();
+        $this->setScope($parent->getScope());
     }
 
     /**
@@ -186,28 +179,6 @@ abstract class AbstractTest implements TestInterface
     public function getTearDownFunctions()
     {
         return $this->tearDownFns;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Peridot\Core\Scope
-     */
-    public function getScope()
-    {
-        return $this->scope;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param Scope $scope
-     * @return $this
-     */
-    public function setScope(Scope $scope)
-    {
-        $this->scope = $scope;
-        return $this;
     }
 
     /**
