@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.8.4
+
+* update all scope refs to core scope *2014-11-16*
+
+
 #### 1.8.3
 
 * Adds Core Scope back as an extension of scope module *2014-11-16*
