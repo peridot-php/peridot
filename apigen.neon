@@ -3,6 +3,7 @@ source:
 	- src
 	- vendor/symfony/console
 	- vendor/evenement/evenement/src
+	- vendor/peridot-php/peridot-scope/src
 	
 exclude:
 	- *vendor/symfony/console/Symfony/Component/Console/Tests*
