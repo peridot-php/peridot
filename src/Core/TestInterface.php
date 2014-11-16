@@ -2,7 +2,6 @@
 namespace Peridot\Core;
 
 use Evenement\EventEmitterInterface;
-use Peridot\Scope\Scope;
 
 /**
  * Defines the contract for Peridot test fixtures like Test and Suite

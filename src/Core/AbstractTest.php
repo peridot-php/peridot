@@ -2,8 +2,6 @@
 
 namespace Peridot\Core;
 
-use Peridot\Scope\ScopeTrait;
-
 /**
  * Base class for Peridot Suites and Tests
  *
@@ -12,7 +10,6 @@ use Peridot\Scope\ScopeTrait;
 abstract class AbstractTest implements TestInterface
 {
     use HasEventEmitterTrait;
-    use ScopeTrait;
 
     /**
      * The test definition as a callable.
@@ -51,6 +48,11 @@ abstract class AbstractTest implements TestInterface
     protected $pending = null;
 
     /**
+     * @var Scope
+     */
+    protected $scope;
+
+    /**
      * @param string   $description
      * @param callable $definition
      */
@@ -58,6 +60,7 @@ abstract class AbstractTest implements TestInterface
     {
         $this->definition = $definition;
         $this->description = $description;
+        $this->scope = new Scope();
     }
 
     /**
@@ -212,4 +215,28 @@ abstract class AbstractTest implements TestInterface
             $fn($node);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Scope
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param Scope $scope
+     * @return mixed
+     */
+    public function setScope(Scope $scope)
+    {
+        $this->scope = $scope;
+        return $this;
+    }
+
+
 }
