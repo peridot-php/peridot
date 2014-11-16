@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.8.2
+
+* Pull scope into separate package *2014-11-16*
+
+
 #### 1.8.1
 
 * multiline exception messages indent each line *2014-11-11*
