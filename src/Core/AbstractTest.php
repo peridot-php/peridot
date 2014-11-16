@@ -237,6 +237,4 @@ abstract class AbstractTest implements TestInterface
         $this->scope = $scope;
         return $this;
     }
-
-
 }
