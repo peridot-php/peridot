@@ -1,5 +1,4 @@
-Peridot 
-========
+![Peridot logo](https://raw.github.com/peridot-php/peridot/master/logo.png "Peridot logo")
 
 [![Build Status](https://travis-ci.org/peridot-php/peridot.png)](https://travis-ci.org/peridot-php/peridot) [![HHVM Status](http://hhvm.h4cc.de/badge/peridot-php/peridot.svg)](http://hhvm.h4cc.de/package/peridot-php/peridot)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/peridot-php/peridot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/peridot-php/peridot/?branch=master) [![Coverage Status](https://coveralls.io/repos/peridot-php/peridot/badge.png?branch=master)](https://coveralls.io/r/peridot-php/peridot?branch=master)
