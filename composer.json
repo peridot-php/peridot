@@ -1,6 +1,6 @@
 {
   "name": "peridot-php/peridot",
-  "description": "Event driven testing framework for PHP 5.4+",
+  "description": "Event driven BDD test framework for PHP 5.4+",
   "keywords": ["BDD", "TDD", "testing", "PHP"],
   "license": "MIT",
   "authors": [
