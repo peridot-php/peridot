@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.8.5
+
+* Support hhvm 3.5 nightly autoload path in bin/peridot *2014-12-27*
+
+
 #### 1.8.4
 
 * update all scope refs to core scope *2014-11-16*
