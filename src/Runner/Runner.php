@@ -12,7 +12,7 @@ use Peridot\Core\Suite;
  *
  * @package Peridot\Runner
  */
-class Runner
+class Runner implements RunnerInterface
 {
     use HasEventEmitterTrait;
 
@@ -39,15 +39,13 @@ class Runner
     }
 
     /**
-     * Run the Suite
+     * {@inheritdoc}
      *
      * @param TestResult $result
      */
     public function run(TestResult $result)
     {
-        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-            $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
-        });
+        $this->handleErrors();
 
         $this->eventEmitter->on('test.failed', function () {
             if ($this->configuration->shouldStopOnFailure()) {
@@ -61,5 +59,15 @@ class Runner
         $this->eventEmitter->emit('runner.end');
 
         restore_error_handler();
+    }
+
+    /**
+     * Set an error handler to broadcast an error event.
+     */
+    protected function handleErrors()
+    {
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+            $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
+        });
     }
 }

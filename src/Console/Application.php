@@ -5,6 +5,7 @@ use Peridot\Configuration;
 use Peridot\Reporter\ReporterFactory;
 use Peridot\Runner\Context;
 use Peridot\Runner\Runner;
+use Peridot\Runner\RunnerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,6 +23,16 @@ class Application extends ConsoleApplication
      * @var Environment
      */
     protected $environment;
+
+    /**
+     * @var RunnerInterface
+     */
+    protected $runner;
+
+    /**
+     * @var Configuration
+     */
+    protected $configuration;
 
     /**
      * @param Environment $environment
@@ -64,14 +75,14 @@ class Application extends ConsoleApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        $configuration = ConfigurationReader::readInput($input);
-        $this->environment->getEventEmitter()->emit('peridot.configure', [$configuration]);
+        $this->configuration = ConfigurationReader::readInput($input);
+        $this->environment->getEventEmitter()->emit('peridot.configure', [$this->configuration, $this]);
 
-        $runner = new Runner(Context::getInstance()->getCurrentSuite(), $configuration, $this->environment->getEventEmitter());
-        $factory = new ReporterFactory($configuration, $output, $this->environment->getEventEmitter());
+        $runner = $this->getRunner();
+        $factory = new ReporterFactory($this->configuration, $output, $this->environment->getEventEmitter());
 
-        $this->loadDsl($configuration->getDsl());
-        $this->add(new Command($runner, $configuration, $factory, $this->environment->getEventEmitter()));
+        $this->loadDsl($this->configuration->getDsl());
+        $this->add(new Command($runner, $this->configuration, $factory, $this->environment->getEventEmitter()));
 
         $exitCode = parent::doRun($input, $output);
 
@@ -119,6 +130,68 @@ class Application extends ConsoleApplication
         if (file_exists($dslPath)) {
             include_once $dslPath;
         }
+    }
+
+    /**
+     * Set the runner used by the Peridot application.
+     *
+     * @param RunnerInterface $runner
+     * @return $this
+     */
+    public function setRunner(RunnerInterface $runner)
+    {
+        $this->runner = $runner;
+        return $this;
+    }
+
+    /**
+     * Get the RunnerInterface being used by the Peridot application.
+     * If one is not set, a default Runner will be used.
+     *
+     * @return RunnerInterface
+     */
+    public function getRunner()
+    {
+        if (is_null($this->runner)) {
+            $this->runner = new Runner(
+                Context::getInstance()->getCurrentSuite(),
+                $this->getConfiguration(),
+                $this->environment->getEventEmitter()
+            );
+        }
+        return $this->runner;
+    }
+
+    /**
+     * Return the Environment used by the Peridot application.
+     *
+     * @return Environment
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * Return the configuration used by the Peridot application.
+     *
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * Set the configuration object used by the Peridot application.
+     *
+     * @param Configuration $configuration
+     * @return $this
+     */
+    public function setConfiguration(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
+        return $this;
     }
 
     /**

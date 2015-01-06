@@ -1,5 +1,8 @@
 <?php
 use Peridot\Console\Application;
+use Peridot\Core\Suite;
+use Peridot\Runner\Runner;
+use Peridot\Runner\RunnerInterface;
 
 describe('Application', function() {
     include __DIR__ . '/shared/application-tester.php';
@@ -40,6 +43,39 @@ describe('Application', function() {
         it('should return an input', function() {
             $input = $this->application->getInput(['foo.php', 'bar']);
             assert(!is_null($input), "getInput should return an input");
+        });
+    });
+
+    describe('->getEnvironment()', function() {
+        it('should return the Environment used by the application', function() {
+            $env = $this->application->getEnvironment();
+            assert($env === $this->environment);
+        });
+    });
+
+    describe('configuration accessors', function() {
+        it('should allow access to configuration', function() {
+            $this->application->setConfiguration($this->configuration);
+            assert($this->application->getConfiguration() === $this->configuration);
+        });
+    });
+
+    describe('runner accessors', function() {
+        beforeEach(function() {
+            $this->runner = new Runner(new Suite('desc', function() {}), $this->configuration, $this->environment->getEventEmitter());
+        });
+
+        it('should allow access to runner', function() {
+            $this->application->setRunner($this->runner);
+            assert($this->application->getRunner() === $this->runner);
+        });
+
+        context('when getting Runner', function() {
+            it('should return a default runner if none set', function() {
+                $this->application->setConfiguration($this->configuration);
+                $runner = $this->application->getRunner();
+                assert($runner instanceof RunnerInterface);
+            });
         });
     });
 });
