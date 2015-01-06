@@ -1,5 +1,12 @@
 # Changelog
 
+#### 1.9.0
+
+* added Application accessors for Runner, Configuration and Environment *2015-01-06*
+* added RunnerInterface *2015-01-06*
+* peridot.configure is passed Application *2015-01-06*
+
+
 #### 1.8.5
 
 * Support hhvm 3.5 nightly autoload path in bin/peridot *2014-12-27*
