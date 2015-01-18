@@ -33,7 +33,7 @@ This will output documentation to the docs/ directory.
 Peridot's test suite can be run using Peridot:
 
 ```
-$ bin/peridot specs/
+$ bin/peridot
 ```
 
 And a sample of output:

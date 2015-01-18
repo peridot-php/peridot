@@ -27,6 +27,16 @@ class Context
      */
     private function __construct()
     {
+        $this->clear();
+    }
+
+    /**
+     * Clear the internal suite structure.
+     *
+     * @return void
+     */
+    public function clear()
+    {
         $this->suites = [new Suite("", function () {
             //noop
         })];

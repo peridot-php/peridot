@@ -52,7 +52,7 @@ describe('Context', function() {
         });
     });
 
-    describe("->addTest()", function() {
+    describe('->addTest()', function() {
         it("should set pending status if value is not null", function() {
             $test = $this->context->addTest("is a spec", function() {}, true);
             assert($test->getPending(), "pending status should be true");
@@ -66,6 +66,21 @@ describe('Context', function() {
         it("should set pending to true if definition is null", function() {
             $test = $this->context->addTest("is a spec");
             assert($test->getPending(), "pending status should be true");
+        });
+
+        it('should increase size of root suite', function () {
+            $this->context->addTest('spec', function () { });
+            $suite = $this->context->getCurrentSuite();
+            assert(sizeof($suite->getTests()) > 0, 'should have added test to root suite');
+        });
+    });
+
+    describe('->clear()', function () {
+        it('should reset loaded suites', function () {
+            $this->context->addTest('spec', function () { });
+            $this->context->clear();
+            $suite = $this->context->getCurrentSuite();
+            assert(sizeof($suite->getTests()) === 0, 'should have cleared root suite');
         });
     });
 
