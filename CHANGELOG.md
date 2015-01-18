@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.10.0
+
+* Added Context::clear() method *2015-01-17*
+
+
 #### 1.9.0
 
 * added Application accessors for Runner, Configuration and Environment *2015-01-06*
