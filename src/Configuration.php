@@ -55,12 +55,11 @@ class Configuration
      * Set the pattern used to load tests
      *
      * @param string $grep
+     * @return $this
      */
     public function setGrep($grep)
     {
-        $this->grep = $grep;
-
-        return $this;
+        return $this->write('grep', $grep);
     }
 
     /**
@@ -77,12 +76,11 @@ class Configuration
      * Set the name of the reporter to use
      *
      * @param string $reporter
+     * @return $this
      */
     public function setReporter($reporter)
     {
-        $this->reporter = $reporter;
-
-        return $this;
+        return $this->write('reporter', $reporter);
     }
 
     /**
@@ -99,12 +97,11 @@ class Configuration
      * Set the path to load tests from
      *
      * @param string $path
+     * @return $this
      */
     public function setPath($path)
     {
-        $this->path = $path;
-
-        return $this;
+        return $this->write('path', $path);
     }
 
     /**
@@ -124,9 +121,7 @@ class Configuration
      */
     public function disableColors()
     {
-        $this->colorsEnabled = false;
-
-        return $this;
+        return $this->write('colorsEnabled', false);
     }
 
     /**
@@ -146,9 +141,7 @@ class Configuration
      */
     public function stopOnFailure()
     {
-        $this->stopOnFailure = true;
-
-        return $this;
+        return $this->write('stopOnFailure', true);
     }
 
     /**
@@ -165,6 +158,7 @@ class Configuration
      * Set the path to a Peridot configuration file
      *
      * @param string $configurationFile
+     * @return $this
      */
     public function setConfigurationFile($configurationFile)
     {
@@ -175,7 +169,7 @@ class Configuration
             throw new \RuntimeException("Configuration file specified but does not exist");
         }
 
-        $this->configurationFile = $found[0];
+        $this->write('configurationFile', $found[0]);
 
         return $this;
     }
@@ -196,11 +190,11 @@ class Configuration
      * the test language used
      *
      * @param string $dsl
+     * @return $this
      */
     public function setDsl($dsl)
     {
-        $this->dsl = $dsl;
-        return $this;
+        return $this->write('dsl', $dsl);
     }
 
     /**
@@ -212,5 +206,22 @@ class Configuration
     public function getDsl()
     {
         return $this->dsl;
+    }
+
+    /**
+     * Write a configuration value and persist it to the current
+     * environment.
+     *
+     * @param $varName
+     * @param $value
+     * @return $this
+     */
+    protected function write($varName, $value)
+    {
+        $this->$varName = $value;
+        $parts = preg_split('/(?=[A-Z])/', $varName);
+        $env = 'PERIDOT_' . strtoupper(join('_', $parts));
+        putenv($env . '=' . $value);
+        return $this;
     }
 }
