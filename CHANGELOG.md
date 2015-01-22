@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.11.0
+
+* Configuration variables persisted to ENV *2015-01-22*
+
+
 #### 1.10.0
 
 * Added Context::clear() method *2015-01-17*
