@@ -50,4 +50,32 @@ describe('Configuration', function() {
         });
     });
 
+    describe('setters', function () {
+        it('should write corresponding peridot environment variables', function () {
+            $this->configuration->setGrep('*.test.php');
+            $this->configuration->setReporter('reporter');
+            $this->configuration->setPath('/tests');
+            $this->configuration->disableColors();
+            $this->configuration->stopOnFailure();
+            $this->configuration->setDsl(__FILE__);
+            $this->configuration->setConfigurationFile(__FILE__);
+
+            $grep = getenv('PERIDOT_GREP');
+            $reporter = getenv('PERIDOT_REPORTER');
+            $path = getenv('PERIDOT_PATH');
+            $colors = getenv('PERIDOT_COLORS_ENABLED');
+            $stop = getenv('PERIDOT_STOP_ON_FAILURE');
+            $dsl = getenv('PERIDOT_DSL');
+            $file = getenv('PERIDOT_CONFIGURATION_FILE');
+
+            assert($grep === '*.test.php', 'should have set grep env');
+            assert($reporter === 'reporter', 'should have set reporter env');
+            assert($path === '/tests', 'should have set path env');
+            assert(!$colors, 'should have set colors env');
+            assert($stop, 'should have set stop env');
+            assert($dsl === __FILE__, 'should have set dsl env');
+            assert($file === __FILE__, 'should have set config file env');
+        });
+    });
+
 });
