@@ -62,11 +62,12 @@ class TestResult
      * Fail the given test.
      *
      * @param TestInterface $test
+     * @param mixed $exception
      */
-    public function failTest(TestInterface $test, \Exception $e)
+    public function failTest(TestInterface $test, $exception)
     {
         $this->failureCount++;
-        $this->eventEmitter->emit('test.failed', [$test, $e]);
+        $this->eventEmitter->emit('test.failed', [$test, $exception]);
     }
 
     /**
