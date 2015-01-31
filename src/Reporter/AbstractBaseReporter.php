@@ -175,9 +175,9 @@ abstract class AbstractBaseReporter implements ReporterInterface
      *
      * @param int $errorIndex
      * @param Test $test
-     * @param \Exception $exception
+     * @param $exception - an exception like interface with ->getMessage(), ->getTraceAsString()
      */
-    protected function outputError($errorNumber, TestInterface $test, \Exception $exception)
+    protected function outputError($errorNumber, TestInterface $test, $exception)
     {
         $this->output->writeln(sprintf("  %d)%s:", $errorNumber, $test->getTitle()));
 
@@ -240,7 +240,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
             $this->time = \PHP_Timer::stop();
         });
 
-        $this->eventEmitter->on('test.failed', function (Test $test, \Exception $e) {
+        $this->eventEmitter->on('test.failed', function (Test $test, $e) {
             $this->errors[] = [$test, $e];
         });
 
