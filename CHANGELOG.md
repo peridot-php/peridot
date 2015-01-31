@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.11.1
+
+* Exception type hinting no longer required in test results and reporters *2015-01-31*
+
+
 #### 1.11.0
 
 * Configuration variables persisted to ENV *2015-01-22*
