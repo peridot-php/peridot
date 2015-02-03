@@ -18,7 +18,16 @@ describe('Command', function() {
         });
 
         it('should allow getting a default loader', function() {
-            assert(!is_null($this->command->getLoader()), "command should have default loader");
+            assert(!is_null($this->command->getLoader()), 'command should have default loader');
+        });
+    });
+
+    describe('runner accessors', function() {
+        it('should allow setting and getting of the runner', function () {
+            $suite = new Suite('description', function () {});
+            $runner = new Runner($suite, $this->configuration, $this->emitter);
+            $this->command->setRunner($runner);
+            assert($runner === $this->command->getRunner(), 'runner should be accessible from command');
         });
     });
 

@@ -6,7 +6,7 @@ use Peridot\Configuration;
 use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\TestResult;
 use Peridot\Reporter\ReporterFactory;
-use Peridot\Runner\Runner;
+use Peridot\Runner\RunnerInterface;
 use Peridot\Runner\SuiteLoader;
 use Peridot\Runner\SuiteLoaderInterface;
 use Symfony\Component\Console\Command\Command as ConsoleCommand;
@@ -24,7 +24,7 @@ class Command extends ConsoleCommand
     use HasEventEmitterTrait;
 
     /**
-     * @var \Peridot\Runner\Runner
+     * @var \Peridot\Runner\RunnerInterface
      */
     protected $runner;
 
@@ -44,13 +44,13 @@ class Command extends ConsoleCommand
     protected $loader;
 
     /**
-     * @param Runner $runner
+     * @param RunnerInterface $runner
      * @param Configuration $configuration
      * @param ReporterFactory $factory
      * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
-        Runner $runner,
+        RunnerInterface $runner,
         Configuration $configuration,
         ReporterFactory $factory,
         EventEmitterInterface $eventEmitter
@@ -86,6 +86,29 @@ class Command extends ConsoleCommand
             return new SuiteLoader($this->configuration->getGrep());
         }
         return $this->loader;
+    }
+
+    /**
+     * Set the suite runner used by the Peridot command.
+     *
+     * @param RunnerInterface $runner
+     * @return $this
+     */
+    public function setRunner(RunnerInterface $runner)
+    {
+        $this->runner = $runner;
+        return $this;
+    }
+
+    /**
+     * Return the runner used by the Peridot command. Defaults to
+     * an instance of Peridot\Runner\Runner.
+     *
+     * @return RunnerInterface
+     */
+    public function getRunner()
+    {
+        return $this->runner;
     }
 
     /**
