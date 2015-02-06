@@ -52,6 +52,22 @@ describe('Context', function() {
         });
     });
 
+    describe('->setFile()', function () {
+        beforeEach(function () {
+            $this->context->setFile(__FILE__);
+        });
+
+        it('should set the file on suites added via context', function () {
+            $suite = $this->context->addSuite('desc', function() {});
+            assert($suite->getFile() === __FILE__);
+        });
+
+        it('should set the file on tests added via context', function () {
+            $test = $this->context->addTest('desc', function() {}, true);
+            assert($test->getFile() === __FILE__);
+        });
+    });
+
     describe('->addTest()', function() {
         it("should set pending status if value is not null", function() {
             $test = $this->context->addTest("is a spec", function() {}, true);
