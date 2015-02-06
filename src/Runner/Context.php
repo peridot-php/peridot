@@ -61,6 +61,14 @@ class Context
     }
 
     /**
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
      * @return \Peridot\Core\Suite
      */
     public function getCurrentSuite()

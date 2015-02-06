@@ -250,8 +250,9 @@ describe("Test", function() {
 
     describe('file accessors', function () {
         it('should allow access to the file property', function () {
-            $this->suite->setFile(__FILE__);
-            $file = $this->suite->getFile();
+            $test = new Test('test');
+            $test->setFile(__FILE__);
+            $file = $test->getFile();
             assert($file === __FILE__);
         });
     });
