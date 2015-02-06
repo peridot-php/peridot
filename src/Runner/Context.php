@@ -18,6 +18,11 @@ class Context
     protected $suites;
 
     /**
+     * @var string
+     */
+    protected $file;
+
+    /**
      * @var Context
      */
     private static $instance = null;
@@ -43,6 +48,27 @@ class Context
     }
 
     /**
+     * Set the file for the context. This file
+     * generally represents the current file being used
+     * to load suites.
+     *
+     * @param $path
+     * @return void
+     */
+    public function setFile($path)
+    {
+        $this->file = $path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
      * @return \Peridot\Core\Suite
      */
     public function getCurrentSuite()
@@ -63,6 +89,7 @@ class Context
         if (!is_null($pending)) {
             $suite->setPending($pending);
         }
+        $suite->setFile($this->file);
         $this->getCurrentSuite()->addTest($suite);
         array_unshift($this->suites, $suite);
         call_user_func($suite->getDefinition());
@@ -83,6 +110,7 @@ class Context
         if (!is_null($pending)) {
             $test->setPending($pending);
         }
+        $test->setFile($this->file);
         $this->getCurrentSuite()->addTest($test);
 
         return $test;

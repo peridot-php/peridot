@@ -164,6 +164,14 @@ describe("Suite", function() {
             assert(empty($tests), "tests should be empty");
         });
     });
+
+    describe('file accessors', function () {
+        it('should allow access to the file property', function () {
+            $this->suite->setFile(__FILE__);
+            $file = $this->suite->getFile();
+            assert($file === __FILE__);
+        });
+    });
 });
 
 class SuiteScope extends Scope

@@ -15,11 +15,17 @@ class SuiteLoader implements SuiteLoaderInterface
     protected $pattern;
 
     /**
+     * @var Context
+     */
+    protected $context;
+
+    /**
      * @param string $pattern
      */
     public function __construct($pattern)
     {
         $this->pattern = $pattern;
+        $this->context = Context::getInstance();
     }
 
     /**
@@ -31,6 +37,7 @@ class SuiteLoader implements SuiteLoaderInterface
     {
         $tests = $this->getTests($path);
         foreach ($tests as $test) {
+            $this->context->setFile($test);
             include $test;
         }
     }

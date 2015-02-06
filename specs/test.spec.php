@@ -247,4 +247,13 @@ describe("Test", function() {
             assert($scope === $test->getScope(), "scope should be parent scope");
         });
     });
+
+    describe('file accessors', function () {
+        it('should allow access to the file property', function () {
+            $test = new Test('test');
+            $test->setFile(__FILE__);
+            $file = $test->getFile();
+            assert($file === __FILE__);
+        });
+    });
 });
