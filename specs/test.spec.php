@@ -247,4 +247,12 @@ describe("Test", function() {
             assert($scope === $test->getScope(), "scope should be parent scope");
         });
     });
+    
+    describe('file accessors', function () {
+        it('should allow access to the file property', function () {
+            $this->suite->setFile(__FILE__);
+            $file = $this->suite->getFile();
+            assert($file === __FILE__);
+        });
+    });
 });

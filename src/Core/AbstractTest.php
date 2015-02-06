@@ -53,6 +53,11 @@ abstract class AbstractTest implements TestInterface
     protected $scope;
 
     /**
+     * @var string
+     */
+    protected $file;
+
+    /**
      * @param string   $description
      * @param callable $definition
      */
@@ -235,6 +240,27 @@ abstract class AbstractTest implements TestInterface
     public function setScope(Scope $scope)
     {
         $this->scope = $scope;
+        return $this;
+    }
+
+    /**
+     * Get the file this test belongs to.
+     *
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Set the file this test belongs to.
+     *
+     * @param string $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
         return $this;
     }
 }
