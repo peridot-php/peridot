@@ -1,5 +1,11 @@
 # Changelog
 
+#### 1.12.0
+
+* AbstractTest objects now include the file path associated with them via getFile() *2015-02-06*
+* Command::getRunner() and Command::setRunner() added *2015-02-06*
+
+
 #### 1.11.1
 
 * Exception type hinting no longer required in test results and reporters *2015-01-31*
