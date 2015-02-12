@@ -55,8 +55,9 @@ class Runner implements RunnerInterface
 
         $this->eventEmitter->emit('runner.start');
         $this->suite->setEventEmitter($this->eventEmitter);
+        $start = microtime(true);
         $this->suite->run($result);
-        $this->eventEmitter->emit('runner.end');
+        $this->eventEmitter->emit('runner.end', [microtime(true) - $start]);
 
         restore_error_handler();
     }

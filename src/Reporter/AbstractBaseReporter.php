@@ -142,7 +142,19 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
-     * @return double|integer
+     * Set the run time to report.
+     *
+     * @param float $time
+     */
+    public function setTime($time)
+    {
+        $this->time = $time;
+    }
+
+    /**
+     * Get the run time to report.
+     *
+     * @return float
      */
     public function getTime()
     {
@@ -234,11 +246,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
      */
     private function registerEvents()
     {
-        $this->eventEmitter->on('runner.start', ['\PHP_Timer', 'start']);
-
-        $this->eventEmitter->on('runner.end', function () {
-            $this->time = \PHP_Timer::stop();
-        });
+        $this->eventEmitter->on('runner.end', [$this, 'setTime']);
 
         $this->eventEmitter->on('test.failed', function (Test $test, $e) {
             $this->errors[] = [$test, $e];
