@@ -65,14 +65,14 @@ describe("Runner", function() {
             assert($emitted, 'start event should have been emitted');
         });
 
-        it("should emit an end event when the runner ends", function() {
-            $emitted = false;
-            $this->eventEmitter->on('runner.end', function() use (&$emitted) {
-                $emitted = true;
+        it("should emit an end event with run time when the runner ends", function() {
+            $time = null;
+            $this->eventEmitter->on('runner.end', function($timeToRun) use (&$time) {
+                $time = $timeToRun;
             });
             $result = new TestResult(new EventEmitter());
             $this->runner->run($result);
-            assert($emitted && $result->getTestCount() > 0, 'end event should have been emitted');
+            assert(is_numeric($time) && $result->getTestCount() > 0, 'end event with a time arg should have been emitted');
         });
 
         it("should emit a fail event when a spec fails", function() {
