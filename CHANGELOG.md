@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.13.0
+
+* runner.end event now receives the run time as an argument *2015-02-12*
+
+
 #### 1.12.0
 
 * AbstractTest objects now include the file path associated with them via getFile() *2015-02-06*
