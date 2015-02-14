@@ -113,6 +113,8 @@ class TestResult
     }
 
     /**
+     * Get the number of failures tracked by this result.
+     *
      * @return int
      */
     public function getFailureCount()
@@ -121,6 +123,20 @@ class TestResult
     }
 
     /**
+     * Set the number of failures tracked by this result.
+     *
+     * @param int $failureCount
+     */
+    public function setFailureCount($failureCount)
+    {
+        $this->failureCount = $failureCount;
+        return $this;
+    }
+
+    /**
+     * Get the number of tests tracked by this
+     * result.
+     *
      * @return int
      */
     public function getTestCount()
@@ -129,10 +145,37 @@ class TestResult
     }
 
     /**
+     * Set the number of tests tracked by this
+     * result.
+     *
+     * @param int $testCount
+     */
+    public function setTestCount($testCount)
+    {
+        $this->testCount = $testCount;
+        return $this;
+    }
+
+    /**
+     * Get the number of pending tests tracked
+     * by this test result.
+     *
      * @return int
      */
     public function getPendingCount()
     {
         return $this->pendingCount;
+    }
+
+    /**
+     * Set the number of pending tests tracked
+     * by this test result.
+     *
+     * @param int $pendingCount
+     */
+    public function setPendingCount($pendingCount)
+    {
+        $this->pendingCount = $pendingCount;
+        return $this;
     }
 }
