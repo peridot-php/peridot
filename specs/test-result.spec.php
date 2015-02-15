@@ -134,13 +134,27 @@ describe("TestResult", function() {
         });
     });
 
-    describe("->getPendingCount()", function() {
-        it("should return the pending count tracked by the result", function() {
+    describe('pending test accessors', function () {
+        it('should allow access to the total number of pending tests', function () {
             $result = new TestResult($this->eventEmitter);
-            $pending = new Test("pending");
-            $result->pendTest($pending);
-            $count = $result->getPendingCount();
-            assert($count == 1, "pending count should be 1");
+            $result->setPendingCount(1);
+            assert($result->getPendingCount() === 1, 'should have returned pending count');
+        });
+    });
+
+    describe('failure accessors', function () {
+        it('should allow access to the total number of failures', function () {
+            $result = new TestResult($this->eventEmitter);
+            $result->setFailureCount(1);
+            assert($result->getFailureCount() === 1, 'should have returned failure count');
+        });
+    });
+
+    describe('test count accessors', function () {
+        it('should allow access to the total number of tests', function () {
+            $result = new TestResult($this->eventEmitter);
+            $result->setTestCount(1);
+            assert($result->getTestCount() === 1, 'should have returned test count');
         });
     });
 });
