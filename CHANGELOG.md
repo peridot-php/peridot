@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.14.0
+
+* Added count accessors to TestResult *2015-02-15*
+
+
 #### 1.13.0
 
 * runner.end event now receives the run time as an argument *2015-02-12*
