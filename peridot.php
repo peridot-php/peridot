@@ -5,9 +5,6 @@ use Peridot\Console\Environment;
 use Peridot\Reporter\ReporterInterface;
 use Symfony\Component\Console\Input\InputOption;
 
-/**
- * Demonstrate registering a runner via peridot config
- */
 return function(EventEmitterInterface $emitter) {
     $counts = ['pass' => 0, 'fail' => 0, 'pending' => 0];
 
@@ -60,7 +57,10 @@ return function(EventEmitterInterface $emitter) {
         $definition->option("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text");
         $definition->getArgument('path')->setDefault('specs');
     });
-
+    
+    /**
+     * Demonstrate registering a custom reporter via peridot config
+     */
     $emitter->on('peridot.reporters', function($input, $reporters) use (&$counts) {
         $banner = $input->getOption('banner');
         $reporters->register('basic', 'a simple summary', function(ReporterInterface $reporter) use (&$counts, $banner) {
