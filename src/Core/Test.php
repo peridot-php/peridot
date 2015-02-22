@@ -17,7 +17,7 @@ class Test extends AbstractTest
      */
     public function __construct($description, callable $definition = null)
     {
-        if (is_null($definition)) {
+        if ($definition === null) {
             $this->pending = true;
             $definition = function () {
                 //noop

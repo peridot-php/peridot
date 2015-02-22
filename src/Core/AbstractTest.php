@@ -197,7 +197,7 @@ abstract class AbstractTest implements TestInterface
     public function forEachNodeBottomUp(callable $fn)
     {
         $node = $this;
-        while (!is_null($node)) {
+        while ($node !== null) {
             $fn($node);
             $node = $node->getParent();
         }
@@ -212,7 +212,7 @@ abstract class AbstractTest implements TestInterface
     {
         $node = $this;
         $nodes = [];
-        while (!is_null($node)) {
+        while ($node !== null) {
             array_unshift($nodes, $node);
             $node = $node->getParent();
         }

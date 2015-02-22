@@ -40,10 +40,7 @@ class Application extends ConsoleApplication
     public function __construct(Environment $environment)
     {
         $this->environment = $environment;
-        if (! $this->environment->load(getcwd() . DIRECTORY_SEPARATOR . 'peridot.php')) {
-            fwrite(STDERR, "Configuration file specified but does not exist" . PHP_EOL);
-            exit(1);
-        }
+        $this->validateConfiguration();
         $this->environment->getEventEmitter()->emit('peridot.start', [$this->environment, $this]);
         parent::__construct(Version::NAME, Version::NUMBER);
     }
@@ -57,7 +54,7 @@ class Application extends ConsoleApplication
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        if (!is_null($input)) {
+        if ($input !== null) {
             $in = $input;
         } else {
             $in = $this->getInput();
@@ -94,7 +91,7 @@ class Application extends ConsoleApplication
     /**
      * Fetch the ArgvInput used by Peridot. If any exceptions are thrown due to
      * a mismatch between the option or argument requested and the input definition, the
-     * exception will be rendered and Peridot will exit with an error code
+     * exception will be rendered and Peridot will exit with an error code.
      *
      * @param array $argv An array of parameters from the CLI in the argv format.
      * @return ArgvInput
@@ -152,7 +149,7 @@ class Application extends ConsoleApplication
      */
     public function getRunner()
     {
-        if (is_null($this->runner)) {
+        if ($this->runner === null) {
             $this->runner = new Runner(
                 Context::getInstance()->getCurrentSuite(),
                 $this->getConfiguration(),
@@ -202,5 +199,18 @@ class Application extends ConsoleApplication
     protected function getDefaultInputDefinition()
     {
         return $this->environment->getDefinition();
+    }
+
+    /**
+     * Validate that a supplied configuration exists.
+     *
+     * @return void
+     */
+    protected function validateConfiguration()
+    {
+        if (!$this->environment->load(getcwd() . DIRECTORY_SEPARATOR . 'peridot.php')) {
+            fwrite(STDERR, "Configuration file specified but does not exist" . PHP_EOL);
+            exit(1);
+        }
     }
 }
