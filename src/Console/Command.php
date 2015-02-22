@@ -82,7 +82,7 @@ class Command extends ConsoleCommand
      */
     public function getLoader()
     {
-        if (is_null($this->loader)) {
+        if ($this->loader === null) {
             return new SuiteLoader($this->configuration->getGrep());
         }
         return $this->loader;

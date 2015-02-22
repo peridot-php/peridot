@@ -94,7 +94,7 @@ class Suite extends AbstractTest
      */
     protected function runTest(AbstractTest $test, TestResult $result)
     {
-        if (!is_null($this->getPending())) {
+        if ($this->getPending() !== null) {
             $test->setPending($this->getPending());
         }
 

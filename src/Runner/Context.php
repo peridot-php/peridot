@@ -10,7 +10,7 @@ use Peridot\Core\Suite;
  *
  * @package Peridot\Runner
  */
-class Context
+final class Context
 {
     /**
      * @var array
@@ -86,7 +86,7 @@ class Context
     public function addSuite($description, callable $fn, $pending = null)
     {
         $suite = new Suite($description, $fn);
-        if (!is_null($pending)) {
+        if ($pending !== null) {
             $suite->setPending($pending);
         }
         $suite->setFile($this->file);
@@ -107,7 +107,7 @@ class Context
     public function addTest($description, callable $fn = null, $pending = null)
     {
         $test = new Test($description, $fn);
-        if (!is_null($pending)) {
+        if ($pending !== null) {
             $test->setPending($pending);
         }
         $test->setFile($this->file);
@@ -144,7 +144,7 @@ class Context
      */
     public static function getInstance()
     {
-        if (is_null(self::$instance)) {
+        if (self::$instance === null) {
             self::$instance = new Context();
         }
 

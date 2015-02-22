@@ -34,7 +34,7 @@ class InputDefinition extends Definition
     /**
      * Add an argument
      *
-     * @param  InputArgument $name
+     * @param  string $name
      * @param  null          $mode
      * @param  string        $description
      * @param  null          $default
@@ -51,7 +51,7 @@ class InputDefinition extends Definition
     /**
      * Add an option
      *
-     * @param  InputOption $name
+     * @param  string $name
      * @param  null        $shortcut
      * @param  null        $mode
      * @param  string      $description

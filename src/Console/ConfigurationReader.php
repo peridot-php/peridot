@@ -28,7 +28,6 @@ class ConfigurationReader
     /**
      * Read configuration information from input
      *
-     * @param  InputInterface $input
      * @return Configuration
      */
     public function read()
@@ -67,9 +66,11 @@ class ConfigurationReader
     }
 
     /**
-     * @param Configuration $config
+     * Execute a callback if the input object has a value for the
+     * given option name.
+     *
      * @param string $optionName
-     * @param string $method
+     * @param callable $callable
      */
     protected function callForOption($optionName, callable $callable)
     {

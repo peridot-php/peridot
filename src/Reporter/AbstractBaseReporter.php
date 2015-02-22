@@ -7,6 +7,7 @@ use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\Test;
 use Peridot\Core\TestInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\StreamOutput;
 
 /**
  * The base class for all Peridot reporters. Sits on top of an OutputInterface
@@ -168,7 +169,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
     {
         $this->output->write($this->color('success', sprintf("\n  %d passing", $this->passing)));
         $this->output->writeln(sprintf($this->color('muted', " (%s)"), \PHP_Timer::secondsToTimeString($this->getTime())));
-        if ($this->errors) {
+        if (! empty($this->errors)) {
             $this->output->writeln($this->color('error', sprintf("  %d failing", count($this->errors))));
         }
         if ($this->pending) {
@@ -185,8 +186,8 @@ abstract class AbstractBaseReporter implements ReporterInterface
     /**
      * Output a test failure.
      *
-     * @param int $errorIndex
-     * @param Test $test
+     * @param int $errorNumber
+     * @param TestInterface $test
      * @param $exception - an exception like interface with ->getMessage(), ->getTraceAsString()
      */
     protected function outputError($errorNumber, TestInterface $test, $exception)
@@ -272,7 +273,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
     }
 
     /**
-     * Determine if reporter is reporting to a tty terminal
+     * Determine if reporter is reporting to a tty terminal.
      *
      * @return bool
      */
@@ -282,7 +283,21 @@ abstract class AbstractBaseReporter implements ReporterInterface
             return true;
         }
 
-        $tty = function_exists('posix_isatty') && @posix_isatty($this->output->getStream());
+        if (! $this->output instanceof StreamOutput) {
+            return false;
+        }
+
+        return $this->isTtyTerminal($this->output);
+    }
+
+    /**
+     * See if stream output is a tty terminal.
+     *
+     * @return bool
+     */
+    private function isTtyTerminal(StreamOutput $output)
+    {
+        $tty = function_exists('posix_isatty') && @posix_isatty($output->getStream());
         if ($tty) {
             putenv("PERIDOT_TTY=1");
         }
