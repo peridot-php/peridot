@@ -85,11 +85,8 @@ final class Context
      */
     public function addSuite($description, callable $fn, $pending = null)
     {
-        $suite = new Suite($description, $fn);
-        if ($pending !== null) {
-            $suite->setPending($pending);
-        }
-        $suite->setFile($this->file);
+        $suite = $this->createSuite($description, $fn, $pending);
+
         $this->getCurrentSuite()->addTest($suite);
         array_unshift($this->suites, $suite);
         call_user_func($suite->getDefinition());
@@ -149,5 +146,23 @@ final class Context
         }
 
         return self::$instance;
+    }
+
+    /**
+     * Create a Suite based on the state of the Context.
+     *
+     * @param $description
+     * @param callable $fn
+     * @param $pending
+     * @return Suite
+     */
+    private function createSuite($description, callable $fn, $pending)
+    {
+        $suite = new Suite($description, $fn);
+        if ($pending !== null) {
+            $suite->setPending($pending);
+        }
+        $suite->setFile($this->file);
+        return $suite;
     }
 }
