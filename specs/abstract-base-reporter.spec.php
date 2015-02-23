@@ -2,6 +2,7 @@
 use Evenement\EventEmitter;
 use Peridot\Configuration;
 use Peridot\Reporter\AbstractBaseReporter;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -47,7 +48,7 @@ describe('AbstractBaseReporter', function() {
             });
 
             afterEach(function() {
-                putenv('PERIDOT_TTY=');
+                putenv('PERIDOT_TTY');
             });
 
             it('should set the PERIDOT_TTY environment variable', function() {
@@ -59,6 +60,13 @@ describe('AbstractBaseReporter', function() {
                 putenv('PERIDOT_TTY=1');
                 $text = $this->reporter->color('success', 'text');
                 assert("\033[32mtext\033[39m" == $text, "colored text should have been written");
+            });
+
+            it('should not write colors when output is not a stream output', function () {
+                $output = new BufferedOutput();
+                $reporter = new TtyTestReporter(new Configuration(), $output, new EventEmitter());
+                $text = $reporter->color('success', 'text');
+                assert($text == 'text', 'should not have colored text');
             });
         });
     });

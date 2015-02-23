@@ -214,11 +214,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
             return $this->hasAnsiSupport();
         }
 
-        if (method_exists($this->output, 'getStream')) {
-            return $this->hasTty();
-        }
-
-        return false;
+        return $this->hasTty();
     }
 
     /**
@@ -279,12 +275,12 @@ abstract class AbstractBaseReporter implements ReporterInterface
      */
     private function hasTty()
     {
-        if (getenv("PERIDOT_TTY")) {
-            return true;
-        }
-
         if (! $this->output instanceof StreamOutput) {
             return false;
+        }
+
+        if (getenv("PERIDOT_TTY")) {
+            return true;
         }
 
         return $this->isTtyTerminal($this->output);
