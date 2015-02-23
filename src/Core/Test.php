@@ -54,7 +54,7 @@ class Test extends AbstractTest
         $action = ['passTest', $this];
         try {
             $this->runSetup();
-            call_user_func($this->getDefinition());
+            call_user_func_array($this->getDefinition(), $this->getDefinitionArguments());
         } catch (Exception $e) {
             $action = ['failTest', $this, $e];
         }
