@@ -172,6 +172,31 @@ describe("Suite", function() {
             assert($file === __FILE__);
         });
     });
+
+    describe('->define()', function () {
+        beforeEach(function () {
+            $this->arg = null;
+            $that = $this;
+            $this->suite = new Suite('argument testing', function($x) use ($that) {
+                $that->arg = $x;
+            });
+            $this->suite->setEventEmitter($this->eventEmitter);
+        });
+
+        it('should call the suite definition with definition arguments', function () {
+            $this->suite->setDefinitionArguments([1]);
+            $this->suite->define();
+            assert($this->arg === 1, 'should have passed argument');
+        });
+
+        it('should emit a suite.define event', function () {
+            $this->eventEmitter->on('suite.define', function ($suite) {
+                $suite->setDefinitionArguments([1]);
+            });
+            $this->suite->define();
+            assert($this->arg === 1, 'should have set definition arguments');
+        });
+    });
 });
 
 class SuiteScope extends Scope

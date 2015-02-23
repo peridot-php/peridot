@@ -1,6 +1,8 @@
 <?php
 namespace Peridot\Runner;
 
+use Evenement\EventEmitter;
+use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\Test;
 use Peridot\Core\Suite;
 
@@ -12,6 +14,8 @@ use Peridot\Core\Suite;
  */
 final class Context
 {
+    use HasEventEmitterTrait;
+
     /**
      * @var array
      */
@@ -89,7 +93,7 @@ final class Context
 
         $this->getCurrentSuite()->addTest($suite);
         array_unshift($this->suites, $suite);
-        call_user_func($suite->getDefinition());
+        $suite->define();
         array_shift($this->suites);
 
         return $suite;
@@ -163,6 +167,7 @@ final class Context
             $suite->setPending($pending);
         }
         $suite->setFile($this->file);
+        $suite->setEventEmitter($this->getEventEmitter());
         return $suite;
     }
 }

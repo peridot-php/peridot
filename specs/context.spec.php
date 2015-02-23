@@ -11,6 +11,7 @@ describe('Context', function() {
         $construct->setAccessible(true);
         $construct->invoke($context);
         $this->context = $context;
+        $this->context->setEventEmitter(new \Evenement\EventEmitter());
     });
 
     describe('->addSuite()', function() {
