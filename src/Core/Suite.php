@@ -54,6 +54,17 @@ class Suite extends AbstractTest
     }
 
     /**
+     * Execute the Suite definition.
+     *
+     * @return void
+     */
+    public function define()
+    {
+        $this->eventEmitter->emit('suite.define', [$this]);
+        call_user_func_array($this->getDefinition(), $this->getDefinitionArguments());
+    }
+
+    /**
      * Run all the specs belonging to the suite
      *
      * @param TestResult $result
@@ -61,7 +72,6 @@ class Suite extends AbstractTest
     public function run(TestResult $result)
     {
         $this->eventEmitter->emit('suite.start', [$this]);
-
         $this->eventEmitter->on('suite.halt', [$this, 'halt']);
 
         foreach ($this->tests as $test) {

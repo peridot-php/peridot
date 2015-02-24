@@ -58,6 +58,11 @@ abstract class AbstractTest implements TestInterface
     protected $file;
 
     /**
+     * @var array
+     */
+    protected $definitionArguments = [];
+
+    /**
      * @param string   $description
      * @param callable $definition
      */
@@ -262,5 +267,26 @@ abstract class AbstractTest implements TestInterface
     {
         $this->file = $file;
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param array $args
+     * @return $this
+     */
+    public function setDefinitionArguments(array $args)
+    {
+        $this->definitionArguments = $args;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function getDefinitionArguments()
+    {
+        return $this->definitionArguments;
     }
 }

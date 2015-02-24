@@ -79,7 +79,7 @@ describe("Test", function() {
             assert(empty($test->getScope()->log), 'test should have been skipped');
         });
 
-        context("when spec is pending", function() {
+        context("when test is pending", function() {
            it("should not execute", function() {
                $neverRan = true;
                $test = new Test('shouldnt run', function() use (&$neverRan) {
@@ -89,6 +89,18 @@ describe("Test", function() {
                $test->run(new TestResult(new EventEmitter()));
                assert($neverRan, 'pending spec should not have run');
            });
+        });
+
+        context('when definition arguments have been given', function () {
+            it('should pass arguments to test', function () {
+                $arg = null;
+                $test = new Test('should have args', function ($x) use (&$arg) {
+                    $arg = $x;
+                });
+                $test->setDefinitionArguments([1]);
+                $test->run(new TestResult(new EventEmitter()));
+                assert($arg === 1, 'should have passed argument to test');
+            });
         });
 
         context('when running setup functions', function() {

@@ -3,6 +3,7 @@ namespace Peridot\Console;
 
 use Evenement\EventEmitterInterface;
 use Peridot\Core\HasEventEmitterTrait;
+use Peridot\Runner\Context;
 
 /**
  * Environment is responsible for creating necessary objects and conditions
@@ -40,6 +41,7 @@ class Environment
         $this->definition = $definition;
         $this->eventEmitter = $emitter;
         $this->options = $options;
+        $this->initializeContext($emitter);
     }
 
     /**
@@ -129,5 +131,15 @@ class Environment
     protected function wasGivenAConfigurationPath()
     {
         return isset($this->options['c']) || isset($this->options['configuration']);
+    }
+
+    /**
+     * Initialize the Context with the same event emitter as the Environment.
+     *
+     * @param EventEmitterInterface $emitter
+     */
+    protected function initializeContext(EventEmitterInterface $emitter)
+    {
+        Context::getInstance()->setEventEmitter($emitter);
     }
 }

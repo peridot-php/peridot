@@ -131,4 +131,19 @@ interface TestInterface
      * @param callable $fn
      */
     public function forEachNodeTopDown(callable $fn);
+
+    /**
+     * Set arguments to be passed to the test definition when invoked.
+     *
+     * @param array $args
+     * @return mixed
+     */
+    public function setDefinitionArguments(array $args);
+
+    /**
+     * Return an array of arguments to be passed to the test definition when invoked.
+     *
+     * @return array
+     */
+    public function getDefinitionArguments();
 }

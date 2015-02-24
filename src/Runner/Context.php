@@ -1,6 +1,8 @@
 <?php
 namespace Peridot\Runner;
 
+use Evenement\EventEmitter;
+use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\Test;
 use Peridot\Core\Suite;
 
@@ -12,6 +14,8 @@ use Peridot\Core\Suite;
  */
 final class Context
 {
+    use HasEventEmitterTrait;
+
     /**
      * @var array
      */
@@ -85,14 +89,11 @@ final class Context
      */
     public function addSuite($description, callable $fn, $pending = null)
     {
-        $suite = new Suite($description, $fn);
-        if ($pending !== null) {
-            $suite->setPending($pending);
-        }
-        $suite->setFile($this->file);
+        $suite = $this->createSuite($description, $fn, $pending);
+
         $this->getCurrentSuite()->addTest($suite);
         array_unshift($this->suites, $suite);
-        call_user_func($suite->getDefinition());
+        $suite->define();
         array_shift($this->suites);
 
         return $suite;
@@ -149,5 +150,24 @@ final class Context
         }
 
         return self::$instance;
+    }
+
+    /**
+     * Create a Suite based on the state of the Context.
+     *
+     * @param $description
+     * @param callable $fn
+     * @param $pending
+     * @return Suite
+     */
+    private function createSuite($description, callable $fn, $pending)
+    {
+        $suite = new Suite($description, $fn);
+        if ($pending !== null) {
+            $suite->setPending($pending);
+        }
+        $suite->setFile($this->file);
+        $suite->setEventEmitter($this->getEventEmitter());
+        return $suite;
     }
 }
