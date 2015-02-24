@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.15.0
+
+* Allow test and suite definitions to be invoked with arguments via TestInterface::setDefinitionArguments and TestInterface::getDefinitionArguments *2015-02-24*
+
+
 #### 1.14.0
 
 * Added count accessors to TestResult *2015-02-15*
