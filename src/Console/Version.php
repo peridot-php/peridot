@@ -11,7 +11,7 @@ class Version
     /**
      * @var int
      */
-    const NUMBER = "1.14.0";
+    const NUMBER = "1.15.0";
 
     /**
      * @var string
