@@ -22,7 +22,10 @@ return function(EventEmitterInterface $emitter) {
 
     $codeCoverage = getenv('CODE_COVERAGE');
     $hhvm = defined('HHVM_VERSION'); //exclude coverage from hhvm because its pretty flawed at the moment
-    if ($codeCoverage == 'html' && !$hhvm) {
+    $php7 = preg_match('/^7/', PHP_VERSION);
+    $shouldCover = !$hhvm && $php7 == 0;
+
+    if ($codeCoverage == 'html' && $shouldCover) {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
             $coverage->filter()->addFileToBlacklist(__DIR__. '/src/Dsl.php');
@@ -36,7 +39,7 @@ return function(EventEmitterInterface $emitter) {
         });
     }
 
-    if ($codeCoverage == 'clover' && !$hhvm) {
+    if ($codeCoverage == 'clover' && $shouldCover) {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
             $coverage->filter()->addFileToBlacklist(__DIR__. '/src/Dsl.php');
