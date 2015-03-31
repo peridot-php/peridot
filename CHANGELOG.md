@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.15.1
+
+* Eliminate duplicate directory separators in path info *2015-03-31*
+
+
 #### 1.15.0
 
 * Allow test and suite definitions to be invoked with arguments via TestInterface::setDefinitionArguments and TestInterface::getDefinitionArguments *2015-02-24*
