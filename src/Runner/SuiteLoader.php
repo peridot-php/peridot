@@ -57,7 +57,7 @@ class SuiteLoader implements SuiteLoaderInterface
         if (! file_exists($path)) {
             throw new \RuntimeException("Cannot load path $path");
         }
-        $pattern = $path . '/' . $this->pattern;
+        $pattern = realpath($path) . '/' . $this->pattern;
 
         return $this->globRecursive($pattern);
     }

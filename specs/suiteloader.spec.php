@@ -35,6 +35,17 @@ describe("SuiteLoader", function() {
             }
             assert(!is_null($exception), "loader should have thrown exception");
         });
+
+        context('when search path contains a trailing slash', function () {
+            it('should not include multiple directory separators', function () {
+                $tests = $this->loader->getTests($this->fixtures . '/');
+                foreach ($tests as $test) {
+                    $double = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
+                    $pos = strpos($test, $double);
+                    assert($pos === false, 'should not have found double directory separators');
+                }
+            });
+        });
     });
 
     describe('->load()', function() {
@@ -48,7 +59,7 @@ describe("SuiteLoader", function() {
         it('should set the context file path', function() {
             $loader = new SuiteLoader('test2.spec.php');
             $loader->load($this->fixtures);
-            $expected = $this->fixtures . '/test2.spec.php';
+            $expected = realpath($this->fixtures . '/test2.spec.php');
             $actual = $this->context->getFile();
             assert($actual === $expected, "expected $expected, got $actual");
         });
