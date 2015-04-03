@@ -3,7 +3,7 @@ namespace Peridot\Reporter;
 
 use Peridot\Core\Test;
 use Peridot\Core\Suite;
-use Peridot\Runner\Context;
+use Peridot\Core\Context;
 
 /**
  * The SpecReporter is the default Peridot reporter. It organizes Suite and Test results

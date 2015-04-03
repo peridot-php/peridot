@@ -1,5 +1,5 @@
 <?php
-namespace Peridot\Runner;
+namespace Peridot\Core;
 
 use Evenement\EventEmitter;
 use Peridot\Core\HasEventEmitterTrait;
@@ -7,10 +7,10 @@ use Peridot\Core\Test;
 use Peridot\Core\Suite;
 
 /**
- * Context tracks the state of the runner - i.e the current Suite, and provides access to
- * Peridot's global state.
+ * Context represents the state of a Peridot test hierarchy - i.e the current Suite, and provides access to
+ * Peridot's global test tree.
  *
- * @package Peridot\Runner
+ * @package Peridot\Core
  */
 final class Context
 {

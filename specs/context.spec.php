@@ -1,11 +1,11 @@
 <?php
 
-use Peridot\Runner\Context;
+use Peridot\Core\Context;
 
 describe('Context', function() {
 
     beforeEach(function() {
-        $this->reflection = new ReflectionClass('Peridot\Runner\Context');
+        $this->reflection = new ReflectionClass('Peridot\Core\Context');
         $context = $this->reflection->newInstanceWithoutConstructor();
         $construct = $this->reflection->getConstructor();
         $construct->setAccessible(true);
