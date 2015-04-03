@@ -1,5 +1,5 @@
 <?php
-use Peridot\Runner\Context;
+use Peridot\Core\Context;
 
 /**
  * Creates a suite and sets it on the suite factory
