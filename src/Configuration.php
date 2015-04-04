@@ -46,7 +46,7 @@ class Configuration
 
     public function __construct()
     {
-        $this->path = getcwd();
+        $this->path = getcwd() . DIRECTORY_SEPARATOR . 'specs';
         $this->configurationFile = getcwd() . DIRECTORY_SEPARATOR . 'peridot.php';
         $this->dsl = __DIR__ . DIRECTORY_SEPARATOR . 'Dsl.php';
     }
