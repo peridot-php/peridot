@@ -15,6 +15,13 @@ describe('Configuration', function() {
         });
     });
 
+    describe('->getPath()', function () {
+        it('should default to a specs directory in the current working directory', function () {
+            $expected = getcwd() . DIRECTORY_SEPARATOR . 'specs';
+            assert($this->configuration->getPath() === $expected);
+        });
+    });
+
     describe('->setConfigurationFile()', function() {
 
         it('should check current working directory with file name', function() {

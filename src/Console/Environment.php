@@ -3,7 +3,7 @@ namespace Peridot\Console;
 
 use Evenement\EventEmitterInterface;
 use Peridot\Core\HasEventEmitterTrait;
-use Peridot\Runner\Context;
+use Peridot\Core\Context;
 
 /**
  * Environment is responsible for creating necessary objects and conditions

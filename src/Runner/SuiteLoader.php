@@ -1,6 +1,8 @@
 <?php
 namespace Peridot\Runner;
 
+use Peridot\Core\Context;
+
 /**
  * SuiteLoader will recursively load test files given a glob friendly
  * pattern.

@@ -3,7 +3,7 @@ namespace Peridot\Console;
 
 use Peridot\Configuration;
 use Peridot\Reporter\ReporterFactory;
-use Peridot\Runner\Context;
+use Peridot\Core\Context;
 use Peridot\Runner\Runner;
 use Peridot\Runner\RunnerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;

@@ -1,5 +1,5 @@
 <?php
-use Peridot\Runner\Context;
+use Peridot\Core\Context;
 use Peridot\Runner\SuiteLoader;
 
 describe("SuiteLoader", function() {
