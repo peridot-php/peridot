@@ -2,8 +2,8 @@
 use Peridot\Console\Command;
 use Peridot\Core\Suite;
 use Peridot\Core\Test;
-use Peridot\Runner\Runner;
-use Peridot\Runner\SuiteLoader;
+use Peridot\Core\Runner;
+use Peridot\Core\SuiteLoader;
 use Symfony\Component\Console\Input\ArrayInput;
 
 describe('Command', function() {
@@ -25,7 +25,7 @@ describe('Command', function() {
     describe('runner accessors', function() {
         it('should allow setting and getting of the runner', function () {
             $suite = new Suite('description', function () {});
-            $runner = new Runner($suite, $this->configuration, $this->emitter);
+            $runner = new Runner($suite, $this->emitter);
             $this->command->setRunner($runner);
             assert($runner === $this->command->getRunner(), 'runner should be accessible from command');
         });
@@ -68,6 +68,11 @@ describe('Command', function() {
             assert($factory === $this->factory, "reporter factory should have been received by event");
         });
 
+        it('should set the runner stop on failure option', function () {
+            $this->command->run(new ArrayInput(['--bail' => true], $this->definition), $this->output);
+            assert($this->runner->shouldStopOnFailure() === true);
+        });
+
         context('when using the --reporters option', function() {
             it('should list reporters', function() {
                 $this->command->run(new ArrayInput(['--reporters' => true], $this->definition), $this->output);
@@ -107,7 +112,7 @@ describe('Command', function() {
                 $suite = new Suite("fail suite", function() {});
                 $test = new Test('fail', function() { throw new Exception('fail'); });
                 $suite->addTest($test);
-                $runner = new Runner($suite, $this->configuration, $this->emitter);
+                $runner = new Runner($suite, $this->emitter);
                 $command = new Command($runner, $this->configuration, $this->factory, $this->emitter);
                 $command->setApplication($this->application);
                 $exit = $command->run(new ArrayInput([], $this->definition), $this->output);

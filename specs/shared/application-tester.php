@@ -7,7 +7,7 @@ use Peridot\Console\Environment;
 use Peridot\Console\InputDefinition;
 use Peridot\Core\Suite;
 use Peridot\Reporter\ReporterFactory;
-use Peridot\Runner\Runner;
+use Peridot\Core\Runner;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 beforeEach(function() {
@@ -17,7 +17,7 @@ beforeEach(function() {
 
     $this->emitter = new EventEmitter();
     $suite = new Suite("suite", function() {});
-    $this->runner = new Runner($suite, $this->configuration, $this->emitter);
+    $this->runner = new Runner($suite, $this->emitter);
     $this->output = new BufferedOutput();
     $this->factory = new ReporterFactory($this->configuration, $this->output, $this->emitter);
     $this->definition = new InputDefinition();
