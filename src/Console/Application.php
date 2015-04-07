@@ -4,8 +4,8 @@ namespace Peridot\Console;
 use Peridot\Configuration;
 use Peridot\Reporter\ReporterFactory;
 use Peridot\Core\Context;
-use Peridot\Runner\Runner;
-use Peridot\Runner\RunnerInterface;
+use Peridot\Core\Runner;
+use Peridot\Core\RunnerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -152,7 +152,6 @@ class Application extends ConsoleApplication
         if ($this->runner === null) {
             $this->runner = new Runner(
                 Context::getInstance()->getCurrentSuite(),
-                $this->getConfiguration(),
                 $this->environment->getEventEmitter()
             );
         }

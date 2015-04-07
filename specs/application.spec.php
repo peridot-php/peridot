@@ -1,8 +1,8 @@
 <?php
 use Peridot\Console\Application;
 use Peridot\Core\Suite;
-use Peridot\Runner\Runner;
-use Peridot\Runner\RunnerInterface;
+use Peridot\Core\Runner;
+use Peridot\Core\RunnerInterface;
 
 describe('Application', function() {
     include __DIR__ . '/shared/application-tester.php';

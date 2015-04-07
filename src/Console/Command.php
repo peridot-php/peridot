@@ -6,9 +6,9 @@ use Peridot\Configuration;
 use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\TestResult;
 use Peridot\Reporter\ReporterFactory;
-use Peridot\Runner\RunnerInterface;
-use Peridot\Runner\SuiteLoader;
-use Peridot\Runner\SuiteLoaderInterface;
+use Peridot\Core\RunnerInterface;
+use Peridot\Core\SuiteLoader;
+use Peridot\Core\SuiteLoaderInterface;
 use Symfony\Component\Console\Command\Command as ConsoleCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,7 +39,7 @@ class Command extends ConsoleCommand
     protected $factory;
 
     /**
-     * @var \Peridot\Runner\SuiteLoaderInterface
+     * @var \Peridot\Core\SuiteLoaderInterface
      */
     protected $loader;
 
@@ -102,7 +102,7 @@ class Command extends ConsoleCommand
 
     /**
      * Return the runner used by the Peridot command. Defaults to
-     * an instance of Peridot\Runner\Runner.
+     * an instance of Peridot\Core\Runner.
      *
      * @return RunnerInterface
      */
@@ -144,7 +144,7 @@ class Command extends ConsoleCommand
         }
 
         $this->eventEmitter->emit('peridot.load', [$this, $this->configuration]);
-
+        $this->runner->setStopOnFailure($input->getOption('bail'));
 
         return $this->getResult();
     }
