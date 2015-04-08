@@ -19,7 +19,7 @@ beforeEach(function() {
     $suite = new Suite("suite", function() {});
     $this->runner = new Runner($suite, $this->emitter);
     $this->output = new BufferedOutput();
-    $this->factory = new ReporterFactory($this->configuration, $this->output, $this->emitter);
+    $this->factory = new ReporterFactory($this->output, $this->emitter);
     $this->definition = new InputDefinition();
 
     $this->configPath = __DIR__  . '/../../fixtures/samplespec.php';

@@ -76,7 +76,7 @@ class Application extends ConsoleApplication
         $this->environment->getEventEmitter()->emit('peridot.configure', [$this->configuration, $this]);
 
         $runner = $this->getRunner();
-        $factory = new ReporterFactory($this->configuration, $output, $this->environment->getEventEmitter());
+        $factory = new ReporterFactory($output, $this->environment->getEventEmitter());
 
         $this->loadDsl($this->configuration->getDsl());
         $this->add(new Command($runner, $this->configuration, $factory, $this->environment->getEventEmitter()));
