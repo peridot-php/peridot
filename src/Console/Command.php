@@ -145,6 +145,8 @@ class Command extends ConsoleCommand
 
         $this->eventEmitter->emit('peridot.load', [$this, $this->configuration]);
         $this->runner->setStopOnFailure($input->getOption('bail'));
+        $reporter = $this->factory->create($this->configuration->getReporter());
+        $reporter->setColorsEnabled(! $input->getOption('no-colors'));
 
         return $this->getResult();
     }
@@ -172,7 +174,6 @@ class Command extends ConsoleCommand
     {
         $result = new TestResult($this->eventEmitter);
         $this->getLoader()->load($this->configuration->getPath());
-        $this->factory->create($this->configuration->getReporter());
         $this->runner->run($result);
 
         if ($result->getFailureCount() > 0) {
