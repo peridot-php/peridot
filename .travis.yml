@@ -16,9 +16,3 @@ matrix:
 
 install:
   - composer install --prefer-source
-
-script:
-  - CODE_COVERAGE=clover bin/peridot specs/
-
-after_script:
-  - php vendor/bin/coveralls

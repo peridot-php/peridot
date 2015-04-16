@@ -32,5 +32,4 @@ use Peridot\Cli\Application;
 use Peridot\Version;
 
 $application = Application::create(Version::NAME, Version::NUMBER, $argv);
-$application->loadDsl(__DIR__ . '/../src/Dsl.php');
 $application->run();
