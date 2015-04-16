@@ -18,6 +18,7 @@
     "peridot-php/peridot-core": "2.0.*@dev",
     "peridot-php/peridot-reporters": "2.0.*@dev",
     "peridot-php/peridot-cli": "2.0.*@dev",
+    "peridot-php/peridot-dsls": "2.0.*@dev",
     "symfony/console": "~2.0",
     "phpunit/php-timer": "~1.0",
     "peridot-php/peridot-scope": "~1.0"

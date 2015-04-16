@@ -1,8 +1,11 @@
 destination: docs
 source:
-	- src
 	- vendor/symfony/console
 	- vendor/evenement/evenement/src
+	- vendor/peridot-php/peridot-cli/src
+	- vendor/peridot-php/peridot-core/src
+	- vendor/peridot-php/peridot-dsls/src
+	- vendor/peridot-php/peridot-reporters/src
 	- vendor/peridot-php/peridot-scope/src
 	
 exclude:
