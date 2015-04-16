@@ -1,7 +1,7 @@
 <?php
 
 use Evenement\EventEmitterInterface;
-use Peridot\Console\Environment;
+use Peridot\Cli\Environment;
 use Peridot\Reporter\ReporterInterface;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -59,7 +59,7 @@ return function(EventEmitterInterface $emitter) {
         $definition = $env->getDefinition();
         $definition->option("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text");
     });
-    
+
     /**
      * Demonstrate registering a custom reporter via peridot config
      */
