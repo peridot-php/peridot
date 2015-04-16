@@ -1,5 +1,5 @@
 <?php
-namespace Peridot\Console;
+namespace Peridot;
 
 /**
  * The Version class contains application name and version information.
@@ -11,7 +11,7 @@ class Version
     /**
      * @var int
      */
-    const NUMBER = "1.15.1";
+    const NUMBER = "2.0.*@dev";
 
     /**
      * @var string

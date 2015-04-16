@@ -28,18 +28,9 @@ if (!defined('PERIDOT_COMPOSER_INSTALL')) {
 
 require_once PERIDOT_COMPOSER_INSTALL;
 
-use Evenement\EventEmitter;
-use Peridot\Console\Application;
-use Peridot\Console\CliOptionParser;
-use Peridot\Console\Environment;
-use Peridot\Console\InputDefinition;
+use Peridot\Cli\Application;
+use Peridot\Version;
 
-$parser = new CliOptionParser(['-c', '--configuration'], $argv);
-$environment = new Environment(
-    new InputDefinition(),
-    new EventEmitter(),
-    $parser->parse()
-);
-
-$application = new Application($environment);
+$application = Application::create(Version::NAME, Version::NUMBER, $argv);
+$application->loadDsl(__DIR__ . '/../src/Dsl.php');
 $application->run();
