@@ -1,6 +1,6 @@
 <?php
 
-use Evenement\EventEmitterInterface;
+use Peridot\EventEmitterInterface;
 use Peridot\Cli\Environment;
 use Peridot\Reporter\ReporterInterface;
 use Symfony\Component\Console\Input\InputOption;
