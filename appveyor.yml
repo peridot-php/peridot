@@ -17,4 +17,4 @@ install:
 
 test_script:
   - cd C:\projects\peridot
-  - vendor\bin\peridot.bat
+  - bin\peridot.bat
