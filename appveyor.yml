@@ -1,0 +1,12 @@
+build: false
+clone_folder: C:\projects\peridot
+
+install:
+  - cinst php
+  - cd C:\projects\peridot
+  - php -r "readfile('http://getcomposer.org/installer');" | php
+  - php composer.phar install --prefer-dist --no-interaction --dev
+
+test_script:
+  - cd C:\projects\peridot
+  - vendor\bin\peridot.bat
