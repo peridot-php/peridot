@@ -1,11 +1,15 @@
 <?php
 
+use Peridot\Core\Behavior\Listener;
 use Peridot\EventEmitterInterface;
 use Peridot\Cli\Environment;
 use Peridot\Reporter\ReporterInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 return function(EventEmitterInterface $emitter) {
+    $listener = new Listener($emitter);
+    $listener->listen();
+
     $counts = ['pass' => 0, 'fail' => 0, 'pending' => 0];
 
     $emitter->on('test.failed', function() use (&$counts) {
