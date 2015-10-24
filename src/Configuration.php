@@ -15,6 +15,11 @@ class Configuration
     protected $colorsEnabled = true;
 
     /**
+     * @var boolean
+     */
+    protected $colorsEnableExplicit = false;
+
+    /**
      * @var string
      */
     protected $grep = '*.spec.php';
@@ -121,7 +126,21 @@ class Configuration
      */
     public function disableColors()
     {
-        return $this->write('colorsEnabled', false);
+        if ( $this->colorsEnableExplicit ) {
+            return $this;
+        }
+        else {
+            return $this->write('colorsEnabled', false);
+        }
+    }
+
+    /**
+     * Force output colors even without TTY support.
+     *
+     * @return $this
+     */
+    public function enableColorsExplicit() {
+        return $this->write('colorsEnableExplicit', true) && $this->write('colorsEnabled', true);
     }
 
     /**
@@ -131,7 +150,16 @@ class Configuration
      */
     public function areColorsEnabled()
     {
-        return $this->colorsEnabled;
+        return $this->colorsEnableExplicit || $this->colorsEnabled;
+    }
+
+    /**
+     * Check if output colors are explicitly enabled.
+     *
+     * @return boolean
+     */
+    public function areColorsEnabledExplicit() {
+        return $this->colorsEnableExplicit;
     }
 
     /**

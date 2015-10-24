@@ -102,7 +102,13 @@ abstract class AbstractBaseReporter implements ReporterInterface
      */
     public function color($key, $text)
     {
-        if (!$this->configuration->areColorsEnabled() || !$this->hasColorSupport()) {
+        if (
+            !$this->configuration->areColorsEnabledExplicit() &&
+            (
+                !$this->configuration->areColorsEnabled() ||
+                !$this->hasColorSupport()
+            )
+        ) {
             return $text;
         }
 

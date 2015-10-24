@@ -37,6 +37,7 @@ class ConfigurationReader
         $options = [
             'grep' => [$configuration, 'setGrep'],
             'no-colors' => [$configuration, 'disableColors'],
+            'force-colors' => [$configuration, 'enableColorsExplicit'],
             'bail' => [$configuration, 'stopOnFailure'],
             'configuration' => [$configuration, 'setConfigurationFile']
         ];

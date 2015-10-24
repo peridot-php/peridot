@@ -23,6 +23,7 @@ class InputDefinition extends Definition
 
         $this->addOption(new InputOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern> <comment>(default: *.spec.php)</comment>'));
         $this->addOption(new InputOption('no-colors', 'C', InputOption::VALUE_NONE, 'Disable output colors'));
+        $this->addOption(new InputOption('--force-colors', '-f', InputOption::VALUE_NONE, 'Force output colors'));
         $this->addOption(new InputOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select which reporter to use <comment>(default: spec)</comment>'));
         $this->addOption(new InputOption('bail', 'b', InputOption::VALUE_NONE, 'Stop on failure'));
         $this->addOption(new InputOption('configuration', 'c', InputOption::VALUE_REQUIRED, 'A php file containing peridot configuration'));
