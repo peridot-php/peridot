@@ -78,4 +78,14 @@ describe('Configuration', function() {
         });
     });
 
+    describe('->enableColorsExplicit()', function() {
+        it('should enable colors when explicit is set', function() {
+            $this->configuration->enableColorsExplicit();
+            $this->configuration->disableColors();
+
+            assert(getenv('PERIDOT_COLORS_ENABLED'), 'should have set colors env');
+            assert($this->configuration->areColorsEnabled(), 'should have set configuration value');
+        });
+    });
+
 });
