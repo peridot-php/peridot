@@ -129,9 +129,8 @@ class Configuration
         if ( $this->colorsEnableExplicit ) {
             return $this;
         }
-        else {
-            return $this->write('colorsEnabled', false);
-        }
+
+        return $this->write('colorsEnabled', false);
     }
 
     /**
@@ -139,8 +138,11 @@ class Configuration
      *
      * @return $this
      */
-    public function enableColorsExplicit() {
-        return $this->write('colorsEnableExplicit', true) && $this->write('colorsEnabled', true);
+    public function enableColorsExplicit()
+    {
+        return $this
+            ->write('colorsEnableExplicit', true)
+            ->write('colorsEnabled', true);
     }
 
     /**
@@ -158,7 +160,8 @@ class Configuration
      *
      * @return boolean
      */
-    public function areColorsEnabledExplicit() {
+    public function areColorsEnabledExplicit()
+    {
         return $this->colorsEnableExplicit;
     }
 
