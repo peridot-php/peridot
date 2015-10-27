@@ -3,6 +3,7 @@ use Peridot\Console\Application;
 use Peridot\Core\Suite;
 use Peridot\Runner\Runner;
 use Peridot\Runner\RunnerInterface;
+use Symfony\Component\Console\Input\ArgvInput;
 
 describe('Application', function() {
     include __DIR__ . '/shared/application-tester.php';
@@ -35,7 +36,8 @@ describe('Application', function() {
 
     describe('->getCommandName()', function() {
         it('should return "peridot"', function() {
-            assert($this->application->getCommandName() == "peridot", "command name should be peridot");
+            $input = new ArgvInput(['foo.php', 'bar'], $this->definition);
+            assert($this->application->getCommandName($input) == "peridot", "command name should be peridot");
         });
     });
 
