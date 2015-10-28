@@ -1,5 +1,10 @@
 # Changelog
 
+#### 1.16.0
+
+* add --force-color option (thanks @vicary) *2015-10-27*
+
+
 #### 1.15.1
 
 * Eliminate duplicate directory separators in path info *2015-03-31*
