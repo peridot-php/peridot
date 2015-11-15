@@ -10,7 +10,7 @@ Read more at [peridot-php.github.io](http://peridot-php.github.io/) or head over
 
 ##Building PHAR
 
-Peridot's phar is built using [Box](http://box-project.org/). Once box is installed, the phar can be built using
+Peridot's phar is built using [Box](https://github.com/box-project/). Once box is installed, the phar can be built using
 the following command from the project directory:
 
 ```
