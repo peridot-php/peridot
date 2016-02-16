@@ -99,10 +99,10 @@ class Suite extends AbstractTest
     /**
      * Run a test and track its results.
      *
+     * @param TestInterface $test
      * @param TestResult $result
-     * @param $test
      */
-    protected function runTest(AbstractTest $test, TestResult $result)
+    protected function runTest(TestInterface $test, TestResult $result)
     {
         if ($this->getPending() !== null) {
             $test->setPending($this->getPending());
