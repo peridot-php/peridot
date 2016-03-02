@@ -67,8 +67,15 @@ class Runner implements RunnerInterface
      */
     protected function handleErrors()
     {
-        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+        $handler = null;
+        $handler = set_error_handler(function ($errno, $errstr, $errfile, $errline) use (&$handler) {
             $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
+
+            if ($handler) {
+                return $handler($errno, $errstr, $errfile, $errline);
+            }
+
+            return false;
         });
     }
 }
