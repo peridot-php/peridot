@@ -45,8 +45,6 @@ class Runner implements RunnerInterface
      */
     public function run(TestResult $result)
     {
-        $this->handleErrors();
-
         $this->eventEmitter->on('test.failed', function () {
             if ($this->configuration->shouldStopOnFailure()) {
                 $this->eventEmitter->emit('suite.halt');
@@ -58,24 +56,5 @@ class Runner implements RunnerInterface
         $start = microtime(true);
         $this->suite->run($result);
         $this->eventEmitter->emit('runner.end', [microtime(true) - $start]);
-
-        restore_error_handler();
-    }
-
-    /**
-     * Set an error handler to broadcast an error event.
-     */
-    protected function handleErrors()
-    {
-        $handler = null;
-        $handler = set_error_handler(function ($errno, $errstr, $errfile, $errline) use (&$handler) {
-            $this->eventEmitter->emit('error', [$errno, $errstr, $errfile, $errline]);
-
-            if ($handler) {
-                return $handler($errno, $errstr, $errfile, $errline);
-            }
-
-            return false;
-        });
     }
 }

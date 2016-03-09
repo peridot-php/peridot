@@ -2,7 +2,10 @@
 
 namespace Peridot\Core;
 
+use Error;
+use ErrorException;
 use Exception;
+use Throwable;
 
 /**
  * The main test fixture for Peridot.
@@ -52,13 +55,17 @@ class Test extends AbstractTest
     protected function executeTest(TestResult $result)
     {
         $action = ['passTest', $this];
+        $handler = $this->handleErrors($result, $action);
         try {
             $this->runSetup();
             call_user_func_array($this->getDefinition(), $this->getDefinitionArguments());
+        } catch (Throwable $e) {
+            $this->failIfPassing($action, $e);
         } catch (Exception $e) {
-            $action = ['failTest', $this, $e];
+            $this->failIfPassing($action, $e);
         }
         $this->runTearDown($result, $action);
+        $this->restoreErrorHandler($handler);
     }
 
     /**
@@ -81,18 +88,79 @@ class Test extends AbstractTest
      * @param TestResult $result
      * @param array $action
      */
-    protected function runTearDown(TestResult $result, $action)
+    protected function runTearDown(TestResult $result, array $action)
     {
         $this->forEachNodeBottomUp(function (TestInterface $test) use ($result, &$action) {
             $tearDowns = $test->getTearDownFunctions();
             foreach ($tearDowns as $tearDown) {
                 try {
                     $tearDown();
+                } catch (Throwable $e) {
+                    $this->failIfPassing($action, $e);
                 } catch (Exception $e) {
-                    $action = ['failTest', $this, $e];
+                    $this->failIfPassing($action, $e);
                 }
             }
         });
         call_user_func_array([$result, $action[0]], array_slice($action, 1));
+    }
+
+    /**
+     * Set an error handler to handle errors within the test
+     *
+     * @param TestResult $result
+     * @param array      &$action
+     *
+     * @return callable|null
+     */
+    protected function handleErrors(TestResult $result, array &$action)
+    {
+        $handler = null;
+        $handler = set_error_handler(function ($severity, $message, $path, $line) use ($result, &$action, &$handler) {
+            // if there is an existing error handler, call it and record the result
+            $isHandled = $handler && false !== $handler($severity, $message, $path, $line);
+
+            if (!$isHandled) {
+                $result->getEventEmitter()->emit('error', [$severity, $message, $path, $line]);
+
+                // honor the error reporting configuration - this also takes care of the error control operator (@)
+                $errorReporting = error_reporting();
+                $shouldHandle = $severity === ($severity & $errorReporting);
+
+                if ($shouldHandle) {
+                    $this->failIfPassing($action, new ErrorException($message, 0, $severity, $path, $line));
+                }
+            }
+        });
+
+        return $handler;
+    }
+
+    /**
+     * Restore the previous error handler
+     *
+     * @param callable|null $handler
+     */
+    protected function restoreErrorHandler($handler)
+    {
+        if ($handler) {
+            set_error_handler($handler);
+        } else {
+            // unfortunately, we can't pass null until PHP 5.5
+            set_error_handler(function () { return false; });
+        }
+    }
+
+    /**
+     * Fail the test, but do not overwrite existing failures
+     *
+     * @param array &$action
+     * @param mixed $error
+     */
+    protected function failIfPassing(array &$action, $error)
+    {
+        if ('passTest' === $action[0]) {
+            $action = ['failTest', $this, $error];
+        }
     }
 }

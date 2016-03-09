@@ -1,6 +1,7 @@
 filter:
   paths: [src/*]
   excluded_paths: [vendor/*, specs/*, src/Test/*]
+  dependency_paths: [fixtures/*]
 checks:
   php:
     parameter_doc_comments: false
@@ -23,7 +24,7 @@ tools:
       method_contract_checks:
         verify_documented_constraints: false
   sensiolabs_security_checker: true
-  php_code_sniffer: 
+  php_code_sniffer:
     enabled: true
     config:
       standard: "PSR2"
