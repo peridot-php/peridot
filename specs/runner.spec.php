@@ -160,51 +160,5 @@ describe("Runner", function() {
                 assert($result->getTestCount() === 3, "spec count should be 3");
             });
         });
-
-        $behavesLikeErrorEmitter = function() {
-            $this->suite->addTest(new Test("my spec", function() {
-                trigger_error("This is a user notice", E_USER_NOTICE);
-            }));
-
-            $error = [];
-            $this->eventEmitter->on('error', function($errno, $errstr, $errfile, $errline) use (&$error) {
-                $error = array(
-                    'errno' => $errno,
-                    'errstr' => $errstr,
-                    'errfile' => $errfile,
-                    'errline' => $errline
-                );
-            });
-
-            $this->runner->run(new TestResult(new EventEmitter()));
-            assert($error['errno'] == E_USER_NOTICE, "error event should have passed error constant");
-            assert($error['errstr'] == "This is a user notice");
-        };
-
-        it("should emit an error event with error information", $behavesLikeErrorEmitter);
-
-        it("should invoke the previous error handler on error", function() use ($behavesLikeErrorEmitter) {
-            $handled = [];
-            $handler = function() use (&$handled) {
-                $handled = func_get_args();
-            };
-            set_error_handler($handler);
-            call_user_func(Closure::bind($behavesLikeErrorEmitter, $this, $this));
-            assert(count($handled) === 4, "runner should have invoked previous handler");
-            assert($handled[0] === E_USER_NOTICE, "runner should have invoked previous handler");
-            assert($handled[1] === "This is a user notice", "runner should have invoked previous handler");
-            assert($handled[2] === __FILE__, "runner should have invoked previous handler");
-            assert(is_int($handled[3]), "runner should have invoked previous handler");
-        });
-
-        it("should restore a previous error handler upon completion", function() use ($behavesLikeErrorEmitter) {
-            $handler = function($errno, $errstr, $errfile, $errline) {
-                //such errors handled. wow!
-            };
-            set_error_handler($handler);
-            call_user_func(Closure::bind($behavesLikeErrorEmitter, $this, $this));
-            $old = set_error_handler(function($n,$s,$f,$l) {});
-            assert($handler === $old, "runner should have restored previous handler");
-        });
     });
 });

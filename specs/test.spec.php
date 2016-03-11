@@ -51,9 +51,63 @@ describe("Test", function() {
 
         it("should add failed results to result", function () {
             $test = new ItWasRun("this should return a failed result", function () {
-                throw new \Exception('blaaargh');
+                throw new Exception('blaaargh');
             });
             $result = new TestResult(new EventEmitter());
+            $test->run($result);
+            assert("1 run, 1 failed" == $result->getSummary(), "result summary should have shown 1 failed");
+        });
+
+        $removeErrorHandlers = function () {
+            do {
+                if ($handler = set_error_handler(function () {})) {
+                    restore_error_handler();
+                }
+
+                restore_error_handler();
+            } while ($handler);
+        };
+
+        it("should add failed results to result on error", function () use ($removeErrorHandlers) {
+            $test = new ItWasRun("this should return a failed result", function () {
+                trigger_error("This is a user notice", E_USER_NOTICE);
+            });
+            $result = new TestResult(new EventEmitter());
+            $removeErrorHandlers();
+            error_reporting(-1);
+            $test->run($result);
+            assert("1 run, 1 failed" == $result->getSummary(), "result summary should have shown 1 failed");
+        });
+
+        it("should ignore errors that are excluded by error reporting", function () use ($removeErrorHandlers) {
+            $test = new ItWasRun("this should return a failed result", function () {
+                trigger_error("This is a user notice", E_USER_NOTICE);
+            });
+            $result = new TestResult(new EventEmitter());
+            $removeErrorHandlers();
+            error_reporting(E_ERROR);
+            $test->run($result);
+            assert("1 run, 0 failed" == $result->getSummary(), "result summary should have shown 0 failed");
+        });
+
+        it("should ignore errors that are excluded by the error control operator", function () use ($removeErrorHandlers) {
+            $test = new ItWasRun("this should return a failed result", function () {
+                $foo = [];
+                @strlen($foo['bar']);
+            });
+            $result = new TestResult(new EventEmitter());
+            $removeErrorHandlers();
+            error_reporting(-1);
+            $test->run($result);
+            assert("1 run, 0 failed" == $result->getSummary(), "result summary should have shown 0 failed");
+        });
+
+        it("should add failed results to result on engine error", function () use ($removeErrorHandlers) {
+            $test = new ItWasRun("this should return a failed result", function () {
+                throw new Error('blaaargh');
+            });
+            $result = new TestResult(new EventEmitter());
+            $removeErrorHandlers();
             $test->run($result);
             assert("1 run, 1 failed" == $result->getSummary(), "result summary should have shown 1 failed");
         });
@@ -191,6 +245,19 @@ describe("Test", function() {
                 $test = new Test('spec', function() {});
                 $test->addTearDownFunction(function() {
                     throw new Exception('tear down failure');
+                });
+
+                $result = new TestResult(new EventEmitter());
+                $test->run($result);
+                $expected = "1 run, 1 failed";
+                $actual = $result->getSummary();
+                assert($expected == $actual, "expected $expected, got $actual");
+            });
+
+            it('should continue if tear down fails with an engine error', function () {
+                $test = new Test('spec', function() {});
+                $test->addTearDownFunction(function() {
+                    throw new Error();
                 });
 
                 $result = new TestResult(new EventEmitter());

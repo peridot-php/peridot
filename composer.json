@@ -30,5 +30,10 @@
       "Peridot\\": "src/"
     }
   },
+  "autoload-dev": {
+    "files": [
+      "fixtures/error-polyfill.php"
+    ]
+  },
   "bin": ["bin/peridot"]
 }

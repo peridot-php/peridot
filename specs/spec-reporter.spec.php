@@ -17,7 +17,7 @@ describe('SpecReporter', function() {
     context('when test.failed is emitted', function() {
         it('should include an error number and the test description', function() {
             $test = new Test("test", function() {});
-            $this->emitter->emit('test.failed', [$test]);
+            $this->emitter->emit('test.failed', [$test, new Exception()]);
             $contents = $this->output->fetch();
             assert(strstr($contents, '1) test') !== false, "error count and test description should be present");
         });
