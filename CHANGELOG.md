@@ -1,5 +1,13 @@
 # Changelog
 
+#### 1.18.1
+
+* Symfony console version constraint fixed
+
+#### 1.18.0
+
+* Tests now fail when an error occurs - not just exceptions.
+
 #### 1.17.0
 
 * Suite type hints on `TestInterface` instead of `AbstractTest`
