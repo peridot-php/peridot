@@ -1,5 +1,9 @@
 # Changelog
 
+#### 1.17.0
+
+* Suite type hints on `TestInterface` instead of `AbstractTest`
+
 #### 1.16.0
 
 * add --force-color option (thanks @vicary) *2015-10-27*
