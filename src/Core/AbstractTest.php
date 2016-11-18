@@ -48,6 +48,11 @@ abstract class AbstractTest implements TestInterface
     protected $pending = null;
 
     /**
+     * @var bool
+     */
+    protected $focused;
+
+    /**
      * @var Scope
      */
     protected $scope;
@@ -65,11 +70,13 @@ abstract class AbstractTest implements TestInterface
     /**
      * @param string   $description
      * @param callable $definition
+     * @param bool     $focused
      */
-    public function __construct($description, callable $definition)
+    public function __construct($description, callable $definition, $focused = false)
     {
         $this->definition = $definition;
         $this->description = $description;
+        $this->focused = $focused;
         $this->scope = new Scope();
     }
 
