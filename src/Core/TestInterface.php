@@ -90,6 +90,13 @@ interface TestInterface
     public function setPending($state);
 
     /**
+     * Return whether or not the test is focused
+     *
+     * @return bool
+     */
+    public function isFocused();
+
+    /**
      * Return scope for this test. Scope contains instance variables
      * for a spec
      *

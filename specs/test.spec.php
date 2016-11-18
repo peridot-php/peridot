@@ -8,10 +8,15 @@ use Peridot\Test\ItWasRun;
 
 describe("Test", function() {
 
-    context("when constructed with null definition", function() {
+    context("when constructed with default parameters", function() {
         it("it should default to a pending state", function() {
             $test = new Test("it should be pending");
             assert($test->getPending(), "test should be pending if definition is null");
+        });
+
+        it("it should default to an unfocused state", function() {
+            $test = new Test("it should not be focused");
+            assert(!$test->isFocused(), "test should not be focused if focused value is not supplied");
         });
     });
 

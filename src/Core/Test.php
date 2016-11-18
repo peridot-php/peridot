@@ -18,7 +18,7 @@ class Test extends AbstractTest
      * @param string $description
      * @param callable $definition
      */
-    public function __construct($description, callable $definition = null)
+    public function __construct($description, callable $definition = null, $focused = false)
     {
         if ($definition === null) {
             $this->pending = true;
@@ -26,7 +26,17 @@ class Test extends AbstractTest
                 //noop
             };
         }
-        parent::__construct($description, $definition);
+        parent::__construct($description, $definition, $focused);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function isFocused()
+    {
+        return $this->focused;
     }
 
     /**

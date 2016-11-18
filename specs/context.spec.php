@@ -34,14 +34,24 @@ describe('Context', function() {
             assert($tests[1] === $sibling2, "sibling2 should have been added to parent");
         });
 
-        it("should set pending if value is not null", function() {
+        it("should set pending if pending value is not null", function() {
             $suite = $this->context->addSuite("desc", function() {}, true);
             assert($suite->getPending(), "suite should be pending");
         });
 
-        it("should ignore pending if value is null", function() {
+        it("should ignore pending if pending value is null", function() {
             $suite = $this->context->addSuite("desc", function() {});
             assert(is_null($suite->getPending()), "pending status should be null");
+        });
+
+        it("should set focused if focused value is supplied", function() {
+            $suite = $this->context->addSuite("desc", function() {}, null, true);
+            assert($suite->isFocused(), "suite should be focused");
+        });
+
+        it("should set focused to false if focused value is not supplied", function() {
+            $suite = $this->context->addSuite("desc", function() {});
+            assert(!$suite->isFocused(), "focused status should be false");
         });
 
         it("should execute a suites bound definition", function() {
@@ -54,12 +64,12 @@ describe('Context', function() {
     });
 
     describe('->addTest()', function() {
-        it("should set pending status if value is not null", function() {
+        it("should set pending status if pending value is not null", function() {
             $test = $this->context->addTest("is a spec", function() {}, true);
             assert($test->getPending(), "pending status should be true");
         });
 
-        it("should ignore pending status if value is null", function() {
+        it("should ignore pending status if pending value is null", function() {
             $test = $this->context->addTest("is a spec", function() {});
             assert(is_null($test->getPending()), "pending status should be null");
         });
@@ -67,6 +77,16 @@ describe('Context', function() {
         it("should set pending to true if definition is null", function() {
             $test = $this->context->addTest("is a spec");
             assert($test->getPending(), "pending status should be true");
+        });
+
+        it("should set focused status if focused value is supplied", function() {
+            $test = $this->context->addTest("is a spec", function() {}, null, true);
+            assert($test->isFocused(), "focused status should be true");
+        });
+
+        it("should set focused status if focused value is supplied", function() {
+            $test = $this->context->addTest("is a spec", function() {});
+            assert(!$test->isFocused(), "focused status should be false");
         });
 
         it('should increase size of root suite', function () {
