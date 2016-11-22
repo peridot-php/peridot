@@ -25,7 +25,7 @@ return function(EventEmitterInterface $emitter) {
     $php7 = preg_match('/^7/', PHP_VERSION);
     $shouldCover = !$hhvm && $php7 == 0;
 
-    if ($codeCoverage == 'html' && $shouldCover) {
+    if ($codeCoverage === 'html' && $shouldCover) {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
             $coverage->filter()->addFileToBlacklist(__DIR__. '/src/Dsl.php');
@@ -39,7 +39,7 @@ return function(EventEmitterInterface $emitter) {
         });
     }
 
-    if ($codeCoverage == 'clover' && $shouldCover) {
+    if ($codeCoverage === 'clover' && $shouldCover) {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
             $coverage->filter()->addFileToBlacklist(__DIR__. '/src/Dsl.php');
