@@ -1,6 +1,7 @@
 ![Peridot logo](https://raw.github.com/peridot-php/peridot/master/logo.png "Peridot logo")
 
 [![Build Status](https://img.shields.io/travis/peridot-php/peridot/master.svg?style=flat-square)](https://travis-ci.org/peridot-php/peridot) [![HHVM Status](https://img.shields.io/badge/hhvm-tested-brightgreen.svg?style=flat-square)](http://hhvm.h4cc.de/package/peridot-php/peridot)
+[![Build Status Windows](https://img.shields.io/appveyor/ci/peridot/peridot/master.svg?style=flat-square)](https://ci.appveyor.com/project/peridot/peridot)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/peridot-php/peridot.svg?style=flat-square)](https://scrutinizer-ci.com/g/peridot-php/peridot/?branch=master)
 [![Packagist](https://img.shields.io/packagist/dt/peridot-php/peridot.svg?style=flat-square)](https://packagist.org/packages/peridot-php/peridot)
 [![codecov](https://img.shields.io/codecov/c/github/peridot-php/peridot/master.svg?style=flat-square)](https://codecov.io/gh/peridot-php/peridot)

@@ -1,0 +1,22 @@
+version: "{branch}-{build}"
+build: false
+clone_folder: C:\projects\peridot
+
+install:
+  - cinst OpenSSL.Light -y
+  - SET PATH=C:\Program Files\OpenSSL;%PATH%
+  - cinst php -version 7.0.7 -y
+  - cd c:\tools\php
+  - copy php.ini-production php.ini
+  - echo date.timezone="UTC" >> php.ini
+  - echo extension_dir=ext >> php.ini
+  - echo extension=php_openssl.dll >> php.ini
+  - echo extension=php_curl.dll >> php.ini
+  - SET PATH=C:\tools\php;%PATH%
+  - cd C:\projects\peridot
+  - php -r "readfile('http://getcomposer.org/installer');" | php
+  - php composer.phar install --prefer-source
+
+test_script:
+  - cd C:\projects\peridot
+  - bin\peridot.bat
