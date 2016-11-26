@@ -22,13 +22,13 @@ return function(EventEmitterInterface $emitter) {
 
     $codeCoverage = getenv('CODE_COVERAGE');
     $hhvm = defined('HHVM_VERSION'); //exclude coverage from hhvm because its pretty flawed at the moment
-    $php7 = preg_match('/^7/', PHP_VERSION);
-    $shouldCover = !$hhvm && $php7 == 0;
+    $shouldCover = !$hhvm;
 
     if ($codeCoverage == 'html' && $shouldCover) {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
-            $coverage->filter()->addFileToBlacklist(__DIR__. '/src/Dsl.php');
+            $coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/src');
+            $coverage->filter()->removeFileFromWhitelist(__DIR__ . '/src/Dsl.php');
             $coverage->start('peridot');
         });
 
@@ -42,7 +42,8 @@ return function(EventEmitterInterface $emitter) {
     if ($codeCoverage == 'clover' && $shouldCover) {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
-            $coverage->filter()->addFileToBlacklist(__DIR__. '/src/Dsl.php');
+            $coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/src');
+            $coverage->filter()->removeFileFromWhitelist(__DIR__ . '/src/Dsl.php');
             $coverage->start('peridot');
         });
 
@@ -60,7 +61,7 @@ return function(EventEmitterInterface $emitter) {
         $definition->option("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text");
         $definition->getArgument('path')->setDefault('specs');
     });
-    
+
     /**
      * Demonstrate registering a custom reporter via peridot config
      */

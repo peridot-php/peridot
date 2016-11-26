@@ -16,14 +16,13 @@
   "require": {
     "php": ">=5.4.0",
     "evenement/evenement": "2.0.*",
-    "symfony/console": "~2.0|~3.0",
-    "phpunit/php-timer": "~1.0",
-    "peridot-php/peridot-scope": "~1.0"
+    "symfony/console": "^2.0|^3.0",
+    "phpunit/php-timer": "^1.0",
+    "peridot-php/peridot-scope": "^1.0"
   },
   "require-dev": {
-    "codegyre/robo": "~0.4",
-    "phpunit/php-code-coverage": "~2.0",
-    "satooshi/php-coveralls": "~0.6"
+    "codegyre/robo": "^0.4",
+    "phpunit/php-code-coverage": "^2.0"
   },
   "autoload": {
     "psr-4": {
