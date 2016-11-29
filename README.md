@@ -1,10 +1,12 @@
 ![Peridot logo](https://raw.github.com/peridot-php/peridot/master/logo.png "Peridot logo")
 
-[![Build Status](https://img.shields.io/travis/peridot-php/peridot/master.svg?style=flat-square)](https://travis-ci.org/peridot-php/peridot) [![HHVM Status](https://img.shields.io/badge/hhvm-tested-brightgreen.svg?style=flat-square)](http://hhvm.h4cc.de/package/peridot-php/peridot)
-[![Build Status Windows](https://img.shields.io/appveyor/ci/peridot/peridot/master.svg?style=flat-square)](https://ci.appveyor.com/project/peridot/peridot)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/peridot-php/peridot.svg?style=flat-square)](https://scrutinizer-ci.com/g/peridot-php/peridot/?branch=master)
-[![Packagist](https://img.shields.io/packagist/dt/peridot-php/peridot.svg?style=flat-square)](https://packagist.org/packages/peridot-php/peridot)
-[![codecov](https://img.shields.io/codecov/c/github/peridot-php/peridot/master.svg?style=flat-square)](https://codecov.io/gh/peridot-php/peridot)
+[![Packagist Version](https://img.shields.io/packagist/v/peridot-php/peridot.svg?style=flat-square "Packagist Version")](https://packagist.org/packages/peridot-php/peridot)
+[![Build Status](https://img.shields.io/travis/peridot-php/peridot/master.svg?style=flat-square "Build Status")](https://travis-ci.org/peridot-php/peridot)
+[![HHVM Build Status](https://img.shields.io/badge/hhvm-tested-brightgreen.svg?style=flat-square "HHVM Build Status")](https://travis-ci.org/peridot-php/peridot)
+[![Windows Build Status](https://img.shields.io/appveyor/ci/peridot/peridot/master.svg?label=windows&style=flat-square "Windows Build Status")](https://ci.appveyor.com/project/peridot/peridot)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/peridot-php/peridot.svg?style=flat-square "Scrutinizer Code Quality")](https://scrutinizer-ci.com/g/peridot-php/peridot/?branch=master)
+[![Codecov Coverage](https://img.shields.io/codecov/c/github/peridot-php/peridot/master.svg?style=flat-square "Codecov Coverage")](https://codecov.io/gh/peridot-php/peridot)
+[![Gitter Chat](https://img.shields.io/gitter/room/peridot-php/lobby.svg?style=flat-square "Gitter Chat")](https://gitter.im/peridot-php/lobby)
 
 The highly extensible, highly enjoyable, PHP testing framework.
 
