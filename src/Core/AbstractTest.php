@@ -182,6 +182,30 @@ abstract class AbstractTest implements TestInterface
     }
 
     /**
+     * Set the focused status of the test and its children according to the
+     * supplied focus pattern and/or skip pattern
+     *
+     * @param string|null $focusPattern
+     * @param string|null $skipPattern
+     */
+    public function applyFocusPatterns($focusPattern, $skipPattern = null)
+    {
+        $title = $this->getTitle();
+
+        if ($skipPattern !== null && preg_match($skipPattern, $title)) {
+            $this->focused = false;
+
+            return;
+        }
+
+        if ($focusPattern === null) {
+            $this->focused = true;
+        } else {
+            $this->focused = (bool) preg_match($focusPattern, $title);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @return array

@@ -97,6 +97,15 @@ interface TestInterface
     public function isFocused();
 
     /**
+     * Set the focused status of the test and its children according to the
+     * supplied focus pattern and/or skip pattern
+     *
+     * @param string|null $focusPattern
+     * @param string|null $skipPattern
+     */
+    public function applyFocusPatterns($focusPattern, $skipPattern = null);
+
+    /**
      * Return scope for this test. Scope contains instance variables
      * for a spec
      *

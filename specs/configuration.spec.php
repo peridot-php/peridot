@@ -52,6 +52,8 @@ describe('Configuration', function() {
 
     describe('setters', function () {
         it('should write corresponding peridot environment variables', function () {
+            $this->configuration->setFocusPattern('/focus/');
+            $this->configuration->setSkipPattern('/skip/');
             $this->configuration->setGrep('*.test.php');
             $this->configuration->setReporter('reporter');
             $this->configuration->setPath('/tests');
@@ -60,6 +62,8 @@ describe('Configuration', function() {
             $this->configuration->setDsl(__FILE__);
             $this->configuration->setConfigurationFile(__FILE__);
 
+            $focusPattern = getenv('PERIDOT_FOCUS_PATTERN');
+            $skipPattern = getenv('PERIDOT_SKIP_PATTERN');
             $grep = getenv('PERIDOT_GREP');
             $reporter = getenv('PERIDOT_REPORTER');
             $path = getenv('PERIDOT_PATH');
@@ -68,6 +72,8 @@ describe('Configuration', function() {
             $dsl = getenv('PERIDOT_DSL');
             $file = getenv('PERIDOT_CONFIGURATION_FILE');
 
+            assert($focusPattern === '/focus/', 'should have set focus pattern env');
+            assert($skipPattern === '/skip/', 'should have set skip pattern env');
             assert($grep === '*.test.php', 'should have set grep env');
             assert($reporter === 'reporter', 'should have set reporter env');
             assert($path === '/tests', 'should have set path env');
@@ -75,6 +81,46 @@ describe('Configuration', function() {
             assert($stop, 'should have set stop env');
             assert($dsl === __FILE__, 'should have set dsl env');
             assert($file === __FILE__, 'should have set config file env');
+        });
+    });
+
+    describe('->setFocusPattern()', function() {
+        it('should normalize patterns that are invalid regular expressions', function() {
+            $this->configuration->setFocusPattern('certain ~( type of)? test');
+            $pattern = $this->configuration->getFocusPattern();
+
+            assert(preg_match($pattern, 'certain ~ test'), 'normalized pattern should still honor PCRE syntax');
+            assert(preg_match($pattern, 'certain ~ type of test'), 'normalized pattern should still honor PCRE syntax');
+            assert(preg_match($pattern, 'a certain ~ test with extras'), 'normalized pattern should match text with prefixes and suffixes');
+            assert(!preg_match($pattern, 'an uncertain ~ test'), 'normalized pattern should not match text without word boundaries');
+        });
+
+        it('should fall back to plaintext matching for regular expressions that cannot be salvaged', function() {
+            $this->configuration->setFocusPattern('lol(wat');
+            $pattern = $this->configuration->getFocusPattern();
+
+            assert(preg_match($pattern, 'lmao lol(wat huh'), 'normalized pattern should match text with prefixes and suffixes');
+            assert(!preg_match($pattern, 'lolol(wat'), 'normalized pattern should not match text without word boundaries');
+        });
+    });
+
+    describe('->setSkipPattern()', function() {
+        it('should normalize patterns that are invalid regular expressions', function() {
+            $this->configuration->setSkipPattern('certain ~( type of)? test');
+            $pattern = $this->configuration->getSkipPattern();
+
+            assert(preg_match($pattern, 'certain ~ test'), 'normalized pattern should still honor PCRE syntax');
+            assert(preg_match($pattern, 'certain ~ type of test'), 'normalized pattern should still honor PCRE syntax');
+            assert(preg_match($pattern, 'a certain ~ test with extras'), 'normalized pattern should match text with prefixes and suffixes');
+            assert(!preg_match($pattern, 'an uncertain ~ test'), 'normalized pattern should not match text without word boundaries');
+        });
+
+        it('should fall back to plaintext matching for regular expressions that cannot be salvaged', function() {
+            $this->configuration->setSkipPattern('lol(wat');
+            $pattern = $this->configuration->getSkipPattern();
+
+            assert(preg_match($pattern, 'lmao lol(wat huh'), 'normalized pattern should match text with prefixes and suffixes');
+            assert(!preg_match($pattern, 'lolol(wat'), 'normalized pattern should not match text without word boundaries');
         });
     });
 

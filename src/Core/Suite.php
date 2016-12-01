@@ -43,6 +43,22 @@ class Suite extends AbstractTest
     }
 
     /**
+     * Set the focused status of the test and its children according to the
+     * supplied focus pattern and/or skip pattern
+     *
+     * @param string|null $focusPattern
+     * @param string|null $skipPattern
+     */
+    public function applyFocusPatterns($focusPattern, $skipPattern = null)
+    {
+        parent::applyFocusPatterns($focusPattern, $skipPattern);
+
+        foreach ($this->tests as $test) {
+            $test->applyFocusPatterns($focusPattern, $skipPattern);
+        }
+    }
+
+    /**
      * Add a test to the suite
      *
      * @param Test $test
