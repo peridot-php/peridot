@@ -35,6 +35,8 @@ class ConfigurationReader
         $configuration = new Configuration();
 
         $options = [
+            'focus' => [$configuration, 'setFocusPattern'],
+            'skip' => [$configuration, 'setSkipPattern'],
             'grep' => [$configuration, 'setGrep'],
             'no-colors' => [$configuration, 'disableColors'],
             'force-colors' => [$configuration, 'enableColorsExplicit'],

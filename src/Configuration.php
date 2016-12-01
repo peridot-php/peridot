@@ -20,6 +20,16 @@ class Configuration
     protected $colorsEnableExplicit = false;
 
     /**
+     * @var string|null
+     */
+    protected $focusPattern;
+
+    /**
+     * @var string|null
+     */
+    protected $skipPattern;
+
+    /**
      * @var string
      */
     protected $grep = '*.spec.php';
@@ -75,6 +85,48 @@ class Configuration
     public function getGrep()
     {
         return $this->grep;
+    }
+
+    /**
+     * Set the pattern used to focus tests
+     *
+     * @param string|null $pattern
+     * @return $this
+     */
+    public function setFocusPattern($pattern)
+    {
+        return $this->write('focusPattern', $pattern);
+    }
+
+    /**
+     * Returns the pattern used to focus tests
+     *
+     * @return string|null
+     */
+    public function getFocusPattern()
+    {
+        return $this->focusPattern;
+    }
+
+    /**
+     * Set the pattern used to skip tests
+     *
+     * @param string|null $pattern
+     * @return $this
+     */
+    public function setSkipPattern($pattern)
+    {
+        return $this->write('skipPattern', $pattern);
+    }
+
+    /**
+     * Returns the pattern used to skip tests
+     *
+     * @return string|null
+     */
+    public function getSkipPattern()
+    {
+        return $this->skipPattern;
     }
 
     /**
