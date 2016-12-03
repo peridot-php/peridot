@@ -1,9 +1,6 @@
-build/
-code-coverage-report/
-vendor/
-.idea/
-composer.lock
-peridot.phar
-.DS_Store
-docs/
-tmp/
+/build/
+/code-coverage-report/
+/docs/
+/tmp/
+/vendor/
+/peridot.phar
