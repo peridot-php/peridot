@@ -23,6 +23,22 @@ class Suite extends AbstractTest
     protected $halted = false;
 
     /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function getFocused()
+    {
+        foreach ($this->tests as $test) {
+            if ($test->getFocused()) {
+                return true;
+            }
+        }
+
+        return $this->focused;
+    }
+
+    /**
      * Add a test to the suite
      *
      * @param Test $test
@@ -74,14 +90,14 @@ class Suite extends AbstractTest
         $this->eventEmitter->emit('suite.start', [$this]);
         $this->eventEmitter->on('suite.halt', [$this, 'halt']);
 
-        foreach ($this->tests as $test) {
-
+        foreach ($this->focusedTests() as $test) {
             if ($this->halted) {
                 break;
             }
 
             $this->runTest($test, $result);
         }
+
         $this->eventEmitter->emit('suite.end', [$this]);
     }
 
@@ -110,5 +126,24 @@ class Suite extends AbstractTest
 
         $test->setEventEmitter($this->eventEmitter);
         $test->run($result);
+    }
+
+    private function focusedTests()
+    {
+        $tests = [];
+        $hasFocusedTests = false;
+
+        foreach ($this->tests as $test) {
+            if ($test->getFocused()) {
+                $hasFocusedTests = true;
+                $tests[] = $test;
+            }
+        }
+
+        if ($hasFocusedTests) {
+            return $tests;
+        }
+
+        return $this->tests;
     }
 }

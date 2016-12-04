@@ -48,7 +48,7 @@ final class Context
     {
         $this->suites = [new Suite("", function () {
             //noop
-        })];
+        }, false)];
     }
 
     /**
@@ -84,12 +84,14 @@ final class Context
      * Creates a suite and adds it to the current suite. The newly
      * created suite will become the new "current" suite
      *
-     * @param $description
+     * @param string $description
      * @param callable $fn
+     * @param bool|null $pending
+     * @param bool $focused
      */
-    public function addSuite($description, callable $fn, $pending = null)
+    public function addSuite($description, callable $fn, $pending = null, $focused = false)
     {
-        $suite = $this->createSuite($description, $fn, $pending);
+        $suite = $this->createSuite($description, $fn, $pending, $focused);
 
         $this->getCurrentSuite()->addTest($suite);
         array_unshift($this->suites, $suite);
@@ -102,12 +104,14 @@ final class Context
     /**
      * Create a test and add it to the current suite
      *
-     * @param $description
-     * @param $fn
+     * @param string $description
+     * @param callable $fn
+     * @param bool|null $pending
+     * @param bool $focused
      */
-    public function addTest($description, callable $fn = null, $pending = null)
+    public function addTest($description, callable $fn = null, $pending = null, $focused = false)
     {
-        $test = new Test($description, $fn);
+        $test = new Test($description, $fn, $focused);
         if ($pending !== null) {
             $test->setPending($pending);
         }
@@ -155,14 +159,15 @@ final class Context
     /**
      * Create a Suite based on the state of the Context.
      *
-     * @param $description
+     * @param string $description
      * @param callable $fn
-     * @param $pending
+     * @param bool|null $pending
+     * @param bool $focused
      * @return Suite
      */
-    private function createSuite($description, callable $fn, $pending)
+    private function createSuite($description, callable $fn, $pending, $focused)
     {
-        $suite = new Suite($description, $fn);
+        $suite = new Suite($description, $fn, $focused);
         if ($pending !== null) {
             $suite->setPending($pending);
         }

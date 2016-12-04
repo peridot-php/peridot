@@ -12,6 +12,13 @@ describe("Suite", function() {
        $this->eventEmitter = new EventEmitter();
     });
 
+    context("when constructed with default parameters", function() {
+        it("it should default to an unfocused state", function() {
+            $suite = new Suite("Suite", function() {});
+            assert(!$suite->getFocused(), "suite should not be focused if focused value is not supplied");
+        });
+    });
+
     describe('->run()', function() {
         it("should run multiple tests", function () {
             $suite = new Suite("Suite", function() {});
@@ -138,6 +145,23 @@ describe("Suite", function() {
 
             assert($result->getTestCount() == 2, "test count should be 2");
         });
+
+        context('when there are focused tests', function() {
+            it("should run only the focused tests", function () {
+                $suite = new Suite("Suite", function() {});
+                $suite->addTest(new ItWasRun("should pass", function () {}, true));
+                $suite->addTest(new ItWasRun('should fail', function () {
+                    throw new \Exception('woooooo!');
+                }, true));
+                $suite->addTest(new ItWasRun("should not be run", function () {}));
+                $suite->addTest(new ItWasRun("should also not be run", function () {}));
+
+                $result = new TestResult($this->eventEmitter);
+                $suite->setEventEmitter($this->eventEmitter);
+                $suite->run($result);
+                assert('2 run, 1 failed' == $result->getSummary(), "result summary should show 2/1");
+            });
+        });
     });
 
     describe("->addTest()", function() {
@@ -195,6 +219,46 @@ describe("Suite", function() {
             });
             $this->suite->define();
             assert($this->arg === 1, 'should have set definition arguments');
+        });
+    });
+
+    describe('->getFocused()', function() {
+        context('when explicitly marked as focused', function () {
+            beforeEach(function() {
+                $this->suite = new Suite("test suite", function() {}, true);
+            });
+
+            it('should return true even if nested tests are not focused', function() {
+                $test = new Test("test", function() {});
+                $this->suite->addTest($test);
+                assert($this->suite->getFocused(), "suite should not be focused");
+            });
+        });
+
+        context('when not explicitly marked as focused', function () {
+            beforeEach(function() {
+                $this->suite = new Suite("test suite", function() {});
+            });
+
+            it('should return false if nested tests are not focused', function() {
+                $test = new Test("test", function() {});
+                $this->suite->addTest($test);
+                assert(!$this->suite->getFocused(), "suite should not be focused");
+            });
+
+            it('should return true if nested tests are focused', function() {
+                $test = new Test("test", function() {}, true);
+                $this->suite->addTest($test);
+                assert($this->suite->getFocused(), "suite should be focused");
+            });
+
+            it('should return true if nested suites are focused', function() {
+                $suite = new Suite("nested suite", function() {});
+                $test = new Test("test", function() {}, true);
+                $suite->addTest($test);
+                $this->suite->addTest($suite);
+                assert($this->suite->getFocused(), "suite should be focused");
+            });
         });
     });
 });

@@ -13,10 +13,11 @@ class ItWasRun extends Test
     /**
      * @param string   $description
      * @param callable $definition
+     * @param bool     $focused
      */
-    public function __construct($description, callable $definition)
+    public function __construct($description, callable $definition, $focused = false)
     {
-        parent::__construct($description, $definition);
+        parent::__construct($description, $definition, $focused);
         $this->getScope()->wasRun = false;
         $this->getScope()->log = false;
     }
