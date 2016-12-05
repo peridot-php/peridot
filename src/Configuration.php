@@ -95,7 +95,7 @@ class Configuration
      */
     public function setFocusPattern($pattern)
     {
-        return $this->write('focusPattern', $pattern);
+        return $this->write('focusPattern', $this->normalizeRegexPattern($pattern));
     }
 
     /**
@@ -116,7 +116,7 @@ class Configuration
      */
     public function setSkipPattern($pattern)
     {
-        return $this->write('skipPattern', $pattern);
+        return $this->write('skipPattern', $this->normalizeRegexPattern($pattern));
     }
 
     /**
@@ -306,5 +306,26 @@ class Configuration
         $env = 'PERIDOT_' . strtoupper(join('_', $parts));
         putenv($env . '=' . $value);
         return $this;
+    }
+
+    /**
+     * Normalize the supplied regular expression pattern.
+     *
+     * @param string $pattern
+     * @return string
+     */
+    protected function normalizeRegexPattern($pattern)
+    {
+        if (false !== @preg_match($pattern, null)) {
+            return $pattern;
+        }
+
+        $boundedPattern = '~\b' . str_replace('~', '\~', $pattern) . '\b~';
+
+        if (false !== @preg_match($boundedPattern, null)) {
+            return $boundedPattern;
+        }
+
+        return '~\b' . preg_quote($pattern, '~') . '\b~';
     }
 }

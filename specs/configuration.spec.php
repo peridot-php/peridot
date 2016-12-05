@@ -84,6 +84,46 @@ describe('Configuration', function() {
         });
     });
 
+    describe('->setFocusPattern()', function() {
+        it('should normalize patterns that are invalid regular expressions', function() {
+            $this->configuration->setFocusPattern('certain ~( type of)? test');
+            $pattern = $this->configuration->getFocusPattern();
+
+            assert(preg_match($pattern, 'certain ~ test'), 'normalized pattern should still honor PCRE syntax');
+            assert(preg_match($pattern, 'certain ~ type of test'), 'normalized pattern should still honor PCRE syntax');
+            assert(preg_match($pattern, 'a certain ~ test with extras'), 'normalized pattern should match text with prefixes and suffixes');
+            assert(!preg_match($pattern, 'an uncertain ~ test'), 'normalized pattern should not match text without word boundaries');
+        });
+
+        it('should fall back to plaintext matching for regular expressions that cannot be salvaged', function() {
+            $this->configuration->setFocusPattern('lol(wat');
+            $pattern = $this->configuration->getFocusPattern();
+
+            assert(preg_match($pattern, 'lmao lol(wat huh'), 'normalized pattern should match text with prefixes and suffixes');
+            assert(!preg_match($pattern, 'lolol(wat'), 'normalized pattern should not match text without word boundaries');
+        });
+    });
+
+    describe('->setSkipPattern()', function() {
+        it('should normalize patterns that are invalid regular expressions', function() {
+            $this->configuration->setSkipPattern('certain ~( type of)? test');
+            $pattern = $this->configuration->getSkipPattern();
+
+            assert(preg_match($pattern, 'certain ~ test'), 'normalized pattern should still honor PCRE syntax');
+            assert(preg_match($pattern, 'certain ~ type of test'), 'normalized pattern should still honor PCRE syntax');
+            assert(preg_match($pattern, 'a certain ~ test with extras'), 'normalized pattern should match text with prefixes and suffixes');
+            assert(!preg_match($pattern, 'an uncertain ~ test'), 'normalized pattern should not match text without word boundaries');
+        });
+
+        it('should fall back to plaintext matching for regular expressions that cannot be salvaged', function() {
+            $this->configuration->setSkipPattern('lol(wat');
+            $pattern = $this->configuration->getSkipPattern();
+
+            assert(preg_match($pattern, 'lmao lol(wat huh'), 'normalized pattern should match text with prefixes and suffixes');
+            assert(!preg_match($pattern, 'lolol(wat'), 'normalized pattern should not match text without word boundaries');
+        });
+    });
+
     describe('->enableColorsExplicit()', function() {
         it('should enable colors when explicit is set', function() {
             $this->configuration->enableColorsExplicit();
