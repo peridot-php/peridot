@@ -8,6 +8,7 @@ use Peridot\Runner\Runner;
 use Peridot\Runner\RunnerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputDefinition as ConsoleInputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -75,11 +76,8 @@ class Application extends ConsoleApplication
         $this->configuration = ConfigurationReader::readInput($input);
         $this->environment->getEventEmitter()->emit('peridot.configure', [$this->configuration, $this]);
 
-        $runner = $this->getRunner();
-        $factory = new ReporterFactory($this->configuration, $output, $this->environment->getEventEmitter());
-
         $this->loadDsl($this->configuration->getDsl());
-        $this->add(new Command($runner, $this->configuration, $factory, $this->environment->getEventEmitter()));
+        $this->add($this->createCommand($this->configuration, $output));
 
         $exitCode = parent::doRun($input, $output);
 
@@ -192,13 +190,13 @@ class Application extends ConsoleApplication
     }
 
     /**
-     * Return the peridot input definition defined by Environment
+     * Return an empty application input definition.
      *
-     * @return InputDefinition
+     * @return ConsoleInputDefinition
      */
-    protected function getDefaultInputDefinition()
+    public function getDefinition()
     {
-        return $this->environment->getDefinition();
+        return new ConsoleInputDefinition();
     }
 
     /**
@@ -212,5 +210,19 @@ class Application extends ConsoleApplication
             fwrite(STDERR, "Configuration file specified but does not exist" . PHP_EOL);
             exit(1);
         }
+    }
+
+    private function createCommand(Configuration $configuration, OutputInterface $output)
+    {
+        $runner = $this->getRunner();
+        $factory = new ReporterFactory($configuration, $output, $this->environment->getEventEmitter());
+
+        return new Command(
+            $runner,
+            $configuration,
+            $factory,
+            $this->environment->getEventEmitter(),
+            $this->environment->getDefinition()
+        );
     }
 }

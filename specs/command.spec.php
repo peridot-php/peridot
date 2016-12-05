@@ -108,7 +108,7 @@ describe('Command', function() {
                 $test = new Test('fail', function() { throw new Exception('fail'); });
                 $suite->addTest($test);
                 $runner = new Runner($suite, $this->configuration, $this->emitter);
-                $command = new Command($runner, $this->configuration, $this->factory, $this->emitter);
+                $command = new Command($runner, $this->configuration, $this->factory, $this->emitter, $this->definition);
                 $command->setApplication($this->application);
                 $exit = $command->run(new ArrayInput([], $this->definition), $this->output);
 
@@ -122,7 +122,7 @@ describe('Command', function() {
                 $test = new Test('focused', function() {}, true);
                 $suite->addTest($test);
                 $runner = new Runner($suite, $this->configuration, $this->emitter);
-                $command = new Command($runner, $this->configuration, $this->factory, $this->emitter);
+                $command = new Command($runner, $this->configuration, $this->factory, $this->emitter, $this->definition);
                 $command->setApplication($this->application);
                 $exit = $command->run(new ArrayInput([], $this->definition), $this->output);
 

@@ -26,6 +26,6 @@ beforeEach(function() {
     $this->environment = new Environment($this->definition, $this->emitter, ['c' => $this->configPath]);
     $this->application = new Application($this->environment);
 
-    $this->command = new Command($this->runner, $this->configuration, $this->factory, $this->emitter);
+    $this->command = new Command($this->runner, $this->configuration, $this->factory, $this->emitter, $this->definition);
     $this->command->setApplication($this->application);
 });

@@ -59,7 +59,6 @@ return function(EventEmitterInterface $emitter) {
     $emitter->on('peridot.start', function(Environment $env) use (&$coverage) {
         $definition = $env->getDefinition();
         $definition->option("banner", null, InputOption::VALUE_REQUIRED, "Custom banner text");
-        $definition->getArgument('path')->setDefault('specs');
     });
 
     /**

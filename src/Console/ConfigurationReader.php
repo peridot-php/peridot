@@ -2,6 +2,7 @@
 namespace Peridot\Console;
 
 use Peridot\Configuration;
+use ReflectionObject;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
@@ -33,6 +34,7 @@ class ConfigurationReader
     public function read()
     {
         $configuration = new Configuration();
+        $configuration->setPaths($this->readPaths());
 
         $options = [
             'focus' => [$configuration, 'setFocusPattern'],
@@ -43,10 +45,6 @@ class ConfigurationReader
             'bail' => [$configuration, 'stopOnFailure'],
             'configuration' => [$configuration, 'setConfigurationFile']
         ];
-
-        if ($path = $this->input->getArgument('path')) {
-            $configuration->setPath($path);
-        }
 
         foreach ($options as $option => $callable) {
             $this->callForOption($option, $callable);
@@ -81,5 +79,26 @@ class ConfigurationReader
         if ($value) {
             call_user_func_array($callable, [$value]);
         }
+    }
+
+    private function readPaths()
+    {
+        // these filthy h4x allow us to determine whether paths were actually
+        // passed, or come from the argument's default
+        $reflector = new ReflectionObject($this->input);
+        $argumentsProperty = $reflector->getProperty('arguments');
+        $argumentsProperty->setAccessible(true);
+        $arguments = $argumentsProperty->getValue($this->input);
+        $paths = $this->input->getArgument('path');
+
+        if (!isset($arguments['path'])) {
+            $paths = array_filter($paths, 'file_exists');
+        }
+
+        if (empty($paths)) {
+            $paths = [getcwd()];
+        }
+
+        return $paths;
     }
 }

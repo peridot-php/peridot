@@ -48,18 +48,21 @@ class Command extends ConsoleCommand
      * @param Configuration $configuration
      * @param ReporterFactory $factory
      * @param EventEmitterInterface $eventEmitter
+     * @param InputDefinition $definition
      */
     public function __construct(
         RunnerInterface $runner,
         Configuration $configuration,
         ReporterFactory $factory,
-        EventEmitterInterface $eventEmitter
+        EventEmitterInterface $eventEmitter,
+        InputDefinition $definition
     ) {
         parent::__construct('peridot');
         $this->runner = $runner;
         $this->configuration = $configuration;
         $this->factory = $factory;
         $this->eventEmitter = $eventEmitter;
+        $this->setDefinition($definition);
     }
 
     /**
@@ -170,7 +173,10 @@ class Command extends ConsoleCommand
     protected function getResult()
     {
         $result = new TestResult($this->eventEmitter);
-        $this->getLoader()->load($this->configuration->getPath());
+        $loader = $this->getLoader();
+        foreach ($this->configuration->getPaths() as $path) {
+            $loader->load($path);
+        }
         $this->factory->create($this->configuration->getReporter());
         $this->runner->run($result);
 
