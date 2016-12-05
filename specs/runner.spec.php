@@ -51,9 +51,42 @@ describe("Runner", function() {
             $this->failingTest = new Test("failing spec", function() { throw new \Exception("fail"); });
             $this->suite->addTest($this->passingTest);
             $this->suite->addTest($this->failingTest);
+            $this->configuration = new Configuration();
             $this->eventEmitter = new EventEmitter();
 
-            $this->runner = new Runner($this->suite, new Configuration(), $this->eventEmitter);
+            $this->runner = new Runner($this->suite, $this->configuration, $this->eventEmitter);
+        });
+
+        it('should apply focus patterns if a focus pattern has been set', function() {
+            $this->configuration->setFocusPattern('/passing/');
+            $count = 0;
+            $this->eventEmitter->on('test.start', function() use (&$count) {
+                $count++;
+            });
+            $this->runner->run(new TestResult($this->eventEmitter));
+            assert(1 == $count, 'expected 1 test:start events to fire');
+        });
+
+        it('should apply focus patterns if a skip pattern has been set', function() {
+            $this->configuration->setSkipPattern('/failing/');
+            $count = 0;
+            $this->eventEmitter->on('test.start', function() use (&$count) {
+                $count++;
+            });
+            $this->runner->run(new TestResult($this->eventEmitter));
+            assert(1 == $count, 'expected 1 test:start events to fire');
+        });
+
+        it('should apply focus patterns if both focus and skip patterns are set', function() {
+            $this->suite->addTest(new Test('another passing spec', function() {}));
+            $this->configuration->setFocusPattern('/passing/');
+            $this->configuration->setSkipPattern('/another/');
+            $count = 0;
+            $this->eventEmitter->on('test.start', function() use (&$count) {
+                $count++;
+            });
+            $this->runner->run(new TestResult($this->eventEmitter));
+            assert(1 == $count, 'expected 1 test:start events to fire');
         });
 
         it("should emit a start event when the runner starts", function() {

@@ -225,40 +225,101 @@ describe("Suite", function() {
     describe('->isFocused()', function() {
         context('when explicitly marked as focused', function () {
             beforeEach(function() {
-                $this->suite = new Suite("test suite", function() {}, true);
+                $this->suite = new Suite('test suite', function() {}, true);
             });
 
             it('should return true even if nested tests are not focused', function() {
-                $test = new Test("test", function() {});
+                $test = new Test('test', function() {});
                 $this->suite->addTest($test);
-                assert($this->suite->isFocused(), "suite should be focused");
+                assert($this->suite->isFocused(), 'suite should be focused');
             });
         });
 
         context('when not explicitly marked as focused', function () {
             beforeEach(function() {
-                $this->suite = new Suite("test suite", function() {});
+                $this->suite = new Suite('test suite', function() {});
             });
 
             it('should return false if nested tests are not focused', function() {
-                $test = new Test("test", function() {});
+                $test = new Test('test', function() {});
                 $this->suite->addTest($test);
-                assert(!$this->suite->isFocused(), "suite should not be focused");
+                assert(!$this->suite->isFocused(), 'suite should not be focused');
             });
 
             it('should return true if nested tests are focused', function() {
-                $test = new Test("test", function() {}, true);
+                $test = new Test('test', function() {}, true);
                 $this->suite->addTest($test);
-                assert($this->suite->isFocused(), "suite should be focused");
+                assert($this->suite->isFocused(), 'suite should be focused');
             });
 
             it('should return true if nested suites are focused', function() {
-                $suite = new Suite("nested suite", function() {});
-                $test = new Test("test", function() {}, true);
+                $suite = new Suite('nested suite', function() {});
+                $test = new Test('test', function() {}, true);
                 $suite->addTest($test);
                 $this->suite->addTest($suite);
-                assert($this->suite->isFocused(), "suite should be focused");
+                assert($this->suite->isFocused(), 'suite should be focused');
             });
+        });
+    });
+
+    describe('->applyFocusPatterns()', function() {
+        beforeEach(function () {
+            $this->childSuite = new Suite('Child suite', function() {});
+            $this->childTestA = new ItWasRun('Test A', function () {});
+            $this->childSuite->addTest($this->childTestA);
+            $this->childTestB = new ItWasRun('Test B', function () {});
+            $this->childSuite->addTest($this->childTestB);
+            $this->parentSuite = new Suite('Parent suite', function() {});
+            $this->parentTestA = new ItWasRun('Test A', function () {});
+            $this->parentSuite->addTest($this->parentTestA);
+            $this->parentTestB = new ItWasRun('Test B', function () {});
+            $this->parentSuite->addTest($this->parentTestB);
+            $this->parentSuite->addTest($this->childSuite);
+            $this->suite = new Suite('Grandparent suite', function() {});
+            $this->grandparentTestA = new ItWasRun('Test A', function () {});
+            $this->suite->addTest($this->grandparentTestA);
+            $this->grandparentTestB = new ItWasRun('Test B', function () {});
+            $this->suite->addTest($this->grandparentTestB);
+            $this->suite->addTest($this->parentSuite);
+        });
+
+        it('should apply focus patterns to the suite itself', function() {
+            $this->suite->applyFocusPatterns('/Grandparent/');
+            assert($this->suite->isFocused(), 'suite should be focused');
+
+            $this->suite->applyFocusPatterns(null, '/Grandparent/');
+            assert(!$this->suite->isFocused(), 'suite should not be focused');
+        });
+
+        it('should apply focus patterns recursively to all children', function() {
+            $this->suite->applyFocusPatterns('/Test A/');
+            assert($this->childTestA->isFocused(), 'test should be focused');
+            assert(!$this->childTestB->isFocused(), 'test should not be focused');
+            assert($this->parentTestA->isFocused(), 'test should be focused');
+            assert(!$this->parentTestB->isFocused(), 'test should not be focused');
+            assert($this->grandparentTestA->isFocused(), 'test should be focused');
+            assert(!$this->grandparentTestB->isFocused(), 'test should not be focused');
+
+            $this->suite->applyFocusPatterns(null, '/Test A/');
+            assert(!$this->childTestA->isFocused(), 'test should not be focused');
+            assert($this->childTestB->isFocused(), 'test should be focused');
+            assert(!$this->parentTestA->isFocused(), 'test should not be focused');
+            assert($this->parentTestB->isFocused(), 'test should be focused');
+            assert(!$this->grandparentTestA->isFocused(), 'test should not be focused');
+            assert($this->grandparentTestB->isFocused(), 'test should be focused');
+        });
+
+        it('should apply skip patterns after focus patterns', function() {
+            $this->suite->applyFocusPatterns('/Parent suite/', '/Child suite/');
+            assert(!$this->childSuite->isFocused(), 'suite should not be focused');
+            assert(!$this->childTestA->isFocused(), 'test should not be focused');
+            assert(!$this->childTestB->isFocused(), 'test should not be focused');
+            assert($this->parentSuite->isFocused(), 'suite should be focused');
+            assert($this->parentTestA->isFocused(), 'test should be focused');
+            assert($this->parentTestB->isFocused(), 'test should be focused');
+            assert($this->suite->isFocused(), 'suite should be focused');
+            assert(!$this->grandparentTestA->isFocused(), 'test should not be focused');
+            assert(!$this->grandparentTestB->isFocused(), 'test should not be focused');
         });
     });
 });

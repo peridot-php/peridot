@@ -52,6 +52,8 @@ describe('Configuration', function() {
 
     describe('setters', function () {
         it('should write corresponding peridot environment variables', function () {
+            $this->configuration->setFocusPattern('/focus/');
+            $this->configuration->setSkipPattern('/skip/');
             $this->configuration->setGrep('*.test.php');
             $this->configuration->setReporter('reporter');
             $this->configuration->setPath('/tests');
@@ -60,6 +62,8 @@ describe('Configuration', function() {
             $this->configuration->setDsl(__FILE__);
             $this->configuration->setConfigurationFile(__FILE__);
 
+            $focusPattern = getenv('PERIDOT_FOCUS_PATTERN');
+            $skipPattern = getenv('PERIDOT_SKIP_PATTERN');
             $grep = getenv('PERIDOT_GREP');
             $reporter = getenv('PERIDOT_REPORTER');
             $path = getenv('PERIDOT_PATH');
@@ -68,6 +72,8 @@ describe('Configuration', function() {
             $dsl = getenv('PERIDOT_DSL');
             $file = getenv('PERIDOT_CONFIGURATION_FILE');
 
+            assert($focusPattern === '/focus/', 'should have set focus pattern env');
+            assert($skipPattern === '/skip/', 'should have set skip pattern env');
             assert($grep === '*.test.php', 'should have set grep env');
             assert($reporter === 'reporter', 'should have set reporter env');
             assert($path === '/tests', 'should have set path env');

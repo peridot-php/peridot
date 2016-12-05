@@ -9,6 +9,8 @@ describe('ConfigurationReader', function() {
     beforeEach(function() {
         $this->definition = array(
             'path' => 'mypath',
+            '--focus' => '/focus/',
+            '--skip' => '/skip/',
             '--grep' => 'mygrep',
             '--no-colors' => true,
             '--bail' => true,
@@ -17,6 +19,8 @@ describe('ConfigurationReader', function() {
         $this->input = new ArrayInput($this->definition, new InputDefinition());
         $this->assert = function($config) {
             assert($config->getPath() == "mypath", "path should be mypath");
+            assert($config->getFocusPattern() == '/focus/', 'focus pattern should be /focus/');
+            assert($config->getSkipPattern() == '/skip/', 'skip pattern should be /skip/');
             assert($config->getGrep() == "mygrep", "grep should be mygrep");
             assert(!$config->areColorsEnabled(), "colors should be disabled");
             assert($config->shouldStopOnFailure(), "should stop on failure");
