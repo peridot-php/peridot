@@ -68,6 +68,24 @@ describe("Test", function() {
             } while ($handler);
         };
 
+        it("should pass 5 arguments to the parent error handler on error", function () use ($removeErrorHandlers) {
+            if(PHP_VERSION_ID >= 70000) {
+                return;
+            }
+            $removeErrorHandlers();
+            $handlerArguments = [];
+            set_error_handler(function() use (&$handlerArguments) {
+                $handlerArguments = func_get_args();
+            });
+            $test = new ItWasRun("this should return a failed result", function () {
+                trigger_error("This is a user notice", E_USER_NOTICE);
+            });
+            $result = new TestResult(new EventEmitter());
+            error_reporting(-1);
+            $test->run($result);
+            assert(count($handlerArguments) == 5, sprintf("should pass 5 arguments, %d passed", count($handlerArguments)));
+        });
+
         it("should add failed results to result on error", function () use ($removeErrorHandlers) {
             $test = new ItWasRun("this should return a failed result", function () {
                 trigger_error("This is a user notice", E_USER_NOTICE);
