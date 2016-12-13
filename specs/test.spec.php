@@ -73,22 +73,36 @@ describe("Test", function() {
             } while ($handler);
         };
 
-        it("should pass 5 arguments to the parent error handler on error", function () use ($removeErrorHandlers) {
-            if(PHP_VERSION_ID >= 70000) {
-                return;
-            }
+        it('should support error handlers with the context parameter', function () use ($removeErrorHandlers) {
             $removeErrorHandlers();
             $handlerArguments = [];
-            set_error_handler(function() use (&$handlerArguments) {
+            set_error_handler(function($type, $message, $file, $line, array $context) use (&$handlerArguments) {
                 $handlerArguments = func_get_args();
             });
-            $test = new ItWasRun("this should return a failed result", function () {
-                trigger_error("This is a user notice", E_USER_NOTICE);
+            $test = new ItWasRun('this should return a failed result', function () {
+                trigger_error('This is a user notice', E_USER_NOTICE);
             });
             $result = new TestResult(new EventEmitter());
             error_reporting(-1);
             $test->run($result);
-            assert(count($handlerArguments) == 5, sprintf("should pass 5 arguments, %d passed", count($handlerArguments)));
+            assert(count($handlerArguments) >= 5, sprintf('should pass at least 5 arguments, %d passed', count($handlerArguments)));
+        });
+
+        it('should support error handlers with extended parameter lists', function () use ($removeErrorHandlers) {
+            $removeErrorHandlers();
+            $handlerArguments = [];
+            set_error_handler(function($type, $message, $file, $line, array $context, array $backtrace = null) use (&$handlerArguments) {
+                $handlerArguments = func_get_args();
+            });
+            $test = new ItWasRun('this should return a failed result', function () {
+                $handler = set_error_handler(function() {});
+                restore_error_handler();
+                $handler(E_USER_NOTICE, 'This is a user notice', '/path/to/file', 111, [], [], 'foo', 'bar');
+            });
+            $result = new TestResult(new EventEmitter());
+            error_reporting(-1);
+            $test->run($result);
+            assert(count($handlerArguments) === 8, sprintf('should pass 8 arguments, %d passed', count($handlerArguments)));
         });
 
         it("should add failed results to result on error", function () use ($removeErrorHandlers) {

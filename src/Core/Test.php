@@ -126,12 +126,14 @@ class Test extends AbstractTest
     protected function handleErrors(TestResult $result, array &$action)
     {
         $handler = null;
-        $handler = set_error_handler(function ($severity, $message, $path, $line, $context) use ($result, &$action, &$handler) {
+        $handler = set_error_handler(function ($severity, $message, $path, $line) use ($result, &$action, &$handler) {
+            $arguments = func_get_args();
+
             // if there is an existing error handler, call it and record the result
-            $isHandled = $handler && false !== $handler($severity, $message, $path, $line, $context);
+            $isHandled = $handler && false !== call_user_func_array($handler, $arguments);
 
             if (!$isHandled) {
-                $result->getEventEmitter()->emit('error', [$severity, $message, $path, $line, $context]);
+                $result->getEventEmitter()->emit('error', $arguments);
 
                 // honor the error reporting configuration - this also takes care of the error control operator (@)
                 $errorReporting = error_reporting();
