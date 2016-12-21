@@ -21,7 +21,9 @@ class InputDefinition extends Definition
         parent::__construct([]);
         $this->addArgument(new InputArgument('path', InputArgument::OPTIONAL, 'The path to a directory or file containing specs'));
 
-        $this->addOption(new InputOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern> <comment>(default: *.spec.php)</comment>'));
+        $this->addOption(new InputOption('focus', 'f', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern>'));
+        $this->addOption(new InputOption('skip', 's', InputOption::VALUE_REQUIRED, 'Skip tests matching <pattern>'));
+        $this->addOption(new InputOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests with filenames matching <pattern> <comment>(default: *.spec.php)</comment>'));
         $this->addOption(new InputOption('no-colors', 'C', InputOption::VALUE_NONE, 'Disable output colors'));
         $this->addOption(new InputOption('--force-colors', null, InputOption::VALUE_NONE, 'Force output colors'));
         $this->addOption(new InputOption('reporter', 'r', InputOption::VALUE_REQUIRED, 'Select which reporter to use <comment>(default: spec)</comment>'));

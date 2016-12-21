@@ -20,6 +20,16 @@ class Configuration
     protected $colorsEnableExplicit = false;
 
     /**
+     * @var string|null
+     */
+    protected $focusPattern;
+
+    /**
+     * @var string|null
+     */
+    protected $skipPattern;
+
+    /**
      * @var string
      */
     protected $grep = '*.spec.php';
@@ -75,6 +85,48 @@ class Configuration
     public function getGrep()
     {
         return $this->grep;
+    }
+
+    /**
+     * Set the pattern used to focus tests
+     *
+     * @param string|null $pattern
+     * @return $this
+     */
+    public function setFocusPattern($pattern)
+    {
+        return $this->write('focusPattern', $this->normalizeRegexPattern($pattern));
+    }
+
+    /**
+     * Returns the pattern used to focus tests
+     *
+     * @return string|null
+     */
+    public function getFocusPattern()
+    {
+        return $this->focusPattern;
+    }
+
+    /**
+     * Set the pattern used to skip tests
+     *
+     * @param string|null $pattern
+     * @return $this
+     */
+    public function setSkipPattern($pattern)
+    {
+        return $this->write('skipPattern', $this->normalizeRegexPattern($pattern));
+    }
+
+    /**
+     * Returns the pattern used to skip tests
+     *
+     * @return string|null
+     */
+    public function getSkipPattern()
+    {
+        return $this->skipPattern;
     }
 
     /**
@@ -254,5 +306,26 @@ class Configuration
         $env = 'PERIDOT_' . strtoupper(join('_', $parts));
         putenv($env . '=' . $value);
         return $this;
+    }
+
+    /**
+     * Normalize the supplied regular expression pattern.
+     *
+     * @param string $pattern
+     * @return string
+     */
+    protected function normalizeRegexPattern($pattern)
+    {
+        if (false !== @preg_match($pattern, null)) {
+            return $pattern;
+        }
+
+        $boundedPattern = '~\b' . str_replace('~', '\~', $pattern) . '\b~';
+
+        if (false !== @preg_match($boundedPattern, null)) {
+            return $boundedPattern;
+        }
+
+        return '~\b' . preg_quote($pattern, '~') . '\b~';
     }
 }

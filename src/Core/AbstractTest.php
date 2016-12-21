@@ -48,6 +48,11 @@ abstract class AbstractTest implements TestInterface
     protected $pending = null;
 
     /**
+     * @var bool
+     */
+    protected $focused;
+
+    /**
      * @var Scope
      */
     protected $scope;
@@ -65,11 +70,13 @@ abstract class AbstractTest implements TestInterface
     /**
      * @param string   $description
      * @param callable $definition
+     * @param bool     $focused
      */
-    public function __construct($description, callable $definition)
+    public function __construct($description, callable $definition, $focused = false)
     {
         $this->definition = $definition;
         $this->description = $description;
+        $this->focused = $focused;
         $this->scope = new Scope();
     }
 
@@ -172,6 +179,30 @@ abstract class AbstractTest implements TestInterface
     public function setPending($state)
     {
         $this->pending = (bool) $state;
+    }
+
+    /**
+     * Set the focused status of the test and its children according to the
+     * supplied focus pattern and/or skip pattern
+     *
+     * @param string|null $focusPattern
+     * @param string|null $skipPattern
+     */
+    public function applyFocusPatterns($focusPattern, $skipPattern = null)
+    {
+        $title = $this->getTitle();
+
+        if ($skipPattern !== null && preg_match($skipPattern, $title)) {
+            $this->focused = false;
+
+            return;
+        }
+
+        if ($focusPattern === null) {
+            $this->focused = true;
+        } else {
+            $this->focused = (bool) preg_match($focusPattern, $title);
+        }
     }
 
     /**

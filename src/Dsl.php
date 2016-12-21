@@ -53,7 +53,7 @@ function xdescribe($description, callable $fn)
  */
 function xcontext($description, callable $fn)
 {
-    xdescribe($description, $fn);
+    Context::getInstance()->addSuite($description, $fn, true);
 }
 
 /**
@@ -65,6 +65,39 @@ function xcontext($description, callable $fn)
 function xit($description, callable $fn = null)
 {
     Context::getInstance()->addTest($description, $fn, true);
+}
+
+/**
+ * Create a focused suite
+ *
+ * @param $description
+ * @param callable $fn
+ */
+function fdescribe($description, callable $fn)
+{
+    Context::getInstance()->addSuite($description, $fn, null, true);
+}
+
+/**
+ * Create a focused context
+ *
+ * @param $description
+ * @param callable $fn
+ */
+function fcontext($description, callable $fn)
+{
+    Context::getInstance()->addSuite($description, $fn, null, true);
+}
+
+/**
+ * Create a focused spec
+ *
+ * @param $description
+ * @param callable $fn
+ */
+function fit($description, callable $fn = null)
+{
+    Context::getInstance()->addTest($description, $fn, null, true);
 }
 
 /**

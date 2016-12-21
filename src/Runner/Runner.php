@@ -45,6 +45,13 @@ class Runner implements RunnerInterface
      */
     public function run(TestResult $result)
     {
+        $focusPattern = $this->configuration->getFocusPattern();
+        $skipPattern = $this->configuration->getSkipPattern();
+
+        if ($focusPattern !== null || $skipPattern !== null) {
+            $this->suite->applyFocusPatterns($focusPattern, $skipPattern);
+        }
+
         $this->eventEmitter->on('test.failed', function () {
             if ($this->configuration->shouldStopOnFailure()) {
                 $this->eventEmitter->emit('suite.halt');
