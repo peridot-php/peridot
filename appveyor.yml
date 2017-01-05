@@ -5,7 +5,7 @@ clone_folder: C:\projects\peridot
 install:
   - cinst OpenSSL.Light -y
   - SET PATH=C:\Program Files\OpenSSL;%PATH%
-  - cinst php -version 7.0.7 -y
+  - cinst --allow-empty-checksums php -version 7.0.7 -y
   - cd c:\tools\php
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
