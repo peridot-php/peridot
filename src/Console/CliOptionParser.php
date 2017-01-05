@@ -1,6 +1,8 @@
 <?php
 namespace Peridot\Console;
 
+use Symfony\Component\Console\Input\ArgvInput;
+
 /**
  * The CliOptionParser parser searches an array of
  * arguments for the specified options and returns their
@@ -18,7 +20,7 @@ class CliOptionParser
     protected $search;
 
     /**
-     * The CLI arguments to search against 
+     * The CLI arguments to search against
      *
      * @var array
      */
@@ -42,22 +44,16 @@ class CliOptionParser
      */
     public function parse()
     {
+        $input = new ArgvInput($this->arguments);
         $parsed = [];
-        $count = count($this->arguments);
-        for ($i = 1; $i < $count; $i++) {
-            $previous = $this->arguments[$i - 1];
-            $arg = $this->arguments[$i];
 
-            $needle = array_reduce($this->search, function ($result, $search) use ($previous) {
-                return ($previous == $search) ? $search : $result;
-            });
-
-            if (!$needle) {
-                continue;
+        foreach ($this->search as $option) {
+            if ($input->hasParameterOption($option)) {
+                $name = ltrim($option, '-');
+                $parsed[$name] = $input->getParameterOption($option);
             }
-
-            $parsed[str_replace('-', '', $previous)] = $arg;
         }
+
         return $parsed;
     }
 }
