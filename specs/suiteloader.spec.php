@@ -18,7 +18,7 @@ describe("SuiteLoader", function() {
     describe('->getTests()', function() {
         it("should return file paths matching *.spec.php recursively", function() {
             $tests = $this->loader->getTests($this->fixtures);
-            assert(count($tests) == 5, "suite loader should have loaded 5 specs");
+            assert(count($tests) == 6, "suite loader should have loaded 6 specs");
         });
 
         it("should return single file if it exists", function() {
