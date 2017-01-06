@@ -43,7 +43,7 @@ install:
   - composer install --prefer-source
 
 script:
-  - CODE_COVERAGE=clover make coverage
+  - make travis
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
