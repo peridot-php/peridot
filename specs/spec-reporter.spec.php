@@ -48,11 +48,13 @@ describe('SpecReporter', function() {
 
             $exception = null;
             try {
-                throw new Exception("ooops" . PHP_EOL . "nextline");
+                $expectedTrace = preg_quote(sprintf('%s:%d', __FILE__, __LINE__ + 1), '~') . '.*';
+                new ExceptionThrower($expectedTrace);
             } catch (Exception $e) {
                 $exception = $e;
             }
             $this->exception = $exception;
+            $this->expectedTrace = '~' . $expectedTrace . '~s';
 
             $this->emitter->emit('test.passed', [new Test('passing test', function() {})]);
             $this->emitter->emit('test.failed', [new Test('failing test', function() {}), $this->exception]);
@@ -81,9 +83,33 @@ describe('SpecReporter', function() {
         it('should display exception stacks and messages', function() {
             $expectedExceptionMessage = "     ooops" . PHP_EOL . "     nextline";
             assert(strstr($this->contents, $expectedExceptionMessage) !== false, "should include exception message");
-            $trace = preg_replace('/^#/m', "      #", $this->exception->getTraceAsString());
-            assert(strstr($this->contents, $trace) !== false, "should include exception stack");
+            assert(preg_match($this->expectedTrace, $this->contents), 'should include exception stack');
         });
     });
 
 });
+
+function throwException(&$pattern)
+{
+    $pattern = preg_quote(sprintf('%s:%d', __FILE__, __LINE__ + 1), '~') . '.*noFilename.*' . $pattern;
+    $exception = new Exception('ooops' . PHP_EOL . 'nextline');
+
+    $reflector = new ReflectionClass('Exception');
+    $traceProperty = $reflector->getProperty('trace');
+    $traceProperty->setAccessible(true);
+
+    $trace = $traceProperty->getValue($exception);
+    array_unshift($trace, ['function' => 'noFilename']);
+    $traceProperty->setValue($exception, $trace);
+
+    throw $exception;
+}
+
+class ExceptionThrower
+{
+    public function __construct(&$pattern)
+    {
+        $pattern = preg_quote(sprintf('%s:%d', __FILE__, __LINE__ + 1), '~') . '.*' . $pattern;
+        throwException($pattern);
+    }
+}

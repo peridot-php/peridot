@@ -183,6 +183,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
         for ($i = 0; $i < $errorCount; $i++) {
             list($test, $error) = $this->errors[$i];
             $this->outputError($i + 1, $test, $error);
+            $this->output->writeln('');
         }
     }
 
@@ -191,7 +192,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
      *
      * @param int $errorNumber
      * @param TestInterface $test
-     * @param $exception - an exception like interface with ->getMessage(), ->getTraceAsString()
+     * @param $exception - an exception like interface with ->getMessage(), ->getTrace()
      */
     protected function outputError($errorNumber, TestInterface $test, $exception)
     {
@@ -200,8 +201,32 @@ abstract class AbstractBaseReporter implements ReporterInterface
         $message = sprintf("     %s", str_replace(PHP_EOL, PHP_EOL . "     ", $exception->getMessage()));
         $this->output->writeln($this->color('error', $message));
 
-        $trace = preg_replace('/^#/m', "      #", $exception->getTraceAsString());
-        $this->output->writeln($this->color('muted', $trace));
+        $location = sprintf('     at %s:%d', $exception->getFile(), $exception->getLine());
+        $this->output->writeln($location);
+
+        $this->outputTrace($exception->getTrace());
+    }
+
+    /**
+     * Output a stack trace.
+     *
+     * @param array $trace
+     */
+    protected function outputTrace(array $trace)
+    {
+        foreach ($trace as $index => $entry) {
+            if (isset($entry['class'])) {
+                $function = $entry['class'] . $entry['type'] . $entry['function'];
+            } else {
+                $function = $entry['function'];
+            }
+
+            if (strncmp($function, 'Peridot\\', 8) === 0) {
+                break;
+            }
+
+            $this->output->writeln($this->color('muted', $this->renderTraceEntry($index, $entry, $function)));
+        }
     }
 
     /**
@@ -309,4 +334,15 @@ abstract class AbstractBaseReporter implements ReporterInterface
      * @return void
      */
     abstract public function init();
+
+    private function renderTraceEntry($index, array $entry, $function)
+    {
+        if (isset($entry['file'])) {
+            $location = sprintf(' (%s:%d)', $entry['file'], $entry['line']);
+        } else {
+            $location = '';
+        }
+
+        return sprintf('       #%d %s%s', $index, $function, $location);
+    }
 }
