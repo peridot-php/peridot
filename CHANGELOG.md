@@ -1,4 +1,4 @@
-# Changelog
+# Peridot Changelog
 
 ## Next release
 
@@ -172,7 +172,7 @@
 
 ## 1.1.6 (2014-10-29)
 
-- [`¯\_(ツ)_/¯`](https://github.com/peridot-php/peridot/commit/e3c3a63)
+- [`¯\_(ツ)_/¯`](https://github.com/peridot-php/peridot/compare/367f62a...1.1.6)
 
 ## 1.1.5 (2014-10-29)
 
