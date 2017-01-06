@@ -1,198 +1,200 @@
 # Changelog
 
-#### 1.18.1
+## Next release
 
-* Symfony console version constraint fixed
+- **[NEW]** Introduced focused specs for powerful test isolation ([#199],
+  [#197], [#194], [#188], [#185], [#181])
+- **[IMPROVED]** Stack trace output now excludes irrelevant information ([#203],
+  [#170])
+- **[FIXED]** Fixed error handler signature ([#198] - thanks [@YuraLukashik])
+- **[FIXED]** Fixed `--configuration` command line option parsing ([#201],
+  [#171])
 
-#### 1.18.0
+[#170]: https://github.com/peridot-php/peridot/issues/170
+[#171]: https://github.com/peridot-php/peridot/issues/171
+[#181]: https://github.com/peridot-php/peridot/issues/181
+[#185]: https://github.com/peridot-php/peridot/issues/185
+[#188]: https://github.com/peridot-php/peridot/pull/188
+[#194]: https://github.com/peridot-php/peridot/pull/194
+[#197]: https://github.com/peridot-php/peridot/pull/197
+[#198]: https://github.com/peridot-php/peridot/pull/198
+[#199]: https://github.com/peridot-php/peridot/pull/199
+[#201]: https://github.com/peridot-php/peridot/pull/201
+[#203]: https://github.com/peridot-php/peridot/pull/203
 
-* Tests now fail when an error occurs - not just exceptions.
+## 1.18.1 (2016-04-23)
 
-#### 1.17.0
+- Symfony console version constraint fixed
 
-* Suite type hints on `TestInterface` instead of `AbstractTest`
+## 1.18.0 (2016-03-14)
 
-#### 1.16.0
+- Tests now fail when an error occurs - not just exceptions.
 
-* add --force-color option (thanks @vicary) *2015-10-27*
+## 1.17.0 (2016-02-23)
 
+- Suite type hints on `TestInterface` instead of `AbstractTest`
 
-#### 1.15.1
+## 1.16.0 (2015-10-28)
 
-* Eliminate duplicate directory separators in path info *2015-03-31*
+- Add `--force-color` option (thanks [@vicary])
 
+## 1.15.2 (2015-06-01)
 
-#### 1.15.0
+- Fixed strict standards warning (thanks [@mrkrstphr])
 
-* Allow test and suite definitions to be invoked with arguments via TestInterface::setDefinitionArguments and TestInterface::getDefinitionArguments *2015-02-24*
+## 1.15.1 (2015-03-31)
 
+- Eliminate duplicate directory separators in path info
 
-#### 1.14.0
+## 1.15.0 (2015-02-24)
 
-* Added count accessors to TestResult *2015-02-15*
+- Allow test and suite definitions to be invoked with arguments via
+  `TestInterface::setDefinitionArguments` and
+  `TestInterface::getDefinitionArguments`
 
+## 1.14.0 (2015-02-15)
 
-#### 1.13.0
+- Added count accessors to `TestResult`
 
-* runner.end event now receives the run time as an argument *2015-02-12*
+## 1.13.0 (2015-02-12)
 
+- `runner.end` event now receives the run time as an argument
 
-#### 1.12.0
+## 1.12.0 (2015-02-06)
 
-* AbstractTest objects now include the file path associated with them via getFile() *2015-02-06*
-* Command::getRunner() and Command::setRunner() added *2015-02-06*
+- `AbstractTest` objects now include the file path associated with them via
+  `getFile()`
+- `Command::getRunner()` and `Command::setRunner()` added
 
+## 1.11.1 (2015-01-31)
 
-#### 1.11.1
+- Exception type hinting no longer required in test results and reporters
 
-* Exception type hinting no longer required in test results and reporters *2015-01-31*
+## 1.11.0 (2015-01-22)
 
+- Configuration variables persisted to ENV
 
-#### 1.11.0
+## 1.10.0 (2015-01-17)
 
-* Configuration variables persisted to ENV *2015-01-22*
+- Added `Context::clear()` method
 
+## 1.9.0 (2015-01-06)
 
-#### 1.10.0
+- Added Application accessors for `Runner`, `Configuration`, and `Environment`
+- Added `RunnerInterface`
+- `peridot.configure` is passed `Application`
 
-* Added Context::clear() method *2015-01-17*
+## 1.8.5 (2014-12-27)
 
+- Support HHVM 3.5 nightly autoload path in `bin/peridot`
 
-#### 1.9.0
+## 1.8.4 (2014-11-16)
 
-* added Application accessors for Runner, Configuration and Environment *2015-01-06*
-* added RunnerInterface *2015-01-06*
-* peridot.configure is passed Application *2015-01-06*
+- Update all scope refs to core scope
 
+## 1.8.3 (2014-11-16)
 
-#### 1.8.5
+- Adds Core Scope back as an extension of scope module
 
-* Support hhvm 3.5 nightly autoload path in bin/peridot *2014-12-27*
+## 1.8.2 (2014-11-16)
 
+- Pull scope into separate package
 
-#### 1.8.4
+## 1.8.1 (2014-11-11)
 
-* update all scope refs to core scope *2014-11-16*
+- Multi-line exception messages indent each line
 
+## 1.8.0 (2014-11-09)
 
-#### 1.8.3
+- `AbstractTest::forEachNodeBottomUp` and `forEachNodeTopDown` traversal methods
+  added to public API
 
-* Adds Core Scope back as an extension of scope module *2014-11-16*
+## 1.7.1 (2014-11-06)
 
+- ANSI sequences are now sub process friendly
 
-#### 1.8.2
+## 1.7.0 (2014-11-05)
 
-* Pull scope into separate package *2014-11-16*
+- Fail tests if exceptions thrown in tear downs
 
+## 1.6.1 (2014-11-03)
 
-#### 1.8.1
+- Fixed bug where manually specified config file was not being included
 
-* multiline exception messages indent each line *2014-11-11*
+## 1.6.0 (2014-11-03)
 
+- Silly dependency on `ArrayObject` removed
+- Parent scope now correctly passed to children
+- Setup and tear down functions execute in proper order
+- Removed `Scope::BEHAVIOR_` constants and code depending on them
 
-#### 1.8.0
+## 1.5.0 (2014-11-02)
 
-* AbstractTest::forEachNodeBottomUp and forEachNodeTopDown traversal methods added to public API *2014-11-09*
+- Introduce scope behaviors
+- Fix order of execution for setup and tear-down functions
 
+## 1.4.0 (2014-10-31)
 
-#### 1.7.1
+- Added `Suite::setTests` method
 
-* ANSI sequences are now sub process friendly *2014-11-06*
+## 1.3.1 (2014-10-31)
 
+- Include DSLs only once
 
-#### 1.7.0
+## 1.3.0 (2014-10-30)
 
-* Fail tests if exceptions thrown in tear downs *2014-11-05*
+- `peridot.start` event includes application as second argument
 
+## 1.2.3 (2014-10-30)
 
-#### 1.6.1
+- PSR-2 compliance use PSR-2 config in code sniffer
 
-* Fixed bug where manually specified config file was not being included *2014-11-03*
+## 1.2.2 (2014-10-30)
 
+- Added coveralls.io support
+- `Application::getInput()` accepts optional argv
 
-#### 1.6.0
+## 1.2.1 (2014-10-29)
 
-* Silly dependency on ArrayObject removed *2014-11-03*
-* Parent scope now correctly passed to children *2014-11-03*
-* Setup and tear down functions execute in proper order *2014-11-03*
-* Removed Scope::BEHAVIOR_ constants and code depending on them *2014-11-03*
+- Got a rad 10.0 quality score on Scrutinizer CI
+- Reduced complexity of Environment
 
+## 1.2.0 (2014-10-29)
 
-#### 1.5.0
+- Improved code coverage of core
+- Added `Suite::halt()` to public API
 
-* Introduce scope behaviors *2014-11-02*
-* Fix order of execution for setup and teardown functions *2014-11-02*
+## 1.1.7 (2014-10-29)
 
+- Reduced complexity of console command
 
-#### 1.4.0
+## 1.1.5 (2014-10-29)
 
-* Added Suite::setTests method *2014-10-31*
+- Reduced complexity of `AbstractBaseReporter`
 
+## 1.1.4 (2014-10-29)
 
-#### 1.3.1
+- Reduced complexity of `Test`
 
-* Include DSLs only once *2014-10-31*
+## 1.1.3 (2014-10-29)
 
+- Improve build process
 
-#### 1.3.0
+## 1.1.2 (2014-10-29)
 
-* peridot.start event includes application as second argument *2014-10-30*
+- Reduced complexity of `ReporterFactory`
 
+## 1.1.1 (2014-10-29)
 
-#### 1.2.3
+- Reduced complexity of `ConfigurationReader`
+- Various unused variable removals
 
-* psr2 compliance use psr2 config in code sniffer *2014-10-30*
+## 1.1.0 (2014-10-28)
 
+- Support nullable `Test` definitions - i.e auto pending tests
 
-#### 1.2.2
+<!-- Contributors -->
 
-* Added coveralls.io support *2014-10-30*
-* Application::getInput() accepts optional argv *2014-10-30*
-
-
-#### 1.2.1
-
-* Got a rad 10.0 quality score on scrutinizer-ci *2014-10-29*
-* Reduced complexity of Environment *2014-10-29*
-
-
-#### 1.2.0
-
-* Improved code coverage of core *2014-10-29*
-* Added Suite::halt() to public API *2014-10-29*
-
-#### 1.1.7
-
-* Reduced complexity of console command *2014-10-29*
-
-
-#### 1.1.5
-
-* Reduced complexity of AbstractBaseReporter *2014-10-29*
-
-
-#### 1.1.4
-
-* Reduced complexity of Test *2014-10-29*
-
-
-#### 1.1.3
-
-* Improve build process *2014-10-29*
-
-
-#### 1.1.2
-
-* Reduced complexity of ReporterFactory *2014-10-29*
-
-
-#### 1.1.1
-
-* Reduced complexity of ConfigurationReader *2014-10-29*
-* Various unused variable removals *2014-10-28*
-
-
-#### 1.1.0
-
-* Support nullable Test definitions - i.e auto pending tests *2014-10-28*
-
+[@mrkrstphr]: https://github.com/mrkrstphr
+[@vicary]: https://github.com/vicary
+[@YuraLukashik]: https://github.com/YuraLukashik
