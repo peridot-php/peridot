@@ -35,9 +35,9 @@ class Configuration
     protected $grep = '*.spec.php';
 
     /**
-     * @var string
+     * @var array
      */
-    protected $reporter = 'spec';
+    protected $reporters = ['spec'];
 
     /**
      * @var string
@@ -137,7 +137,7 @@ class Configuration
      */
     public function setReporter($reporter)
     {
-        return $this->write('reporter', $reporter);
+        return $this->writeReporters([$reporter]);
     }
 
     /**
@@ -147,7 +147,32 @@ class Configuration
      */
     public function getReporter()
     {
-        return $this->reporter;
+        return $this->reporters[0];
+    }
+
+    /**
+     * Set the names of the reporters to use
+     *
+     * @param array $reporters
+     * @return $this
+     */
+    public function setReporters(array $reporters)
+    {
+        if (empty($reporters)) {
+            throw new \InvalidArgumentException('Reporters cannot be empty.');
+        }
+
+        return $this->writeReporters($reporters);
+    }
+
+    /**
+     * Return the names of the reporters configured for use
+     *
+     * @return array
+     */
+    public function getReporters()
+    {
+        return $this->reporters;
     }
 
     /**
@@ -327,5 +352,19 @@ class Configuration
         }
 
         return '~\b' . preg_quote($pattern, '~') . '\b~';
+    }
+
+    /**
+     * Write the reporters and persist them to the current environment.
+     *
+     * @param array $reporters
+     * @return $this
+     */
+    protected function writeReporters(array $reporters)
+    {
+        $this->reporters = $reporters;
+        putenv('PERIDOT_REPORTER=' . $reporters[0]);
+        putenv('PERIDOT_REPORTERS=' . implode(',', $reporters));
+        return $this;
     }
 }

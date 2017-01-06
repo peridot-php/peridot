@@ -4,6 +4,7 @@
 
 - **[NEW]** Introduced focused specs for powerful test isolation ([#199],
   [#204], [#197], [#194], [#188], [#185], [#181])
+- **[NEW]** Support for multiple reporters ([#202], [#186])
 - **[IMPROVED]** Stack trace output now excludes irrelevant information ([#203],
   [#170])
 - **[FIXED]** Fixed error handler signature ([#198] - thanks [@YuraLukashik])
@@ -14,12 +15,14 @@
 [#171]: https://github.com/peridot-php/peridot/issues/171
 [#181]: https://github.com/peridot-php/peridot/issues/181
 [#185]: https://github.com/peridot-php/peridot/issues/185
+[#186]: https://github.com/peridot-php/peridot/issues/186
 [#188]: https://github.com/peridot-php/peridot/pull/188
 [#194]: https://github.com/peridot-php/peridot/pull/194
 [#197]: https://github.com/peridot-php/peridot/pull/197
 [#198]: https://github.com/peridot-php/peridot/pull/198
 [#199]: https://github.com/peridot-php/peridot/pull/199
 [#201]: https://github.com/peridot-php/peridot/pull/201
+[#202]: https://github.com/peridot-php/peridot/pull/202
 [#203]: https://github.com/peridot-php/peridot/pull/203
 [#204]: https://github.com/peridot-php/peridot/pull/204
 
