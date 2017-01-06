@@ -76,13 +76,15 @@
 
 ## 1.10.0 (2015-01-17)
 
-- Added `Context::clear()` method
+- The `Context` class now supports a `clear` method to reset loaded suites.
 
 ## 1.9.0 (2015-01-06)
 
-- Added Application accessors for `Runner`, `Configuration`, and `Environment`
-- Added `RunnerInterface`
-- `peridot.configure` is passed `Application`
+- `RunnerInterface` added for custom Runners to implement
+- The `Application` class added methods `setRunner`, `getRunner`,
+  `getEnvironment`, `getConfiguration`, and `setConfiguration`
+- The `peridot.configure` event is passed an additional argument that is the
+  `Application` instance
 
 ## 1.8.5 (2014-12-27)
 
@@ -167,6 +169,10 @@
 ## 1.1.7 (2014-10-29)
 
 - Reduced complexity of console command
+
+## 1.1.6 (2014-10-29)
+
+- [`¯\_(ツ)_/¯`](https://github.com/peridot-php/peridot/commit/e3c3a63)
 
 ## 1.1.5 (2014-10-29)
 
