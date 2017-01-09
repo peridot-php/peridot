@@ -158,4 +158,12 @@ describe("TestResult", function() {
             assert($result->getTestCount() === 1, 'should have returned test count');
         });
     });
+
+    describe('focused by DSL accessors', function () {
+        it('should allow access to the DSL focus state', function () {
+            $result = new TestResult($this->eventEmitter);
+            $result->setIsFocusedByDsl(true);
+            assert($result->isFocusedByDsl(), 'should be focused by DSL');
+        });
+    });
 });

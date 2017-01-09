@@ -145,7 +145,6 @@ class Command extends ConsoleCommand
 
         $this->eventEmitter->emit('peridot.load', [$this, $this->configuration]);
 
-
         return $this->getResult();
     }
 
@@ -177,6 +176,10 @@ class Command extends ConsoleCommand
 
         if ($result->getFailureCount() > 0) {
             return 1;
+        }
+
+        if ($result->isFocusedByDsl()) {
+            return 2;
         }
 
         return 0;

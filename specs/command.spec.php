@@ -115,5 +115,19 @@ describe('Command', function() {
                 assert($exit == 1, "exit code should be 1");
             });
         });
+
+        context('when there are DSL focused tests', function() {
+            it('should return an exit code', function() {
+                $suite = new Suite('DSL focused suite', function() {});
+                $test = new Test('focused', function() {}, true);
+                $suite->addTest($test);
+                $runner = new Runner($suite, $this->configuration, $this->emitter);
+                $command = new Command($runner, $this->configuration, $this->factory, $this->emitter);
+                $command->setApplication($this->application);
+                $exit = $command->run(new ArrayInput([], $this->definition), $this->output);
+
+                assert($exit == 2, 'exit code should be 2');
+            });
+        });
     });
 });

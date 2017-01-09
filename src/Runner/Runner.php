@@ -45,12 +45,7 @@ class Runner implements RunnerInterface
      */
     public function run(TestResult $result)
     {
-        $focusPattern = $this->configuration->getFocusPattern();
-        $skipPattern = $this->configuration->getSkipPattern();
-
-        if ($focusPattern !== null || $skipPattern !== null) {
-            $this->suite->applyFocusPatterns($focusPattern, $skipPattern);
-        }
+        $this->applyFocus($result);
 
         $this->eventEmitter->on('test.failed', function () {
             if ($this->configuration->shouldStopOnFailure()) {
@@ -62,6 +57,17 @@ class Runner implements RunnerInterface
         $this->suite->setEventEmitter($this->eventEmitter);
         $start = microtime(true);
         $this->suite->run($result);
-        $this->eventEmitter->emit('runner.end', [microtime(true) - $start]);
+        $this->eventEmitter->emit('runner.end', [microtime(true) - $start, $result]);
+    }
+
+    private function applyFocus(TestResult $result)
+    {
+        $result->setIsFocusedByDsl($this->suite->isFocused());
+        $focusPattern = $this->configuration->getFocusPattern();
+        $skipPattern = $this->configuration->getSkipPattern();
+
+        if ($focusPattern !== null || $skipPattern !== null) {
+            $this->suite->applyFocusPatterns($focusPattern, $skipPattern);
+        }
     }
 }

@@ -6,6 +6,7 @@ use Peridot\Configuration;
 use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\Test;
 use Peridot\Core\TestInterface;
+use Peridot\Core\TestResult;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
@@ -58,6 +59,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
         'white' => ['left' => "\033[37m", 'right' => "\033[39m"],
         'success' => ['left' => "\033[32m", 'right' => "\033[39m"],
         'error' => ['left' => "\033[31m", 'right' => "\033[39m"],
+        'warning' => ['left' => "\033[33m", 'right' => "\033[39m"],
         'muted' => ['left' => "\033[90m", 'right' => "\033[0m"],
         'pending' => ['left' => "\033[36m", 'right' => "\033[39m"],
     );
@@ -184,6 +186,18 @@ abstract class AbstractBaseReporter implements ReporterInterface
             list($test, $error) = $this->errors[$i];
             $this->outputError($i + 1, $test, $error);
             $this->output->writeln('');
+        }
+    }
+
+    /**
+     * Output result warnings
+     *
+     * @param TestResult $result
+     */
+    public function warnings(TestResult $result)
+    {
+        if ($result->isFocusedByDsl()) {
+            $this->output->writeln($this->color('warning', 'WARNING: Tests have been focused programmatically.'));
         }
     }
 

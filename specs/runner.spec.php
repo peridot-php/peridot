@@ -63,8 +63,10 @@ describe("Runner", function() {
             $this->eventEmitter->on('test.start', function() use (&$count) {
                 $count++;
             });
-            $this->runner->run(new TestResult($this->eventEmitter));
+            $result = new TestResult($this->eventEmitter);
+            $this->runner->run($result);
             assert(1 == $count, 'expected 1 test:start events to fire');
+            assert(!$result->isFocusedByDsl(), 'should not be focused by DSL');
         });
 
         it('should apply focus patterns if a skip pattern has been set', function() {
@@ -73,8 +75,10 @@ describe("Runner", function() {
             $this->eventEmitter->on('test.start', function() use (&$count) {
                 $count++;
             });
-            $this->runner->run(new TestResult($this->eventEmitter));
+            $result = new TestResult($this->eventEmitter);
+            $this->runner->run($result);
             assert(1 == $count, 'expected 1 test:start events to fire');
+            assert(!$result->isFocusedByDsl(), 'should not be focused by DSL');
         });
 
         it('should apply focus patterns if both focus and skip patterns are set', function() {
@@ -85,8 +89,17 @@ describe("Runner", function() {
             $this->eventEmitter->on('test.start', function() use (&$count) {
                 $count++;
             });
-            $this->runner->run(new TestResult($this->eventEmitter));
+            $result = new TestResult($this->eventEmitter);
+            $this->runner->run($result);
             assert(1 == $count, 'expected 1 test:start events to fire');
+            assert(!$result->isFocusedByDsl(), 'should not be focused by DSL');
+        });
+
+        it('should mark the result as focused by DSL where appropriate', function() {
+            $this->suite->addTest(new Test('another passing spec', function() {}, true));
+            $result = new TestResult($this->eventEmitter);
+            $this->runner->run($result);
+            assert($result->isFocusedByDsl(), 'should be focused by DSL');
         });
 
         it("should emit a start event when the runner starts", function() {
@@ -98,14 +111,17 @@ describe("Runner", function() {
             assert($emitted, 'start event should have been emitted');
         });
 
-        it("should emit an end event with run time when the runner ends", function() {
+        it("should emit an end event with run time and result when the runner ends", function() {
             $time = null;
-            $this->eventEmitter->on('runner.end', function($timeToRun) use (&$time) {
+            $emittedResult = null;
+            $this->eventEmitter->on('runner.end', function($timeToRun, $result) use (&$time, &$emittedResult) {
                 $time = $timeToRun;
+                $emittedResult = $result;
             });
             $result = new TestResult(new EventEmitter());
             $this->runner->run($result);
             assert(is_numeric($time) && $result->getTestCount() > 0, 'end event with a time arg should have been emitted');
+            assert($emittedResult === $result, 'end event with a result arg should have been emitted');
         });
 
         it("should emit a fail event when a spec fails", function() {
