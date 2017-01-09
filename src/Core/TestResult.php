@@ -35,6 +35,13 @@ class TestResult
     protected $pendingCount = 0;
 
     /**
+     * True if focused specs were configured via DSL functions
+     *
+     * @var bool
+     */
+    protected $isFocusedByDsl = false;
+
+    /**
      * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(EventEmitterInterface $eventEmitter)
@@ -176,6 +183,27 @@ class TestResult
     public function setPendingCount($pendingCount)
     {
         $this->pendingCount = $pendingCount;
+        return $this;
+    }
+
+    /**
+     * Returns true if focused specs were configured via DSL functions
+     *
+     * @return bool
+     */
+    public function isFocusedByDsl()
+    {
+        return $this->isFocusedByDsl;
+    }
+
+    /**
+     * Mark this result as having focused specs configured via DSL functions
+     *
+     * @param bool $isFocusedByDsl
+     */
+    public function setIsFocusedByDsl($isFocusedByDsl)
+    {
+        $this->isFocusedByDsl = $isFocusedByDsl;
         return $this;
     }
 }

@@ -2,6 +2,7 @@
 use Evenement\EventEmitter;
 use Peridot\Configuration;
 use Peridot\Core\Test;
+use Peridot\Core\TestResult;
 use Peridot\Reporter\SpecReporter;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -59,7 +60,7 @@ describe('SpecReporter', function() {
             $this->emitter->emit('test.passed', [new Test('passing test', function() {})]);
             $this->emitter->emit('test.failed', [new Test('failing test', function() {}), $this->exception]);
             $this->emitter->emit('test.pending', [new Test('pending test', function(){})]);
-            $this->footer = $this->reporter->footer();
+            $this->reporter->footer();
             $this->contents = $this->output->fetch();
         });
 
@@ -84,6 +85,19 @@ describe('SpecReporter', function() {
             $expectedExceptionMessage = "     ooops" . PHP_EOL . "     nextline";
             assert(strstr($this->contents, $expectedExceptionMessage) !== false, "should include exception message");
             assert(preg_match($this->expectedTrace, $this->contents), 'should include exception stack');
+        });
+    });
+
+    describe('->warnings()', function() {
+        it('should output DSL focused test warnings', function() {
+            $this->configuration->disableColors();
+            $result = new TestResult($this->emitter);
+            $result->setIsFocusedByDsl(true);
+            $this->emitter->emit('runner.end', [1.0, $result]);
+            $this->reporter->warnings($result);
+            $this->contents = $this->output->fetch();
+            $expected = 'WARNING: Tests have been focused programmatically.';
+            assert(strstr($this->contents, $expected) !== false, 'should contain DSL focused warning');
         });
     });
 

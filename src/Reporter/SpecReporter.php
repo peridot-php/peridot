@@ -1,8 +1,9 @@
 <?php
 namespace Peridot\Reporter;
 
-use Peridot\Core\Test;
 use Peridot\Core\Suite;
+use Peridot\Core\Test;
+use Peridot\Core\TestResult;
 use Peridot\Runner\Context;
 
 /**
@@ -102,9 +103,14 @@ class SpecReporter extends AbstractBaseReporter
         ));
     }
 
-    public function onRunnerEnd()
+    /**
+     * @param float $time
+     * @param TestResult $result
+     */
+    public function onRunnerEnd($time, TestResult $result)
     {
         $this->footer();
+        $this->warnings($result);
     }
 
     /**

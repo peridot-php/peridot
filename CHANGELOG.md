@@ -3,7 +3,7 @@
 ## Next release
 
 - **[NEW]** Introduced focused specs for powerful test isolation ([#199],
-  [#197], [#194], [#188], [#185], [#181])
+  [#204], [#197], [#194], [#188], [#185], [#181])
 - **[IMPROVED]** Stack trace output now excludes irrelevant information ([#203],
   [#170])
 - **[FIXED]** Fixed error handler signature ([#198] - thanks [@YuraLukashik])
@@ -21,6 +21,7 @@
 [#199]: https://github.com/peridot-php/peridot/pull/199
 [#201]: https://github.com/peridot-php/peridot/pull/201
 [#203]: https://github.com/peridot-php/peridot/pull/203
+[#204]: https://github.com/peridot-php/peridot/pull/204
 
 ## 1.18.1 (2016-04-23)
 
