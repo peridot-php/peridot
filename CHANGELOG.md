@@ -1,6 +1,6 @@
 # Peridot Changelog
 
-## Next release
+## 1.19.0 (2017-01-19)
 
 - **[NEW]** Introduced focused specs for powerful test isolation ([#199],
   [#204], [#197], [#194], [#188], [#185], [#181])
