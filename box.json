@@ -4,11 +4,7 @@
   "stub": true,
   "directories": [
     "src/",
-    "vendor/evenement/evenement/src/",
-    "vendor/symfony/console/",
-    "vendor/phpunit/php-timer",
-    "vendor/peridot-php",
-    "vendor/composer"
+    "vendor/"
   ],
   "files": ["vendor/autoload.php"],
   "files-bin": ["vendor/phpunit/php-timer/LICENSE"]
