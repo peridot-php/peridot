@@ -139,10 +139,7 @@ class Command extends ConsoleCommand
             return 0;
         }
 
-        if ($reporter = $input->getOption('reporter')) {
-            $this->configuration->setReporter($reporter);
-        }
-
+        $this->configuration->setReporters($input->getOption('reporter'));
         $this->eventEmitter->emit('peridot.load', [$this, $this->configuration]);
 
         return $this->getResult();
@@ -171,7 +168,7 @@ class Command extends ConsoleCommand
     {
         $result = new TestResult($this->eventEmitter);
         $this->getLoader()->load($this->configuration->getPath());
-        $this->factory->create($this->configuration->getReporter());
+        $this->factory->createComposite($this->configuration->getReporters());
         $this->runner->run($result);
 
         if ($result->getFailureCount() > 0) {

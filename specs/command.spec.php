@@ -79,12 +79,13 @@ describe('Command', function() {
             });
         });
 
-        context('when passing a reporter name', function() {
-            it('should set the reporter name on the configuration object', function() {
-                $this->factory->register('test', 'desc', function() {});
-                $this->command->run(new ArrayInput(['-r' => 'test'], $this->definition), $this->output);
-                $reporter = $this->configuration->getReporter();
-                assert($reporter == 'test', 'reporter name should be "test"');
+        context('when passing reporter names', function() {
+            it('should set the reporter names on the configuration object', function() {
+                $this->factory->register('test-a', 'desc', function() {});
+                $this->factory->register('test-b', 'desc', function() {});
+                $this->command->run(new ArrayInput(['-r' => ['test-a', 'test-b']], $this->definition), $this->output);
+                $reporters = $this->configuration->getReporters();
+                assert($reporters === ['test-a', 'test-b'], 'reporter names should be ["test-a", "test-b"]');
             });
         });
 

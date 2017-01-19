@@ -124,6 +124,34 @@ describe('Configuration', function() {
         });
     });
 
+    describe('->setReporter()', function() {
+        it('should set both reporter and reporters', function() {
+            $this->configuration->setReporter('reporter-a');
+
+            assert($this->configuration->getReporter() === 'reporter-a', 'should have set reporter');
+            assert($this->configuration->getReporters() === ['reporter-a'], 'should have set reporters');
+        });
+    });
+
+    describe('->setReporters()', function() {
+        it('should set both reporter and reporters', function() {
+            $this->configuration->setReporters(['reporter-a', 'reporter-b']);
+
+            assert($this->configuration->getReporter() === 'reporter-a', 'should have set reporter');
+            assert($this->configuration->getReporters() === ['reporter-a', 'reporter-b'], 'should have set reporters');
+        });
+
+        it('should disallow setting an empty reporters array', function() {
+            $exception = null;
+            try {
+                $this->configuration->setReporters([]);
+            } catch (InvalidArgumentException $e) {
+                $exception = $e;
+            }
+            assert(!is_null($exception), 'expected exception to be thrown');
+        });
+    });
+
     describe('->enableColorsExplicit()', function() {
         it('should enable colors when explicit is set', function() {
             $this->configuration->enableColorsExplicit();
