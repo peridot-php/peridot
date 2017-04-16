@@ -28,7 +28,7 @@ The main [Peridot site](http://peridot-php.github.io/) lives on [GitHub](https:/
 
 If you have suggestions for documentation or ideas for making the site more useful, please feel free to open pull requests there.
 
-##Testing Peridot
+## Testing Peridot
 Peridot tests can be run using Peridot. Your cloned repository should have a `bin` directory containing a `peridot` executable.
 
 Before running tests, you will need to install the few dependencies Peridot has via [Composer](https://getcomposer.org/):
