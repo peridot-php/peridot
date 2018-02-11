@@ -35,6 +35,17 @@ function it($description, callable $fn = null)
 }
 
 /**
+ * Identical to it. Useful for test readability
+ *
+ * @param $description
+ * @param $fn
+ */
+function test($description, callable $fn = null)
+{
+    it($description, $fn);
+}
+
+/**
  * Create a pending suite
  *
  * @param $description
@@ -68,6 +79,17 @@ function xit($description, callable $fn = null)
 }
 
 /**
+ * Create a pending spec
+ *
+ * @param $description
+ * @param callable $fn
+ */
+function xtest($description, callable $fn = null)
+{
+    xit($description, $fn);
+}
+
+/**
  * Create a focused suite
  *
  * @param $description
@@ -98,6 +120,17 @@ function fcontext($description, callable $fn)
 function fit($description, callable $fn = null)
 {
     Context::getInstance()->addTest($description, $fn, null, true);
+}
+
+/**
+ * Create a focused spec
+ *
+ * @param $description
+ * @param callable $fn
+ */
+function ftest($description, callable $fn = null)
+{
+    fit($description, $fn);
 }
 
 /**
