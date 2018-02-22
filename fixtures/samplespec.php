@@ -4,7 +4,7 @@ describe("Spec", function() {
     $this->value = "hello";
 
     it("should have value", function() {
-        assert($this->value == "hello", "there should be value");
+        assert($this->value === "hello", "there should be value");
     });
 
     it("should have a passing spec", function() {
@@ -31,8 +31,8 @@ describe("Spec", function() {
         });
 
         it('should have access to thing', function() {
-            assert($this->thing[0] == "hello", 'hello should be a thing');
-            assert($this->thing[1] == "goodbye", "goodbye should be a thing");
+            assert($this->thing[0] === "hello", 'hello should be a thing');
+            assert($this->thing[1] === "goodbye", "goodbye should be a thing");
         });
     });
 });
