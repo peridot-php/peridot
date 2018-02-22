@@ -24,7 +24,7 @@ return function(EventEmitterInterface $emitter) {
     $hhvm = defined('HHVM_VERSION'); //exclude coverage from hhvm because its pretty flawed at the moment
     $shouldCover = !$hhvm;
 
-    if ($codeCoverage == 'html' && $shouldCover) {
+    if ($codeCoverage === 'html' && $shouldCover) {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
             $coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/src');
@@ -39,7 +39,7 @@ return function(EventEmitterInterface $emitter) {
         });
     }
 
-    if ($codeCoverage == 'clover' && $shouldCover) {
+    if ($codeCoverage === 'clover' && $shouldCover) {
         $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
             $coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/src');
