@@ -7,6 +7,7 @@ use Peridot\Core\HasEventEmitterTrait;
 use Peridot\Core\Test;
 use Peridot\Core\TestInterface;
 use Peridot\Core\TestResult;
+use SebastianBergmann\Timer\Timer;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
@@ -164,7 +165,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
      */
     public function getTime()
     {
-        return $this->time;
+        return (float)$this->time;
     }
 
     /**
@@ -173,7 +174,7 @@ abstract class AbstractBaseReporter implements ReporterInterface
     public function footer()
     {
         $this->output->write($this->color('success', sprintf("\n  %d passing", $this->passing)));
-        $this->output->writeln(sprintf($this->color('muted', " (%s)"), \PHP_Timer::secondsToTimeString($this->getTime())));
+        $this->output->writeln(sprintf($this->color('muted', " (%s)"), Timer::secondsToTimeString($this->getTime())));
         if (! empty($this->errors)) {
             $this->output->writeln($this->color('error', sprintf("  %d failing", count($this->errors))));
         }
