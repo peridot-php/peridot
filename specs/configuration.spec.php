@@ -78,7 +78,7 @@ describe('Configuration', function() {
             assert($reporter === 'reporter', 'should have set reporter env');
             assert($path === '/tests', 'should have set path env');
             assert(!$colors, 'should have set colors env');
-            assert($stop, 'should have set stop env');
+            assert(!!$stop, 'should have set stop env');
             assert($dsl === __FILE__, 'should have set dsl env');
             assert($file === __FILE__, 'should have set config file env');
         });
@@ -157,7 +157,7 @@ describe('Configuration', function() {
             $this->configuration->enableColorsExplicit();
             $this->configuration->disableColors();
 
-            assert(getenv('PERIDOT_COLORS_ENABLED'), 'should have set colors env');
+            assert(!!getenv('PERIDOT_COLORS_ENABLED'), 'should have set colors env');
             assert($this->configuration->areColorsEnabled(), 'should have set configuration value');
         });
     });

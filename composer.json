@@ -1,6 +1,6 @@
 {
   "name": "peridot-php/peridot",
-  "description": "Event driven BDD test framework for PHP 5.4+",
+  "description": "Event driven BDD test framework for PHP 7.1+",
   "keywords": ["BDD", "TDD", "testing", "PHP"],
   "license": "MIT",
   "authors": [
@@ -14,15 +14,15 @@
     }
   ],
   "require": {
-    "php": ">=5.4",
-    "evenement/evenement": "^2",
-    "symfony/console": "^2|^3",
-    "phpunit/php-timer": "^1",
+    "php": ">=7.1",
+    "evenement/evenement": "^3.0 || ^2.0",
+    "symfony/console": "^4",
+    "phpunit/php-timer": "^2",
     "peridot-php/peridot-scope": "^1"
   },
   "require-dev": {
     "consolidation/robo": "^0.4",
-    "phpunit/php-code-coverage": "^2"
+    "phpunit/php-code-coverage": "^6"
   },
   "autoload": {
     "psr-4": {
@@ -37,7 +37,7 @@
   "bin": ["bin/peridot"],
   "config": {
     "platform": {
-      "php": "5.4"
+      "php": "7.2"
     }
   }
 }

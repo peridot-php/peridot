@@ -4,6 +4,7 @@ use Peridot\Configuration;
 use Peridot\Core\Test;
 use Peridot\Core\TestResult;
 use Peridot\Reporter\SpecReporter;
+use SebastianBergmann\Timer\Timer;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 describe('SpecReporter', function() {
@@ -69,7 +70,7 @@ describe('SpecReporter', function() {
         });
 
         it('should output time', function() {
-            $time = PHP_Timer::secondsToTimeString($this->reporter->getTime());
+            $time = Timer::secondsToTimeString($this->reporter->getTime());
             assert(strstr($this->contents, $time) !== false, 'should contain time text');
         });
 
