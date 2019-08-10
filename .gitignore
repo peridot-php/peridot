@@ -4,3 +4,4 @@
 /tmp/
 /vendor/
 /peridot.phar
+/.phpunit.result.cache
