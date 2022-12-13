@@ -5,6 +5,12 @@ use Peridot\Console\Environment;
 use Peridot\Reporter\ReporterInterface;
 use Symfony\Component\Console\Input\InputOption;
 
+use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Driver\Selector;
+use SebastianBergmann\CodeCoverage\Filter;
+use SebastianBergmann\CodeCoverage\Report\Clover;
+use SebastianBergmann\CodeCoverage\Report\Html\Facade as HtmlReport;
+
 return function(EventEmitterInterface $emitter) {
     $counts = ['pass' => 0, 'fail' => 0, 'pending' => 0];
 
@@ -24,32 +30,36 @@ return function(EventEmitterInterface $emitter) {
     $hhvm = defined('HHVM_VERSION'); //exclude coverage from hhvm because its pretty flawed at the moment
     $shouldCover = !$hhvm;
 
+    $filter = new Filter;
+    $filter->includeDirectory(__DIR__ . '/src');
+    $filter->excludeDirectory(__DIR__ . '/src/Dsl.php');
+
+    $coverage = new CodeCoverage(
+        (new Selector)->forLineCoverage($filter),
+        $filter
+    );
+
     if ($codeCoverage == 'html' && $shouldCover) {
-        $coverage = new PHP_CodeCoverage();
+
         $emitter->on('runner.start', function() use ($coverage) {
-            $coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/src');
-            $coverage->filter()->removeFileFromWhitelist(__DIR__ . '/src/Dsl.php');
             $coverage->start('peridot');
         });
 
         $emitter->on('runner.end', function() use ($coverage) {
             $coverage->stop();
-            $writer = new PHP_CodeCoverage_Report_HTML();
+            $writer = (new HtmlReport);
             $writer->process($coverage, __DIR__ . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'report');
         });
     }
 
     if ($codeCoverage == 'clover' && $shouldCover) {
-        $coverage = new PHP_CodeCoverage();
         $emitter->on('runner.start', function() use ($coverage) {
-            $coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/src');
-            $coverage->filter()->removeFileFromWhitelist(__DIR__ . '/src/Dsl.php');
             $coverage->start('peridot');
         });
 
         $emitter->on('runner.end', function() use ($coverage) {
             $coverage->stop();
-            $writer = new PHP_CodeCoverage_Report_Clover();
+            $writer = (new Clover);
             $writer->process(
                 $coverage, __DIR__ . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR
                 . 'logs' . DIRECTORY_SEPARATOR . 'clover.xml');

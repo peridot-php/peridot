@@ -52,7 +52,7 @@ class Application extends ConsoleApplication
      * @param  OutputInterface $output
      * @return int
      */
-    public function run(InputInterface $input = null, OutputInterface $output = null)
+    public function run(InputInterface $input = null, OutputInterface $output = null): int
     {
         if ($input !== null) {
             $in = $input;
@@ -101,7 +101,7 @@ class Application extends ConsoleApplication
         try {
             return new ArgvInput($argv, $this->environment->getDefinition());
         } catch (\Exception $e) {
-            $this->renderException($e, new ConsoleOutput());
+            $this->renderThrowable($e, new ConsoleOutput());
             exit(1);
         }
     }
@@ -112,7 +112,7 @@ class Application extends ConsoleApplication
      * @param  InputInterface $input
      * @return string
      */
-    public function getCommandName(InputInterface $input)
+    public function getCommandName(InputInterface $input): string
     {
         return 'peridot';
     }
@@ -196,7 +196,7 @@ class Application extends ConsoleApplication
      *
      * @return InputDefinition
      */
-    protected function getDefaultInputDefinition()
+    protected function getDefaultInputDefinition(): InputDefinition
     {
         return $this->environment->getDefinition();
     }
