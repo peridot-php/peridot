@@ -1,7 +1,12 @@
 {
-  "name": "peridot-php/peridot",
-  "description": "Event driven BDD test framework for PHP 7.1+",
-  "keywords": ["BDD", "TDD", "testing", "PHP"],
+  "name": "birdspider/peridot",
+  "description": "Event driven BDD test framework for PHP 7.4+",
+  "keywords": [
+    "BDD",
+    "TDD",
+    "testing",
+    "PHP"
+  ],
   "license": "MIT",
   "authors": [
     {
@@ -13,6 +18,9 @@
       "email": "austin.morris@gmail.com"
     }
   ],
+  "replace": {
+    "peridot-php/peridot": "self.version"
+  },
   "require": {
     "php": ">=7.4",
     "evenement/evenement": "^3.0",
@@ -34,7 +42,9 @@
       "fixtures/error-polyfill.php"
     ]
   },
-  "bin": ["bin/peridot"],
+  "bin": [
+    "bin/peridot"
+  ],
   "config": {
     "platform": {
       "php": "7.4"
